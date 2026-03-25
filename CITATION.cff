@@ -1,0 +1,42 @@
+---
+title: "OpenGradient Model Hub Assistant"
+description: "AI-powered assistant for discovering and exploring AI models on OpenGradient Model Hub"
+keywords:
+  - opengradient
+  - ai
+  - llm
+  - model-hub
+  - fastapi
+  - chatbot
+  - nlp
+authors:
+  - name: "graanit2"
+    twitter: "https://x.com/graanit2"
+license: "MIT"
+repository: "https://github.com/yourusername/og-model-assistant"
+documentation: "https://github.com/yourusername/og-model-assistant#readme"
+---
+
+## Quick Start
+
+```bash
+git clone https://github.com/yourusername/og-model-assistant.git
+cd og-model-assistant-pro
+pip install -r requirements.txt
+python main.py
+```
+
+## Features
+
+- 🔍 Smart Search
+- 💬 AI Chat
+- 🎤 Voice Input
+- 🖼️ Vision AI
+- 💎 Free Tokens (auto-claim every 5h)
+- 🌓 Dark/Light Theme
+
+## Links
+
+- [Documentation](https://github.com/yourusername/og-model-assistant#readme)
+- [API Docs](http://localhost:8000/docs)
+- [OpenGradient](https://www.opengradient.ai/)
