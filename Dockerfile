@@ -20,12 +20,12 @@ COPY . .
 # Create directories
 RUN mkdir -p logs static
 
-# Expose port
-EXPOSE 8000
+# Expose port (Render uses PORT env variable)
+EXPOSE 10000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import httpx; httpx.get('http://localhost:8000/api/health')"
+    CMD python -c "import httpx; httpx.get('http://localhost:10000/api/health')"
 
-# Run application
-CMD ["python", "main.py"]
+# Run application with uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
