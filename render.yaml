@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: og-model-assistant
+    env: python
+    region: frankfurt
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DATABASE_URL
+        generateValue: true
+        type: postgres
+      - key: REDIS_URL
+        generateValue: true
+        type: redis
+      - key: API_HOST
+        value: 0.0.0.0
+      - key: API_PORT
+        value: 10000
+      - key: LOG_LEVEL
+        value: INFO
+    disk:
+      name: logs
+      mountPath: /app/logs
+      sizeGB: 1
+    domains:
+      - og-model-assistant.onrender.com
