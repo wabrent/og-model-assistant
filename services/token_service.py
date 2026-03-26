@@ -30,8 +30,8 @@ PURCHASE_PACKAGES = [
 # Faucet configuration
 FAUCET_CONFIG = {
     "url": "https://faucet.opengradient.ai/",
-    "claim_interval_hours": 3,  # Уменьшил интервал с 5 до 3 часов
-    "tokens_per_claim": 10.0,   # Увеличил с 5 до 10 токенов
+    "claim_interval_hours": 5,  # Официальный интервал faucet
+    "tokens_per_claim": 0.1,    # Официально: 0.1 $OPG за claim
     "api_endpoint": "https://faucet.opengradient.ai/api/claim",
 }
 
