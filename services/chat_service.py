@@ -28,14 +28,14 @@ class ChatService:
             try:
                 import opengradient as og
                 self._llm = og.LLM(private_key=settings.private_key)
-                
-                # Ensure OPG approval
+
+                # Ensure OPG approval (reduced from 10.0 to 1.0 for testing)
                 try:
-                    approval = self._llm.ensure_opg_approval(opg_amount=10.0)
+                    approval = self._llm.ensure_opg_approval(opg_amount=1.0)
                     logger.info(f"OPG Permit2 allowance: {approval.allowance_after}")
                 except Exception as e:
                     logger.warning(f"Could not ensure OPG approval: {e}")
-                    
+
             except Exception as e:
                 logger.error(f"Failed to initialize OpenGradient LLM: {e}")
                 raise
