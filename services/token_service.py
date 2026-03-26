@@ -30,8 +30,9 @@ PURCHASE_PACKAGES = [
 # Faucet configuration
 FAUCET_CONFIG = {
     "url": "https://faucet.opengradient.ai/",
-    "claim_interval_hours": 5,
-    "tokens_per_claim": 5.0,
+    "claim_interval_hours": 3,  # Уменьшил интервал с 5 до 3 часов
+    "tokens_per_claim": 10.0,   # Увеличил с 5 до 10 токенов
+    "api_endpoint": "https://faucet.opengradient.ai/api/claim",
 }
 
 
@@ -46,17 +47,17 @@ class TokenService:
         user = result.scalar_one_or_none()
         
         if not user:
-            # Create new user with 10 free tokens
-            user = UserToken(user_id=user_id, balance=10.0)
+            # Create new user with 20 free tokens (increased from 10)
+            user = UserToken(user_id=user_id, balance=20.0)
             db.add(user)
-            
+
             # Log initial bonus
             transaction = TokenTransaction(
                 user_id=user_id,
-                amount=10.0,
+                amount=20.0,
                 transaction_type="bonus",
-                description="Welcome bonus - 10 free tokens",
-                balance_after=10.0,
+                description="Welcome bonus - 20 free tokens",
+                balance_after=20.0,
             )
             db.add(transaction)
             await db.commit()
