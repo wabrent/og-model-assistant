@@ -417,42 +417,44 @@
   }
 
   .gallery-item {
-    border-radius: var(--radius-lg);
+    border-radius: 32px;
     overflow: hidden;
     position: relative;
     aspect-ratio: 1;
     cursor: pointer;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     background: var(--bg-secondary);
-    box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
   }
 
   .gallery-item:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
 
-  .gallery-item-icon {
-    font-size: clamp(48px, 8vw, 80px);
-    animation: floatIcon 3s ease-in-out infinite;
-    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2));
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
   }
 
-  @keyframes floatIcon {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-15px) rotate(5deg); }
+  .gallery-item:hover img {
+    transform: scale(1.05);
   }
 
-  .gallery-item:hover .gallery-item-icon {
-    animation: pulseIcon 0.6s ease;
-  }
-
-  @keyframes pulseIcon {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+  .gallery-item-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 2;
   }
 
   .gallery-item-overlay {
@@ -461,39 +463,24 @@
     left: 0;
     right: 0;
     padding: 24px;
-    background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
     color: white;
     text-align: center;
+    z-index: 2;
   }
 
   .gallery-item-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(18px, 4vw, 24px);
+    font-size: clamp(18px, 4vw, 22px);
     font-weight: 600;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
   }
 
   .gallery-item-desc {
-    font-size: clamp(12px, 2.5vw, 14px);
+    font-size: clamp(12px, 2.5vw, 13px);
     opacity: 0.9;
     font-weight: 300;
-  }
-
-  /* Category Badges */
-  .category-badge {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    padding: 6px 14px;
-    background: rgba(255,255,255,0.95);
-    color: var(--text);
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }
 
   /* Chat */
@@ -1203,33 +1190,33 @@
   </div>
 
   <div class="gallery-grid">
-    <div class="gallery-item" onclick="sendQuick('Show Language Models')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-      <span class="category-badge">231 models</span>
-      <div class="gallery-item-icon">🗣️</div>
+    <div class="gallery-item" onclick="sendQuick('Show Language Models')">
+      <span class="gallery-item-badge">231 models</span>
+      <img src="/static/assets/3D/Language Models.png" alt="Language Models">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">Language Models</div>
         <div class="gallery-item-desc">NLP & text generation</div>
       </div>
     </div>
-    <div class="gallery-item" onclick="sendQuick('Show DeFi models')" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-      <span class="category-badge">132 models</span>
-      <div class="gallery-item-icon">💎</div>
+    <div class="gallery-item" onclick="sendQuick('Show DeFi models')">
+      <span class="gallery-item-badge">132 models</span>
+      <img src="/static/assets/3D/DeFi Models.png" alt="DeFi Models">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">DeFi Models</div>
         <div class="gallery-item-desc">Crypto & trading</div>
       </div>
     </div>
-    <div class="gallery-item" onclick="sendQuick('Show Risk models')" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-      <span class="category-badge">112 models</span>
-      <div class="gallery-item-icon">🛡️</div>
+    <div class="gallery-item" onclick="sendQuick('Show Risk models')">
+      <span class="gallery-item-badge">112 models</span>
+      <img src="/static/assets/3D/Risk Analysis.png" alt="Risk Analysis">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">Risk Analysis</div>
         <div class="gallery-item-desc">Security & auditing</div>
       </div>
     </div>
-    <div class="gallery-item" onclick="sendQuick('Show Protocol models')" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-      <span class="category-badge">16 models</span>
-      <div class="gallery-item-icon">⚡</div>
+    <div class="gallery-item" onclick="sendQuick('Show Protocol models')">
+      <span class="gallery-item-badge">16 models</span>
+      <img src="/static/assets/3D/Protocol Optimization.png" alt="Protocol Optimization">
       <div class="gallery-item-overlay">
         <div class="gallery-item-title">Protocol Optimization</div>
         <div class="gallery-item-desc">Efficiency & speed</div>
