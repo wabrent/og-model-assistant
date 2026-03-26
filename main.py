@@ -27,25 +27,37 @@ async def lifespan(app: FastAPI):
     """Application lifespan events."""
     # Startup
     logger.info("Starting OpenGradient Model Assistant...")
-    
+
     # Setup logging
     setup_logging()
-    
+
     # Initialize database
     await init_db()
     logger.info("Database initialized")
-    
+
     # Connect to Redis
     await cache.connect()
-    
+
     # Create static directory if not exists
     os.makedirs("static", exist_ok=True)
     os.makedirs("logs", exist_ok=True)
-    
+
+    # Auto-sync models on startup (for cloud deployments)
+    try:
+        from api.sync_router import run_sync
+        from core.database import async_session_maker
+        
+        logger.info("🔄 Starting initial model sync...")
+        async with async_session_maker() as db:
+            await run_sync(db)
+        logger.info("✅ Initial model sync completed!")
+    except Exception as e:
+        logger.error(f"⚠️ Initial sync failed: {e}. Use /api/sync/trigger to sync manually.")
+
     logger.info(f"Server starting on http://{settings.api_host}:{settings.api_port}")
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down...")
     await cache.close()
