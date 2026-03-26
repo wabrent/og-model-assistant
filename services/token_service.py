@@ -62,8 +62,12 @@ class TokenService:
             db.add(transaction)
             await db.commit()
             await db.refresh(user)
-            
-            logger.info(f"Created new user {user_id} with 10 free tokens")
+
+            # Add tokens earned to stats
+            from services.user_stats_service import user_stats_service
+            await user_stats_service.add_tokens_earned(db, user_id, 20.0)
+
+            logger.info(f"Created new user {user_id} with 20 free tokens")
         
         return user
     
@@ -196,7 +200,7 @@ class TokenService:
                     tokens = FAUCET_CONFIG["tokens_per_claim"]
                     user.balance += tokens
                     user.last_faucet_claim = datetime.utcnow()
-                    
+
                     transaction = TokenTransaction(
                         user_id=user_id,
                         amount=tokens,
@@ -205,8 +209,15 @@ class TokenService:
                         balance_after=user.balance,
                     )
                     db.add(transaction)
-                    await db.commit()
                     
+                    # Add to stats
+                    from services.user_stats_service import user_stats_service
+                    await user_stats_service.add_tokens_claimed(db, user_id, tokens)
+                    await user_stats_service.update_streak(db, user_id)
+                    await user_stats_service.check_and_unlock(db, user_id, await user_stats_service.get_or_create_stats(db, user_id))
+                    
+                    await db.commit()
+
                     logger.info(f"User {user_id} claimed {tokens} tokens from faucet")
                     return True, f"Successfully claimed {tokens} tokens from faucet!", tokens
                 else:

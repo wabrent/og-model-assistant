@@ -898,6 +898,165 @@
     right: 0;
   }
 
+  /* Dashboard Panel */
+  .dashboard-panel {
+    position: fixed;
+    top: 56px;
+    right: -400px;
+    width: 400px;
+    height: calc(100vh - 56px);
+    background: var(--bg);
+    border-left: 1px solid var(--border);
+    z-index: 999;
+    transition: right 0.4s ease;
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .dashboard-panel.open {
+    right: 0;
+  }
+
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dashboard-level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .level-badge {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102,126,234,0.4);
+  }
+
+  .level-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .level-info p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin: 4px 0 0;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  .achievements-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 20px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .achievement-item {
+    aspect-ratio: 1;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.4;
+    filter: grayscale(100%);
+  }
+
+  .achievement-item.unlocked {
+    opacity: 1;
+    filter: grayscale(0%);
+    background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+    box-shadow: 0 2px 8px rgba(102,126,234,0.2);
+  }
+
+  .achievement-item:hover {
+    transform: scale(1.05);
+  }
+
+  .achievement-icon {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  .achievement-name {
+    font-size: 9px;
+    text-align: center;
+    color: var(--text-light);
+  }
+
+  .achievement-item.unlocked .achievement-name {
+    color: var(--text);
+    font-weight: 600;
+  }
+
   /* Mobile Menu */
   .mobile-menu-btn {
     display: none;
@@ -1118,6 +1277,7 @@
     <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">🌓</button>
     <button class="icon-btn" onclick="toggleVoice()" id="voice-btn" title="Voice Input">🎤</button>
     <button class="icon-btn" onclick="toggleHistory()" title="History">📜</button>
+    <button class="icon-btn" onclick="toggleDashboard()" title="Dashboard & Achievements">📊</button>
     <button class="nav-btn" onclick="scrollToSection('features')">Features</button>
     <button class="nav-btn" onclick="scrollToSection('gallery')">Models</button>
     <button class="nav-btn primary" onclick="scrollToSection('chat')">Try Now</button>
@@ -1316,6 +1476,51 @@
   <div id="history-list"></div>
 </div>
 
+<!-- Dashboard Panel -->
+<div class="dashboard-panel" id="dashboard-panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <h3 style="font-size:18px;font-weight:600">📊 Dashboard</h3>
+    <button onclick="toggleDashboard()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-light)">×</button>
+  </div>
+  
+  <div class="dashboard-header">
+    <div class="dashboard-level">
+      <div class="level-badge" id="dash-level">1</div>
+      <div class="level-info">
+        <h3 id="dash-level-title">Новичок</h3>
+        <p id="dash-xp">0 / 100 XP</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="dash-progress" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-queries">0</div>
+      <div class="stat-label">Запросов</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-chats">0</div>
+      <div class="stat-label">Сообщений</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-views">0</div>
+      <div class="stat-label">Просмотров</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-streak">0</div>
+      <div class="stat-label">Дней подряд 🔥</div>
+    </div>
+  </div>
+
+  <div class="achievements-section">
+    <h4>🏆 Достижения <span id="achievements-count" style="font-size:12px;color:var(--text-light)">(0/0)</span></h4>
+    <div class="achievements-grid" id="achievements-grid"></div>
+  </div>
+</div>
+
 <!-- Toast Container -->
 <div class="toast-container" id="toast-container"></div>
 
@@ -1504,6 +1709,51 @@
     const isOpen = panel.classList.contains('open');
     panel.classList.toggle('open');
     if (!isOpen) renderHistory();
+  }
+
+  function toggleDashboard() {
+    const panel = document.getElementById('dashboard-panel');
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open');
+    if (!isOpen) loadDashboard();
+  }
+
+  async function loadDashboard() {
+    try {
+      // Load stats
+      const statsR = await fetch(`/api/user/stats?user_id=${sessionId}`);
+      const stats = await statsR.json();
+      
+      document.getElementById('dash-level').textContent = stats.level || 1;
+      document.getElementById('dash-xp').textContent = `${stats.experience || 0} / ${stats.experience_to_next_level || 100} XP`;
+      document.getElementById('dash-progress').style.width = `${((stats.experience || 0) / (stats.experience_to_next_level || 100)) * 100}%`;
+      
+      const levelTitles = ['Новичок', 'Ученик', 'Знаток', 'Эксперт', 'Мастер', 'Легенда', 'Гуру'];
+      const levelIndex = Math.min((stats.level || 1) - 1, levelTitles.length - 1);
+      document.getElementById('dash-level-title').textContent = levelTitles[levelIndex] || 'Новичок';
+      
+      document.getElementById('stat-queries').textContent = stats.total_queries || 0;
+      document.getElementById('stat-chats').textContent = stats.total_chats || 0;
+      document.getElementById('stat-views').textContent = stats.total_models_viewed || 0;
+      document.getElementById('stat-streak').textContent = stats.current_streak || 0;
+      
+      // Load achievements
+      const achR = await fetch(`/api/user/achievements?user_id=${sessionId}`);
+      const achData = await achR.json();
+      
+      document.getElementById('achievements-count').textContent = `(${achData.total_unlocked || 0}/${achData.total_achievements || 0})`;
+      
+      const grid = document.getElementById('achievements-grid');
+      grid.innerHTML = achData.achievements.map(a => `
+        <div class="achievement-item ${a.unlocked ? 'unlocked' : ''}" title="${a.name}${a.unlocked ? ' - ' + a.unlocked_at : ''}">
+          <div class="achievement-icon">${a.achievement_icon}</div>
+          <div class="achievement-name">${a.name}</div>
+        </div>
+      `).join('');
+      
+    } catch (e) {
+      console.error('Failed to load dashboard:', e);
+    }
   }
 
   function renderHistory() {
@@ -1697,7 +1947,25 @@
     loadTokenBalance();
     loadTopModels(); // Load trending models
     startAutoFaucet(); // Start automatic faucet
+    checkAchievements(); // Check for new achievements
   });
+
+  async function checkAchievements() {
+    try {
+      const r = await fetch(`/api/user/check-achievements?user_id=${sessionId}`);
+      const data = await r.json();
+      
+      if (data.unlocked && data.unlocked.length > 0) {
+        data.unlocked.forEach(a => {
+          setTimeout(() => {
+            showToast(a.achievement_icon || '🏆', `Achievement unlocked: ${a.achievement_name}!`);
+          }, 1000);
+        });
+      }
+    } catch (e) {
+      console.error('Failed to check achievements:', e);
+    }
+  }
 </script>
 </body>
 </html>

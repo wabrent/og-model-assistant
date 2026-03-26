@@ -239,3 +239,83 @@ class TokenTransaction(Base):
             "balance_after": self.balance_after,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+class UserAchievement(Base):
+    """User achievements and milestones."""
+    __tablename__ = "user_achievements"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String(100), nullable=False, index=True)
+    achievement_id = Column(String(50), nullable=False)  # achievement identifier
+    achievement_name = Column(String(100), nullable=False)
+    achievement_description = Column(Text, nullable=True)
+    achievement_icon = Column(String(50), nullable=True)  # emoji icon
+    points = Column(Integer, default=0)  # achievement points
+    unlocked_at = Column(DateTime, default=datetime.utcnow)
+
+    def to_dict(self) -> dict:
+        """Convert achievement to dictionary."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "achievement_id": self.achievement_id,
+            "achievement_name": self.achievement_name,
+            "achievement_description": self.achievement_description,
+            "achievement_icon": self.achievement_icon,
+            "points": self.points,
+            "unlocked_at": self.unlocked_at.isoformat() if self.unlocked_at else None,
+        }
+
+
+class UserStats(Base):
+    """User statistics and activity tracking."""
+    __tablename__ = "user_stats"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String(100), nullable=False, unique=True, index=True)
+    
+    # Activity stats
+    total_queries = Column(Integer, default=0)  # Total search queries
+    total_chats = Column(Integer, default=0)  # Total chat messages
+    total_models_viewed = Column(Integer, default=0)  # Models viewed
+    total_favorites = Column(Integer, default=0)  # Models favorited
+    
+    # Token stats
+    total_tokens_earned = Column(Float, default=0.0)
+    total_tokens_spent = Column(Float, default=0.0)
+    total_tokens_claimed = Column(Float, default=0.0)
+    
+    # Streak stats
+    current_streak = Column(Integer, default=0)  # Current daily streak
+    longest_streak = Column(Integer, default=0)  # Longest streak
+    last_active = Column(DateTime, default=datetime.utcnow)
+    
+    # Level and progress
+    level = Column(Integer, default=1)
+    experience = Column(Integer, default=0)
+    experience_to_next_level = Column(Integer, default=100)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self) -> dict:
+        """Convert stats to dictionary."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "total_queries": self.total_queries,
+            "total_chats": self.total_chats,
+            "total_models_viewed": self.total_models_viewed,
+            "total_favorites": self.total_favorites,
+            "total_tokens_earned": self.total_tokens_earned,
+            "total_tokens_spent": self.total_tokens_spent,
+            "total_tokens_claimed": self.total_tokens_claimed,
+            "current_streak": self.current_streak,
+            "longest_streak": self.longest_streak,
+            "last_active": self.last_active.isoformat() if self.last_active else None,
+            "level": self.level,
+            "experience": self.experience,
+            "experience_to_next_level": self.experience_to_next_level,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
