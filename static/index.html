@@ -9,6 +9,11 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* Smooth theme transitions */
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
   :root {
     --bg: #ffffff;
     --bg-secondary: #f8f9fa;
@@ -408,6 +413,69 @@
     color: var(--text-light);
   }
 
+  /* Model Filters */
+  .model-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .filter-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    white-space: nowrap;
+  }
+
+  .filter-select {
+    padding: 10px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .filter-select:hover {
+    border-color: #667eea;
+  }
+
+  .filter-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .filter-reset {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .filter-reset:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
   .gallery-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -425,6 +493,13 @@
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     background: var(--bg-secondary);
     box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .gallery-item.animate-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .gallery-item:hover {
@@ -1171,6 +1246,50 @@
     box-shadow: var(--shadow-md);
   }
 
+  /* Skeleton Loading */
+  .skeleton {
+    pointer-events: none;
+  }
+
+  .skeleton-text {
+    background: linear-gradient(
+      90deg,
+      var(--bg-secondary) 0%,
+      var(--border) 50%,
+      var(--bg-secondary) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: 8px;
+  }
+
+  .skeleton-title {
+    height: 24px;
+    width: 80%;
+    margin-bottom: 12px;
+  }
+
+  .skeleton-desc {
+    height: 16px;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .skeleton-desc:last-child {
+    width: 60%;
+  }
+
+  .skeleton-tags {
+    height: 20px;
+    width: 60%;
+    margin-top: 16px;
+  }
+
+  @keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
   .top-model-name {
     font-weight: 600;
     font-size: 16px;
@@ -1354,6 +1473,41 @@
   <div class="gallery-header">
     <h2 class="gallery-title">Explore Models</h2>
     <p class="gallery-subtitle">2,247+ AI models across multiple categories</p>
+  </div>
+
+  <!-- Model Filters -->
+  <div class="model-filters">
+    <div class="filter-group">
+      <span class="filter-label">📂 Category:</span>
+      <select class="filter-select" id="filter-category" onchange="applyFilters()">
+        <option value="">All Categories</option>
+        <option value="language">Language Models</option>
+        <option value="defi">DeFi & Crypto</option>
+        <option value="vision">Computer Vision</option>
+        <option value="audio">Audio & Speech</option>
+        <option value="risk">Risk Analysis</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">📏 Size:</span>
+      <select class="filter-select" id="filter-size" onchange="applyFilters()">
+        <option value="">Any Size</option>
+        <option value="small">Small (&lt;1B)</option>
+        <option value="medium">Medium (1B-10B)</option>
+        <option value="large">Large (10B-100B)</option>
+        <option value="xl">XL (&gt;100B)</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">⚡ Speed:</span>
+      <select class="filter-select" id="filter-speed" onchange="applyFilters()">
+        <option value="">Any Speed</option>
+        <option value="fast">Fast</option>
+        <option value="medium">Medium</option>
+        <option value="slow">Slow (High Quality)</option>
+      </select>
+    </div>
+    <button class="filter-reset" onclick="resetFilters()">Reset</button>
   </div>
 
   <div class="gallery-grid">
@@ -1590,8 +1744,14 @@
   function toggleTheme() {
     const body = document.body;
     const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    localStorage.setItem('og_theme', isDark ? 'light' : 'dark');
+    const newTheme = isDark ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('og_theme', newTheme);
+    
+    // Update button icon
+    const btn = document.querySelector('[onclick="toggleTheme()"]');
+    if (btn) btn.textContent = isDark ? '🌙' : '☀️';
+    
     showToast('🌓', `${isDark ? 'Light' : 'Dark'} mode enabled`);
   }
 
@@ -1603,9 +1763,64 @@
     btn.classList.toggle('active');
   }
 
-  // Load saved theme
-  const savedTheme = localStorage.getItem('og_theme') || 'light';
-  document.body.setAttribute('data-theme', savedTheme);
+  // Load saved theme or system preference
+  const savedTheme = localStorage.getItem('og_theme');
+  if (savedTheme) {
+    document.body.setAttribute('data-theme', savedTheme);
+  } else {
+    // Use system preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const systemTheme = prefersDark ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', systemTheme);
+  }
+  
+  // Update theme button icon on load
+  setTimeout(() => {
+    const btn = document.querySelector('[onclick="toggleTheme()"]');
+    if (btn) {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      btn.textContent = isDark ? '🌙' : '☀️';
+    }
+  }, 100);
+
+  // ==================== SCROLL ANIMATIONS ====================
+  // Animate elements on scroll
+  function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          // Add staggered delay for multiple elements
+          setTimeout(() => {
+            entry.target.classList.add('animate-in');
+          }, index * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe gallery items
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      observer.observe(item);
+    });
+
+    // Observe feature cards
+    document.querySelectorAll('.feature-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    // Observe top model cards
+    document.querySelectorAll('.top-model-card').forEach(card => {
+      observer.observe(card);
+    });
+  }
+
+  // Initialize on DOM load
+  setTimeout(() => {
+    initScrollAnimations();
+  }, 500);
 
   // ==================== STATS ====================
   async function loadStats() {
@@ -1617,7 +1832,31 @@
   }
 
   // ==================== TOP MODELS ====================
+  function showTopModelsSkeleton() {
+    const container = document.getElementById('top-models-grid');
+    container.innerHTML = `
+      <div class="top-model-card skeleton">
+        <div class="skeleton-text skeleton-title"></div>
+        <div class="skeleton-text skeleton-desc"></div>
+        <div class="skeleton-text skeleton-tags"></div>
+      </div>
+      <div class="top-model-card skeleton">
+        <div class="skeleton-text skeleton-title"></div>
+        <div class="skeleton-text skeleton-desc"></div>
+        <div class="skeleton-text skeleton-tags"></div>
+      </div>
+      <div class="top-model-card skeleton">
+        <div class="skeleton-text skeleton-title"></div>
+        <div class="skeleton-text skeleton-desc"></div>
+        <div class="skeleton-text skeleton-tags"></div>
+      </div>
+    `;
+  }
+
   async function loadTopModels() {
+    // Show skeleton first
+    showTopModelsSkeleton();
+    
     try {
       const r = await fetch('/api/models?limit=3&offset=0');
       const models = await r.json();
@@ -1945,6 +2184,65 @@
   function removeTyping() {
     const t = document.getElementById('typing');
     if (t) t.remove();
+  }
+
+  // ==================== FILTERS ====================
+  function applyFilters() {
+    const category = document.getElementById('filter-category').value;
+    const size = document.getElementById('filter-size').value;
+    const speed = document.getElementById('filter-speed').value;
+    
+    // Build search query based on filters
+    let query = 'Show models';
+    
+    if (category) {
+      const categoryNames = {
+        'language': 'language models',
+        'defi': 'DeFi crypto models',
+        'vision': 'computer vision models',
+        'audio': 'audio speech models',
+        'risk': 'risk analysis models'
+      };
+      query = categoryNames[category] || query;
+    }
+    
+    if (size) {
+      const sizeNames = {
+        'small': 'small',
+        'medium': 'medium',
+        'large': 'large',
+        'xl': 'extra large'
+      };
+      query += ` ${sizeNames[size] || ''}`;
+    }
+    
+    if (speed) {
+      const speedNames = {
+        'fast': 'fast',
+        'medium': 'medium speed',
+        'slow': 'high quality'
+      };
+      query += ` ${speedNames[speed] || ''}`;
+    }
+    
+    query += ' models';
+    sendQuick(query);
+    
+    // Track filter usage
+    try {
+      fetch('/api/analytics/filter-used', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category, size, speed })
+      }).catch(() => {});
+    } catch (e) {}
+  }
+
+  function resetFilters() {
+    document.getElementById('filter-category').value = '';
+    document.getElementById('filter-size').value = '';
+    document.getElementById('filter-speed').value = '';
+    showToast('🔄', 'Filters reset');
   }
 
   // ==================== INIT ====================
