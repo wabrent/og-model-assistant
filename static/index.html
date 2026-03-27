@@ -457,40 +457,6 @@
     z-index: 2;
   }
 
-  .status-indicator {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(0,0,0,0.7);
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    color: white;
-    z-index: 2;
-    backdrop-filter: blur(4px);
-  }
-
-  .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-
-  .status-dot.online {
-    background: #4ade80;
-    box-shadow: 0 0 10px #4ade80;
-  }
-
-  .status-dot.offline {
-    background: #f87171;
-    box-shadow: 0 0 10px #f87171;
-  }
-
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.5; transform: scale(1.1); }
@@ -1392,7 +1358,6 @@
 
   <div class="gallery-grid">
     <div class="gallery-item" onclick="sendQuick('Show Language Models')">
-      <span class="status-indicator"><span class="status-dot online"></span>Online</span>
       <span class="gallery-item-badge">231 models</span>
       <img src="/static/assets/3D/Language Models.jpg" alt="Language Models">
       <div class="gallery-item-overlay">
@@ -1401,7 +1366,6 @@
       </div>
     </div>
     <div class="gallery-item" onclick="sendQuick('Show DeFi models')">
-      <span class="status-indicator"><span class="status-dot online"></span>Online</span>
       <span class="gallery-item-badge">132 models</span>
       <img src="/static/assets/3D/DeFi Models.jpg" alt="DeFi Models">
       <div class="gallery-item-overlay">
@@ -1410,7 +1374,6 @@
       </div>
     </div>
     <div class="gallery-item" onclick="sendQuick('Show Risk models')">
-      <span class="status-indicator"><span class="status-dot online"></span>Online</span>
       <span class="gallery-item-badge">112 models</span>
       <img src="/static/assets/3D/Risk Analysis.jpg" alt="Risk Analysis">
       <div class="gallery-item-overlay">
@@ -1419,7 +1382,6 @@
       </div>
     </div>
     <div class="gallery-item" onclick="sendQuick('Show Protocol models')">
-      <span class="status-indicator"><span class="status-dot online"></span>Online</span>
       <span class="gallery-item-badge">16 models</span>
       <img src="/static/assets/3D/Protocol Optimization.jpg" alt="Protocol Optimization">
       <div class="gallery-item-overlay">
@@ -1674,57 +1636,6 @@
       }
     } catch (e) {
       console.error('Failed to load top models:', e);
-    }
-  }
-
-  // ==================== MODEL STATUS ====================
-  async function loadModelStatus() {
-    try {
-      const r = await fetch('/api/models/status');
-
-      // If response is not OK (e.g., 422), treat as API error and show Online
-      if (!r.ok) {
-        console.log('Model status API returned error:', r.status);
-        throw new Error(`HTTP ${r.status}`);
-      }
-
-      const status = await r.json();
-      console.log('Model status API response:', status);
-
-      // Update status indicators in gallery
-      const indicators = document.querySelectorAll('.status-indicator');
-      if (indicators.length > 0) {
-        // ALWAYS show Online unless API explicitly returns offline data
-        // This prevents flickering when API returns empty or zero values
-        const isOnline = !status.is_offline; // Only offline if explicitly set
-        
-        indicators.forEach(ind => {
-          const dot = ind.querySelector('.status-dot');
-          if (dot) {
-            if (isOnline) {
-              dot.classList.remove('offline');
-              dot.classList.add('online');
-              ind.innerHTML = '<span class="status-dot online"></span>Online';
-            } else {
-              dot.classList.remove('online');
-              dot.classList.add('offline');
-              ind.innerHTML = '<span class="status-dot offline"></span>Offline';
-            }
-          }
-        });
-      }
-    } catch (e) {
-      // API not available or returned error - show online by default
-      console.log('Model status API error, showing Online by default');
-      const indicators = document.querySelectorAll('.status-indicator');
-      indicators.forEach(ind => {
-        const dot = ind.querySelector('.status-dot');
-        if (dot) {
-          dot.classList.remove('offline');
-          dot.classList.add('online');
-          ind.innerHTML = '<span class="status-dot online"></span>Online';
-        }
-      });
     }
   }
 
@@ -2042,7 +1953,6 @@
     loadStats();
     loadTokenBalance();
     loadTopModels(); // Load trending models
-    loadModelStatus(); // Load live model status
     startAutoFaucet(); // Start automatic faucet
     checkAchievements(); // Check for new achievements
   });
