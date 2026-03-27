@@ -319,3 +319,44 @@ class UserStats(Base):
             "experience_to_next_level": self.experience_to_next_level,
             "created_at": self.created_at.isoformat() if self.created_at else None,
         }
+
+
+class ModelStatus(Base):
+    """Live status of AI models - online/offline tracking."""
+    __tablename__ = "model_statuses"
+
+    id = Column(Integer, primary_key=True, index=True)
+    model_id = Column(Integer, ForeignKey("models.id"), unique=True, nullable=False, index=True)
+    
+    # Status tracking
+    is_online = Column(Boolean, default=True)  # Current online status
+    last_checked = Column(DateTime, default=datetime.utcnow)  # Last check time
+    response_time_ms = Column(Float, nullable=True)  # Last response time
+    uptime_percentage = Column(Float, default=100.0)  # Uptime % (last 24h)
+    
+    # Health metrics
+    success_count = Column(Integer, default=0)  # Successful checks
+    failure_count = Column(Integer, default=0)  # Failed checks
+    error_message = Column(Text, nullable=True)  # Last error message
+    
+    # Metadata
+    checked_at = Column(DateTime, default=datetime.utcnow, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationship
+    model = relationship("Model", backref="status", uselist=False, lazy="select")
+
+    def to_dict(self) -> dict:
+        """Convert status to dictionary."""
+        return {
+            "id": self.id,
+            "model_id": self.model_id,
+            "is_online": self.is_online,
+            "last_checked": self.last_checked.isoformat() if self.last_checked else None,
+            "response_time_ms": self.response_time_ms,
+            "uptime_percentage": round(self.uptime_percentage, 2),
+            "success_count": self.success_count,
+            "failure_count": self.failure_count,
+            "error_message": self.error_message,
+            "checked_at": self.checked_at.isoformat() if self.checked_at else None,
+        }

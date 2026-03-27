@@ -21,6 +21,7 @@ from api.sync_router import router as sync_router
 from api.health_router import router as health_router
 from api.tokens_router import router as tokens_router
 from api.user_stats_router import router as user_stats_router
+from api.model_status_router import router as model_status_router
 
 
 @asynccontextmanager
@@ -93,6 +94,7 @@ app.include_router(sync_router)
 app.include_router(health_router)
 app.include_router(tokens_router)
 app.include_router(user_stats_router)
+app.include_router(model_status_router)
 
 # Serve static files
 if os.path.exists("static"):
