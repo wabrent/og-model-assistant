@@ -1530,7 +1530,7 @@
     <div class="dashboard-level">
       <div class="level-badge" id="dash-level">1</div>
       <div class="level-info">
-        <h3 id="dash-level-title">Новичок</h3>
+        <h3 id="dash-level-title">Beginner</h3>
         <p id="dash-xp">0 / 100 XP</p>
         <div class="progress-bar">
           <div class="progress-fill" id="dash-progress" style="width: 0%"></div>
@@ -1542,24 +1542,24 @@
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-value" id="stat-queries">0</div>
-      <div class="stat-label">Запросов</div>
+      <div class="stat-label">Queries</div>
     </div>
     <div class="stat-card">
       <div class="stat-value" id="stat-chats">0</div>
-      <div class="stat-label">Сообщений</div>
+      <div class="stat-label">Messages</div>
     </div>
     <div class="stat-card">
       <div class="stat-value" id="stat-views">0</div>
-      <div class="stat-label">Просмотров</div>
+      <div class="stat-label">Views</div>
     </div>
     <div class="stat-card">
       <div class="stat-value" id="stat-streak">0</div>
-      <div class="stat-label">Дней подряд 🔥</div>
+      <div class="stat-label">Streak 🔥</div>
     </div>
   </div>
 
   <div class="achievements-section">
-    <h4>🏆 Достижения <span id="achievements-count" style="font-size:12px;color:var(--text-light)">(0/0)</span></h4>
+    <h4>🏆 Achievements <span id="achievements-count" style="font-size:12px;color:var(--text-light)">(0/0)</span></h4>
     <div class="achievements-grid" id="achievements-grid"></div>
   </div>
 </div>
@@ -1814,9 +1814,9 @@
       document.getElementById('dash-xp').textContent = `${stats.experience || 0} / ${stats.experience_to_next_level || 100} XP`;
       document.getElementById('dash-progress').style.width = `${((stats.experience || 0) / (stats.experience_to_next_level || 100)) * 100}%`;
       
-      const levelTitles = ['Новичок', 'Ученик', 'Знаток', 'Эксперт', 'Мастер', 'Легенда', 'Гуру'];
+      const levelTitles = ['Beginner', 'Learner', 'Expert', 'Master', 'Legend', 'Guru', 'Sage'];
       const levelIndex = Math.min((stats.level || 1) - 1, levelTitles.length - 1);
-      document.getElementById('dash-level-title').textContent = levelTitles[levelIndex] || 'Новичок';
+      document.getElementById('dash-level-title').textContent = levelTitles[levelIndex] || 'Beginner';
       
       document.getElementById('stat-queries').textContent = stats.total_queries || 0;
       document.getElementById('stat-chats').textContent = stats.total_chats || 0;
