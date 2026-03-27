@@ -2332,16 +2332,16 @@
     
     // Navigate to ecosystem pages
     const pages = {
-      'marketplace': '/marketplace.html',
-      'developer': '/developer.html',
-      'academy': '/academy.html',
-      'defi': '/defi.html'
+      'marketplace': '/static/marketplace.html',
+      'developer': '/static/developer.html',
+      'academy': '/static/academy.html',
+      'defi': '/static/defi.html'
     };
     
     if (pages[page]) {
       // For now, show toast for pages that don't exist yet
       if (page === 'developer') {
-        window.location.href = '/developer.html';
+        window.location.href = '/static/developer.html';
       } else {
         showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
       }

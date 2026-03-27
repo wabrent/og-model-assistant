@@ -120,6 +120,32 @@ async def root():
     }
 
 
+@app.get("/developer")
+async def developer_hub():
+    """Developer Hub page."""
+    if os.path.exists("static/developer.html"):
+        return FileResponse("static/developer.html")
+    return {"error": "Developer Hub not found"}
+
+
+@app.get("/marketplace")
+async def marketplace():
+    """AI Marketplace page (coming soon)."""
+    return {"message": "Marketplace - Coming Soon"}
+
+
+@app.get("/academy")
+async def academy():
+    """AI Academy page (coming soon)."""
+    return {"message": "Academy - Coming Soon"}
+
+
+@app.get("/defi")
+async def defi():
+    """DeFi page (coming soon)."""
+    return {"message": "DeFi Hub - Coming Soon"}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
