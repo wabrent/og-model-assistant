@@ -849,6 +849,101 @@
     border-color: #667eea;
   }
 
+  /* Ecosystem Panel */
+  .ecosystem-panel {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    width: 400px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 24px;
+    z-index: 1000;
+    display: none;
+    animation: slideDown 0.3s ease;
+  }
+
+  .ecosystem-panel.active {
+    display: block;
+  }
+
+  .ecosystem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .ecosystem-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .ecosystem-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-light);
+  }
+
+  .ecosystem-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .ecosystem-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ecosystem-card:hover {
+    border-color: #667eea;
+    box-shadow: var(--shadow-sm);
+    transform: translateX(4px);
+  }
+
+  .ecosystem-card-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .ecosystem-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .ecosystem-card-desc {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  .ecosystem-card-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #667eea;
+    color: white;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-top: 8px;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   /* Footer */
   .footer {
     background: var(--text);
@@ -1404,6 +1499,7 @@
     <button class="icon-btn" onclick="toggleVoice()" id="voice-btn" title="Voice Input">🎤</button>
     <button class="icon-btn" onclick="toggleHistory()" title="History">📜</button>
     <button class="icon-btn" onclick="toggleDashboard()" title="Dashboard & Achievements">📊</button>
+    <button class="nav-btn" onclick="showEcosystem()">🌐 Ecosystem</button>
     <button class="nav-btn" onclick="scrollToSection('features')">Features</button>
     <button class="nav-btn" onclick="scrollToSection('gallery')">Models</button>
     <button class="nav-btn primary" onclick="scrollToSection('chat')">Try Now</button>
@@ -1643,7 +1739,7 @@
     <h3 style="font-size:18px;font-weight:600">📊 Dashboard</h3>
     <button onclick="toggleDashboard()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-light)">×</button>
   </div>
-  
+
   <div class="dashboard-header">
     <div class="dashboard-level">
       <div class="level-badge" id="dash-level">1</div>
@@ -1679,6 +1775,40 @@
   <div class="achievements-section">
     <h4>🏆 Achievements <span id="achievements-count" style="font-size:12px;color:var(--text-light)">(0/0)</span></h4>
     <div class="achievements-grid" id="achievements-grid"></div>
+  </div>
+</div>
+
+<!-- Ecosystem Panel -->
+<div class="ecosystem-panel" id="ecosystem-panel">
+  <div class="ecosystem-header">
+    <h3 class="ecosystem-title">🌐 OpenGradient Ecosystem</h3>
+    <button class="ecosystem-close" onclick="hideEcosystem()">×</button>
+  </div>
+  <div class="ecosystem-grid">
+    <div class="ecosystem-card" onclick="showEcosystemPage('marketplace')">
+      <div class="ecosystem-card-icon">🛒</div>
+      <div class="ecosystem-card-title">AI Marketplace</div>
+      <div class="ecosystem-card-desc">Buy & sell AI models with OPG tokens</div>
+      <span class="ecosystem-card-badge">Coming Soon</span>
+    </div>
+    <div class="ecosystem-card" onclick="showEcosystemPage('developer')">
+      <div class="ecosystem-card-icon">👨‍💻</div>
+      <div class="ecosystem-card-title">Developer Hub</div>
+      <div class="ecosystem-card-desc">API docs, SDKs, and sandbox</div>
+      <span class="ecosystem-card-badge">Coming Soon</span>
+    </div>
+    <div class="ecosystem-card" onclick="showEcosystemPage('academy')">
+      <div class="ecosystem-card-icon">🎓</div>
+      <div class="ecosystem-card-title">AI Academy</div>
+      <div class="ecosystem-card-desc">Learn AI/ML with courses & tutorials</div>
+      <span class="ecosystem-card-badge">Coming Soon</span>
+    </div>
+    <div class="ecosystem-card" onclick="showEcosystemPage('defi')">
+      <div class="ecosystem-card-icon">💰</div>
+      <div class="ecosystem-card-title">DeFi + AI</div>
+      <div class="ecosystem-card-desc">Stake OPG, earn rewards, governance</div>
+      <span class="ecosystem-card-badge">Coming Soon</span>
+    </div>
   </div>
 </div>
 
@@ -2185,6 +2315,34 @@
     const t = document.getElementById('typing');
     if (t) t.remove();
   }
+
+  // ==================== ECOSYSTEM ====================
+  function showEcosystem() {
+    const panel = document.getElementById('ecosystem-panel');
+    panel.classList.toggle('active');
+  }
+
+  function hideEcosystem() {
+    const panel = document.getElementById('ecosystem-panel');
+    panel.classList.remove('active');
+  }
+
+  function showEcosystemPage(page) {
+    hideEcosystem();
+    showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
+    // TODO: Navigate to ecosystem pages when ready
+    // window.location.href = '/' + page;
+  }
+
+  // Close ecosystem when clicking outside
+  document.addEventListener('click', (e) => {
+    const panel = document.getElementById('ecosystem-panel');
+    const btn = document.querySelector('[onclick="showEcosystem()"]');
+    if (panel && panel.classList.contains('active') && 
+        !panel.contains(e.target) && !btn.contains(e.target)) {
+      hideEcosystem();
+    }
+  });
 
   // ==================== FILTERS ====================
   function applyFilters() {
