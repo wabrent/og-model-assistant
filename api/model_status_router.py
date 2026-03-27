@@ -19,7 +19,15 @@ async def get_all_statuses(db: AsyncSession = Depends(get_db)):
         summary = await model_status_service.get_status_summary(db)
         return summary
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Return default response on any error
+        logger.error(f"Status endpoint failed: {e}")
+        return {
+            "total_models": 0,
+            "online": 0,
+            "offline": 0,
+            "avg_response_time_ms": 0,
+            "avg_uptime_percentage": 0,
+        }
 
 
 @router.get("/online")

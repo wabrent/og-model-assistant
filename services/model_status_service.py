@@ -192,6 +192,15 @@ class ModelStatusService:
 
     async def get_status_summary(self, db: AsyncSession) -> Dict[str, Any]:
         """Get summary of all model statuses."""
+        # Default response if table doesn't exist or any error occurs
+        default_response = {
+            "total_models": 0,
+            "online": 0,
+            "offline": 0,
+            "avg_response_time_ms": 0,
+            "avg_uptime_percentage": 0,
+        }
+        
         try:
             result = await db.execute(
                 select(
@@ -214,13 +223,7 @@ class ModelStatusService:
         except Exception as e:
             # Table doesn't exist yet - return default values
             logger.warning(f"Status summary failed (table may not exist): {e}")
-            return {
-                "total_models": 0,
-                "online": 0,
-                "offline": 0,
-                "avg_response_time_ms": 0,
-                "avg_uptime_percentage": 0,
-            }
+            return default_response
 
 
 # Global service instance
