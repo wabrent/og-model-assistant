@@ -4,15 +4,16 @@ API Router for model status monitoring.
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Dict, Any
+from loguru import logger
 
 from core.database import get_db
 from services.model_status_service import model_status_service
 from services.opengradient_service import og_service
 
-router = APIRouter(prefix="/api/models/status", tags=["Model Status"])
+router = APIRouter(prefix="/api/models", tags=["Model Status"])
 
 
-@router.get("")
+@router.get("/status")
 async def get_all_statuses(db: AsyncSession = Depends(get_db)):
     """Get status summary for all models."""
     try:
