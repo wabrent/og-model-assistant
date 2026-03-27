@@ -2329,9 +2329,23 @@
 
   function showEcosystemPage(page) {
     hideEcosystem();
-    showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
-    // TODO: Navigate to ecosystem pages when ready
-    // window.location.href = '/' + page;
+    
+    // Navigate to ecosystem pages
+    const pages = {
+      'marketplace': '/marketplace.html',
+      'developer': '/developer.html',
+      'academy': '/academy.html',
+      'defi': '/defi.html'
+    };
+    
+    if (pages[page]) {
+      // For now, show toast for pages that don't exist yet
+      if (page === 'developer') {
+        window.location.href = '/developer.html';
+      } else {
+        showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
+      }
+    }
   }
 
   // Close ecosystem when clicking outside
