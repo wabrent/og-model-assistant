@@ -1681,6 +1681,12 @@
   async function loadModelStatus() {
     try {
       const r = await fetch('/api/models/status');
+      
+      // If response is not OK (e.g., 422), treat as API error and show Online
+      if (!r.ok) {
+        throw new Error(`HTTP ${r.status}`);
+      }
+      
       const status = await r.json();
 
       // Update status indicators in gallery
@@ -1707,7 +1713,7 @@
 
       console.log(`Model status: ${status.online}/${status.total_models} online`);
     } catch (e) {
-      // API not available yet - show online by default
+      // API not available or returned error - show online by default
       console.log('Model status API not ready, showing Online by default');
       const indicators = document.querySelectorAll('.status-indicator');
       indicators.forEach(ind => {
