@@ -502,7 +502,7 @@
     left: 0;
     right: 0;
     padding: 24px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
     color: white;
     text-align: center;
     z-index: 2;
@@ -514,12 +514,14 @@
     font-weight: 600;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
 
   .gallery-item-desc {
     font-size: clamp(12px, 2.5vw, 13px);
-    opacity: 0.9;
+    opacity: 0.95;
     font-weight: 300;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
 
   /* Chat */
@@ -1680,12 +1682,13 @@
     try {
       const r = await fetch('/api/models/status');
       const status = await r.json();
-      
+
       // Update status indicators in gallery
       const indicators = document.querySelectorAll('.status-indicator');
       if (indicators.length > 0) {
-        // If API returns data and there are online models, show online
-        const isOnline = status.online > 0 || status.total_models === 0;
+        // Show online if: total_models is 0 (no data yet) OR online > 0
+        // This prevents showing "Offline" when API returns empty data
+        const isOnline = status.total_models === 0 || status.online > 0;
         indicators.forEach(ind => {
           const dot = ind.querySelector('.status-dot');
           if (dot) {
@@ -1701,7 +1704,7 @@
           }
         });
       }
-      
+
       console.log(`Model status: ${status.online}/${status.total_models} online`);
     } catch (e) {
       // API not available yet - show online by default
