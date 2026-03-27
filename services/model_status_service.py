@@ -192,24 +192,35 @@ class ModelStatusService:
 
     async def get_status_summary(self, db: AsyncSession) -> Dict[str, Any]:
         """Get summary of all model statuses."""
-        result = await db.execute(
-            select(
-                func.count(ModelStatus.id).label("total"),
-                func.sum(func.case((ModelStatus.is_online == True, 1), else_=0)).label("online"),
-                func.sum(func.case((ModelStatus.is_online == False, 1), else_=0)).label("offline"),
-                func.avg(ModelStatus.response_time_ms).label("avg_response"),
-                func.avg(ModelStatus.uptime_percentage).label("avg_uptime"),
+        try:
+            result = await db.execute(
+                select(
+                    func.count(ModelStatus.id).label("total"),
+                    func.sum(func.case((ModelStatus.is_online == True, 1), else_=0)).label("online"),
+                    func.sum(func.case((ModelStatus.is_online == False, 1), else_=0)).label("offline"),
+                    func.avg(ModelStatus.response_time_ms).label("avg_response"),
+                    func.avg(ModelStatus.uptime_percentage).label("avg_uptime"),
+                )
             )
-        )
-        row = result.first()
+            row = result.first()
 
-        return {
-            "total_models": row.total or 0,
-            "online": row.online or 0,
-            "offline": row.offline or 0,
-            "avg_response_time_ms": round(row.avg_response or 0, 2),
-            "avg_uptime_percentage": round(row.avg_uptime or 0, 2),
-        }
+            return {
+                "total_models": row.total or 0,
+                "online": row.online or 0,
+                "offline": row.offline or 0,
+                "avg_response_time_ms": round(row.avg_response or 0, 2),
+                "avg_uptime_percentage": round(row.avg_uptime or 0, 2),
+            }
+        except Exception as e:
+            # Table doesn't exist yet - return default values
+            logger.warning(f"Status summary failed (table may not exist): {e}")
+            return {
+                "total_models": 0,
+                "online": 0,
+                "offline": 0,
+                "avg_response_time_ms": 0,
+                "avg_uptime_percentage": 0,
+            }
 
 
 # Global service instance
