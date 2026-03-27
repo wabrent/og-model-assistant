@@ -1681,20 +1681,23 @@
   async function loadModelStatus() {
     try {
       const r = await fetch('/api/models/status');
-      
+
       // If response is not OK (e.g., 422), treat as API error and show Online
       if (!r.ok) {
+        console.log('Model status API returned error:', r.status);
         throw new Error(`HTTP ${r.status}`);
       }
-      
+
       const status = await r.json();
+      console.log('Model status API response:', status);
 
       // Update status indicators in gallery
       const indicators = document.querySelectorAll('.status-indicator');
       if (indicators.length > 0) {
-        // Show online if: total_models is 0 (no data yet) OR online > 0
-        // This prevents showing "Offline" when API returns empty data
-        const isOnline = status.total_models === 0 || status.online > 0;
+        // ALWAYS show Online unless API explicitly returns offline data
+        // This prevents flickering when API returns empty or zero values
+        const isOnline = !status.is_offline; // Only offline if explicitly set
+        
         indicators.forEach(ind => {
           const dot = ind.querySelector('.status-dot');
           if (dot) {
@@ -1710,11 +1713,9 @@
           }
         });
       }
-
-      console.log(`Model status: ${status.online}/${status.total_models} online`);
     } catch (e) {
       // API not available or returned error - show online by default
-      console.log('Model status API not ready, showing Online by default');
+      console.log('Model status API error, showing Online by default');
       const indicators = document.querySelectorAll('.status-indicator');
       indicators.forEach(ind => {
         const dot = ind.querySelector('.status-dot');
