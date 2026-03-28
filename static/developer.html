@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developer Hub - OpenGradient</title>
+<link rel="icon" type="image/png" href="/static/logos/logo-trp-blue@2x.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text: #1a1a1a;
+    --text-light: #666666;
+    --text-tertiary: #999999;
+    --border: #e5e5e5;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --radius-lg: 40px;
+    --radius-md: 24px;
+    --radius-sm: 12px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --text: #ffffff;
+    --text-light: #a0a0a0;
+    --text-tertiary: #666666;
+    --border: #333333;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .logo img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .nav-btn.primary {
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+  }
+
+  /* Hero */
+  .dev-hero {
+    padding: 100px 48px 60px;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  }
+
+  .dev-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 700;
+    margin-bottom: 16px;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dev-hero p {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+
+  .dev-hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 42px;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 8px;
+  }
+
+  /* Main Content */
+  .dev-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .dev-section-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 40px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .dev-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .dev-section-desc {
+    font-size: 16px;
+    color: var(--text-light);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  /* API Key */
+  .api-key-display {
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+    padding: 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    word-break: break-all;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .btn {
+    padding: 14px 28px;
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 8px;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* API Endpoints */
+  .api-endpoint-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .api-method {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 12px;
+  }
+
+  .api-method.get {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  .api-method.post {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+
+  .api-path {
+    display: block;
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .api-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+  }
+
+  .api-example {
+    background: #1a1a2e;
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .api-example pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e0e0e0;
+    margin: 0;
+  }
+
+  .api-example .keyword { color: #f472b6; }
+  .api-example .string { color: #86efac; }
+
+  /* SDK Grid */
+  .sdk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .sdk-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .sdk-item:hover {
+    border-color: #667eea;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+  }
+
+  .sdk-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
+
+  .sdk-item h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .sdk-item code {
+    display: block;
+    background: var(--bg);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 16px;
+  }
+
+  .sdk-item pre {
+    background: #1a1a2e;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .sdk-item pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 12px;
+    color: #e0e0e0;
+    display: block;
+    margin: 0;
+  }
+
+  .sdk-item .keyword { color: #f472b6; }
+  .sdk-item .string { color: #86efac; }
+
+  /* Rate Limits Table */
+  .rate-limit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 24px;
+  }
+
+  .rate-limit-table th {
+    text-align: left;
+    padding: 16px;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .rate-limit-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-light);
+  }
+
+  .rate-limit-table code {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 60px 48px;
+    text-align: center;
+    margin-top: 80px;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .footer-text {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 16px 24px; }
+    .nav-actions { display: none; }
+    .dev-hero { padding: 60px 24px 40px; }
+    .dev-hero h1 { font-size: 32px; }
+    .dev-hero-stats { gap: 32px; }
+    .dev-container { padding: 40px 20px; }
+    .dev-section-card { padding: 24px; }
+    .stat-value { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo" onclick="window.location.href='/'">
+    <img src="/static/logos/logo-gradientbg@2x.png" alt="OpenGradient">
+    <span class="logo-text">OpenGradient</span>
+  </div>
+  <div class="nav-actions">
+    <a href="/" class="nav-btn">← Back to App</a>
+    <a href="https://hub.opengradient.ai" target="_blank" class="nav-btn primary">OpenGradient Hub</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="dev-hero">
+  <h1>👨‍💻 Developer Hub</h1>
+  <p>Build powerful AI applications with OpenGradient API. Access 2,000+ models with simple REST endpoints and official SDKs.</p>
+  
+  <div class="dev-hero-stats">
+    <div class="stat-item">
+      <div class="stat-value">2,247+</div>
+      <div class="stat-label">AI Models</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">99.9%</div>
+      <div class="stat-label">Uptime</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">&lt;100ms</div>
+      <div class="stat-label">Avg Response</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="dev-container">
+  
+  <!-- API Key Section -->
+  <div class="dev-section-card">
+    <h2 class="dev-section-title">🔑 Your API Key</h2>
+    <p class="dev-section-desc">
+      All API requests require authentication using an API key. 
+      Generate your key below and include it in the <code style="background: var(--bg-secondary); padding: 4px 8px; border-radius: 4px;">Authorization</code> header.
+    </p>
+    <div class="api-key-display" id="api-key-display">og_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+    <div style="text-align: center; margin-top: 20px;">
+      <button class="btn" onclick="generateApiKey()">🔄 Generate New Key</button>
+      <button class="btn btn-secondary" onclick="copyApiKey()">📋 Copy</button>
+    </div>
+  </div>
+
+  <!-- Authentication Section -->
+  <div class="dev-section-card">
+    <h2 class="dev-section-title">🔐 Authentication</h2>
+    <p class="dev-section-desc">
+      Include your API key in the Authorization header of every request:
+    </p>
+    <div class="api-example">
+      <pre>Authorization: Bearer og_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx</pre>
+    </div>
+  </div>
+
+  <!-- API Endpoints Section -->
+  <div class="dev-section-card">
+    <h2 class="dev-section-title">📚 API Endpoints</h2>
+    <p class="dev-section-desc">
+      Base URL: <code style="background: var(--bg-secondary); padding: 4px 8px; border-radius: 4px;">https://og-model-assistant.onrender.com/api</code>
+    </p>
+
+    <!-- Search Models -->
+    <div class="api-endpoint-card">
+      <span class="api-method post">POST</span>
+      <code class="api-path">/api/models/search</code>
+      <p class="api-desc">Search for AI models using natural language queries.</p>
+      <div class="api-example">
+        <pre><span class="keyword">curl</span> -X POST https://og-model-assistant.onrender.com/api/models/search \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"query": "language models", "limit": 5}'</span></pre>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="api-endpoint-card">
+      <span class="api-method post">POST</span>
+      <code class="api-path">/api/chat</code>
+      <p class="api-desc">Interact with AI models using chat interface.</p>
+      <div class="api-example">
+        <pre><span class="keyword">curl</span> -X POST https://og-model-assistant.onrender.com/api/chat \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"message": "Hello!", "model": "GROK-4-Fast"}'</span></pre>
+      </div>
+    </div>
+
+    <!-- Get Models -->
+    <div class="api-endpoint-card">
+      <span class="api-method get">GET</span>
+      <code class="api-path">/api/models?limit=10&offset=0</code>
+      <p class="api-desc">Get list of all available AI models with pagination.</p>
+      <div class="api-example">
+        <pre><span class="keyword">curl</span> https://og-model-assistant.onrender.com/api/models?limit=10 \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></pre>
+      </div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="api-endpoint-card">
+      <span class="api-method get">GET</span>
+      <code class="api-path">/api/analytics/stats</code>
+      <p class="api-desc">Get platform statistics and analytics.</p>
+      <div class="api-example">
+        <pre><span class="keyword">curl</span> https://og-model-assistant.onrender.com/api/analytics/stats \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- SDKs Section -->
+  <div class="dev-section-card">
+    <h2 class="dev-section-title">📦 SDKs & Libraries</h2>
+    <p class="dev-section-desc">
+      Official SDKs for popular programming languages. Get started quickly with pre-built clients.
+    </p>
+
+    <div class="sdk-grid">
+      <!-- Python SDK -->
+      <div class="sdk-item">
+        <div class="sdk-icon">🐍</div>
+        <h4>Python SDK</h4>
+        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
+          Official Python client with async support and type hints.
+        </p>
+        <code>pip install opengradient-sdk</code>
+        <pre><code><span class="keyword">from</span> opengradient <span class="keyword">import</span> OGClient
+
+client = OGClient(api_key=<span class="string">"your_key"</span>)
+models = <span class="keyword">await</span> client.search(<span class="string">"language models"</span>)
+
+<span class="keyword">for</span> model <span class="keyword">in</span> models:
+    print(model.name, model.description)</code></pre>
+      </div>
+
+      <!-- JavaScript SDK -->
+      <div class="sdk-item">
+        <div class="sdk-icon">🟨</div>
+        <h4>JavaScript SDK</h4>
+        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
+          Node.js and browser-compatible client with Promise support.
+        </p>
+        <code>npm install @opengradient/sdk</code>
+        <pre><code><span class="keyword">import</span> { OGClient } <span class="keyword">from</span> <span class="string">'@opengradient/sdk'</span>
+
+<span class="keyword">const</span> client = <span class="keyword">new</span> OGClient(<span class="string">'your_key'</span>)
+<span class="keyword">const</span> models = <span class="keyword">await</span> client.search(<span class="string">'language models'</span>)
+
+models.forEach(model => console.log(model.name))</code></pre>
+      </div>
+
+      <!-- REST API -->
+      <div class="sdk-item">
+        <div class="sdk-icon">🌐</div>
+        <h4>REST API</h4>
+        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
+          Use any HTTP client to interact with our RESTful API.
+        </p>
+        <code>Works with curl, Postman, etc.</code>
+        <pre><code><span class="keyword">curl</span> -X POST \
+  https://og-model-assistant.onrender.com/api/models/search \
+  -H <span class="string">"Authorization: Bearer YOUR_KEY"</span> \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"query": "AI models"}'</span></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rate Limits Section -->
+  <div class="dev-section-card">
+    <h2 class="dev-section-title">⚡ Rate Limits</h2>
+    <p class="dev-section-desc">
+      API rate limits ensure fair usage for all developers. Every response includes headers with your current rate limit status.
+    </p>
+
+    <table class="rate-limit-table">
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Limit</th>
+          <th>Window</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/models/search</code></td>
+          <td>100 requests</td>
+          <td>per minute</td>
+        </tr>
+        <tr>
+          <td><code>/chat</code></td>
+          <td>60 requests</td>
+          <td>per minute</td>
+        </tr>
+        <tr>
+          <td><code>/models</code></td>
+          <td>200 requests</td>
+          <td>per minute</td>
+        </tr>
+        <tr>
+          <td><code>/analytics/*</code></td>
+          <td>30 requests</td>
+          <td>per minute</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 24px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-sm);">
+      <strong style="color: var(--text);">Rate Limit Headers:</strong>
+      <pre style="margin-top: 8px; font-family: 'Fira Code', monospace; font-size: 13px; color: var(--text-light);">X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1640000000</pre>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">OpenGradient Model Hub</div>
+  <div class="footer-text">AI-powered model discovery and comparison platform</div>
+  <a href="https://x.com/graanit2" target="_blank" class="footer-link">
+    <span>𝕏</span>
+    <span>Developed by @graanit2</span>
+  </a>
+</footer>
+
+<script>
+  // API Key Generation
+  function generateApiKey() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let key = 'og_live_';
+    for (let i = 0; i < 32; i++) {
+      key += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('api-key-display').textContent = key;
+    localStorage.setItem('og_api_key', key);
+    showToast('✅', 'New API key generated!');
+  }
+
+  // Copy API Key
+  function copyApiKey() {
+    const key = document.getElementById('api-key-display').textContent;
+    navigator.clipboard.writeText(key).then(() => {
+      showToast('📋', 'API key copied to clipboard!');
+    });
+  }
+
+  // Toast Notification
+  function showToast(icon, msg) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      z-index: 10000;
+      animation: slideIn 0.3s ease;
+    `;
+    toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // Load saved API key
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedKey = localStorage.getItem('og_api_key');
+    if (savedKey) {
+      document.getElementById('api-key-display').textContent = savedKey;
+    }
+    
+    // Load theme preference
+    const savedTheme = localStorage.getItem('og_theme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+  });
+</script>
+
+</body>
+</html>
