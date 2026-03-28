@@ -2331,7 +2331,6 @@
   function showEcosystemPage(page) {
     hideEcosystem();
     
-    // Navigate to ecosystem pages
     const pages = {
       'marketplace': '/static/marketplace.html',
       'developer': '/static/developer.html',
@@ -2344,6 +2343,8 @@
         window.location.href = '/static/developer.html';
       } else if (page === 'academy') {
         window.location.href = '/static/academy.html';
+      } else if (page === 'defi') {
+        window.location.href = '/static/defi.html';
       } else {
         showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
       }

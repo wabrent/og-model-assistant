@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeFi Hub - OpenGradient</title>
+<link rel="icon" type="image/png" href="/static/logos/logo-trp-blue@2x.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text: #1a1a1a;
+    --text-light: #666666;
+    --text-tertiary: #999999;
+    --border: #e5e5e5;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --radius-lg: 40px;
+    --radius-md: 24px;
+    --radius-sm: 12px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --text: #ffffff;
+    --text-light: #a0a0a0;
+    --text-tertiary: #666666;
+    --border: #333333;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: var(--gradient-4); animation-delay: 0s; }
+  .blob-2 { top: 30%; right: -10%; width: 500px; height: 500px; background: var(--gradient-5); animation-delay: 2s; }
+  .blob-3 { bottom: -10%; left: 10%; width: 550px; height: 550px; background: var(--gradient-3); animation-delay: 4s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.9); }
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .logo img { width: 40px; height: 40px; }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-btn:hover {
+    background: var(--gradient-4);
+    color: white;
+    border-color: transparent;
+    transform: rotate(180deg);
+  }
+
+  .nav-btn {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--text);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.primary {
+    background: var(--gradient-4);
+    color: white;
+    border: none;
+  }
+
+  /* Hero */
+  .defi-hero {
+    padding: 120px 48px 80px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .defi-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 64px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: var(--gradient-4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .defi-hero p {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto 50px;
+    line-height: 1.8;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  }
+
+  .defi-stats {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 56px;
+    font-weight: 700;
+    background: var(--gradient-4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 8px;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Main Content */
+  .defi-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Cards */
+  .defi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+
+  .defi-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .defi-card:hover {
+    border-color: #43e97b;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-8px);
+  }
+
+  .defi-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .defi-card-icon {
+    font-size: 48px;
+  }
+
+  .defi-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .defi-card-subtitle {
+    font-size: 14px;
+    color: var(--text-light);
+  }
+
+  .apy-badge {
+    padding: 8px 16px;
+    background: var(--gradient-4);
+    color: white;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Input Groups */
+  .input-group {
+    margin-bottom: 20px;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 16px;
+    font-family: 'Fira Code', monospace;
+  }
+
+  .input-group input:focus {
+    outline: none;
+    border-color: #43e97b;
+    box-shadow: 0 0 0 3px rgba(67, 233, 123, 0.1);
+  }
+
+  .balance {
+    font-size: 12px;
+    color: var(--text-light);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  /* Buttons */
+  .btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--gradient-4);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 16px;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-box {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: var(--radius-sm);
+    text-align: center;
+  }
+
+  .stat-box-label {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+
+  .stat-box-value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Governance */
+  .proposal-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .proposal-card:hover {
+    border-color: #43e97b;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .proposal-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .proposal-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .proposal-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .proposal-votes {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .proposal-deadline {
+    font-size: 13px;
+    color: #f5576c;
+  }
+
+  /* Progress Bar */
+  .progress-container {
+    margin: 16px 0;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-4);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 60px 48px;
+    text-align: center;
+    margin-top: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .footer-text {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.85;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 16px 24px; }
+    .nav-actions { display: none; }
+    .defi-hero { padding: 80px 24px 40px; }
+    .defi-hero h1 { font-size: 36px; }
+    .defi-stats { gap: 40px; }
+    .defi-container { padding: 0 20px 40px; }
+    .defi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo" onclick="window.location.href='/'">
+    <img src="/static/logos/logo-gradientbg@2x.png" alt="OpenGradient">
+    <span class="logo-text">OpenGradient</span>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌓</button>
+    <a href="/" class="nav-btn">← Back to App</a>
+    <a href="/static/developer.html" class="nav-btn">Developer Hub</a>
+    <a href="/static/academy.html" class="nav-btn">Academy</a>
+    <a href="https://hub.opengradient.ai" target="_blank" class="nav-btn primary">OpenGradient Hub</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="defi-hero">
+  <h1>💰 DeFi Hub</h1>
+  <p>Stake OPG tokens, earn rewards, and participate in governance. Build the future of AI with decentralized finance.</p>
+  
+  <div class="defi-stats">
+    <div class="stat-item">
+      <div class="stat-value">$2.5M</div>
+      <div class="stat-label">Total Value Locked</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">12.5%</div>
+      <div class="stat-label">Avg APY</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">5K+</div>
+      <div class="stat-label">Stakers</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="defi-container">
+  
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="stat-box-label">Your Balance</div>
+      <div class="stat-box-value" id="user-balance">10.0 OPG</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-label">Staked</div>
+      <div class="stat-box-value" id="user-staked">0.0 OPG</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-label">Rewards Earned</div>
+      <div class="stat-box-value" id="user-rewards">0.0 OPG</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-box-label">Voting Power</div>
+      <div class="stat-box-value" id="user-voting">0</div>
+    </div>
+  </div>
+
+  <div class="defi-grid">
+    
+    <!-- Staking Card -->
+    <div class="defi-card">
+      <div class="defi-card-header">
+        <div>
+          <div class="defi-card-title">💎 Stake OPG</div>
+          <div class="defi-card-subtitle">Earn passive rewards</div>
+        </div>
+        <div class="apy-badge">12.5% APY</div>
+      </div>
+      
+      <div class="input-group">
+        <label>Amount to Stake</label>
+        <input type="number" id="stake-amount" placeholder="0.0" min="0" step="0.1">
+        <div class="balance">Balance: <span id="stake-balance">10.0</span> OPG</div>
+      </div>
+
+      <div class="input-group">
+        <label>Lock Period</label>
+        <select id="lock-period" style="width: 100%; padding: 14px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 16px;">
+          <option value="30">30 days - 12.5% APY</option>
+          <option value="60">60 days - 15.0% APY</option>
+          <option value="90">90 days - 18.0% APY</option>
+          <option value="180">180 days - 24.0% APY</option>
+        </select>
+      </div>
+
+      <button class="btn" onclick="stakeTokens()">🔒 Stake OPG</button>
+      <button class="btn btn-secondary" onclick="unstakeTokens()" style="margin-top: 8px;">🔓 Unstake</button>
+    </div>
+
+    <!-- Liquidity Pool Card -->
+    <div class="defi-card">
+      <div class="defi-card-header">
+        <div>
+          <div class="defi-card-title">💧 Liquidity Pool</div>
+          <div class="defi-card-subtitle">OPG/USDT Pool</div>
+        </div>
+        <div class="apy-badge">28.3% APY</div>
+      </div>
+
+      <div class="stats-grid" style="margin-bottom: 16px;">
+        <div class="stat-box">
+          <div class="stat-box-label">TVL</div>
+          <div class="stat-box-value">$850K</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">Your Share</div>
+          <div class="stat-box-value">0%</div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>Deposit OPG</label>
+        <input type="number" id="lp-amount" placeholder="0.0" min="0" step="0.1">
+      </div>
+
+      <button class="btn" onclick="addLiquidity()">➕ Add Liquidity</button>
+      <button class="btn btn-secondary" onclick="removeLiquidity()" style="margin-top: 8px;">➖ Remove</button>
+    </div>
+
+    <!-- Governance Card -->
+    <div class="defi-card">
+      <div class="defi-card-header">
+        <div>
+          <div class="defi-card-title">🗳️ Governance</div>
+          <div class="defi-card-subtitle">Vote on proposals</div>
+        </div>
+        <div class="apy-badge" style="background: var(--gradient-2);">3 Active</div>
+      </div>
+
+      <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">
+        Your Voting Power: <strong id="voting-power">0</strong> votes
+      </p>
+
+      <button class="btn" onclick="viewProposals()">📋 View Proposals</button>
+    </div>
+
+  </div>
+
+  <!-- Active Proposals -->
+  <div class="defi-card" id="proposals-section">
+    <div class="defi-card-header">
+      <div class="defi-card-title">📜 Active Proposals</div>
+      <div class="defi-card-subtitle">Participate in governance</div>
+    </div>
+
+    <div class="proposal-card">
+      <div class="proposal-title">OGP-001: Add New AI Model Categories</div>
+      <p class="proposal-desc">
+        Proposal to expand the model hub with new categories including Robotics, BioTech, and Climate AI models.
+      </p>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 75%;"></div>
+        </div>
+        <div class="progress-labels">
+          <span>✅ 750 For</span>
+          <span>❌ 250 Against</span>
+        </div>
+      </div>
+      <div class="proposal-meta">
+        <span class="proposal-votes">Your vote: Not voted</span>
+        <span class="proposal-deadline">Ends in 5 days</span>
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button class="btn" style="flex: 1; margin-top: 0;" onclick="vote('for')">✅ Vote For</button>
+        <button class="btn btn-secondary" style="flex: 1; margin-top: 0;" onclick="vote('against')">❌ Vote Against</button>
+      </div>
+    </div>
+
+    <div class="proposal-card">
+      <div class="proposal-title">OGP-002: Reduce Transaction Fees</div>
+      <p class="proposal-desc">
+        Reduce API call fees from 0.1 OPG to 0.05 OPG to encourage more developers to use the platform.
+      </p>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 60%;"></div>
+        </div>
+        <div class="progress-labels">
+          <span>✅ 600 For</span>
+          <span>❌ 400 Against</span>
+        </div>
+      </div>
+      <div class="proposal-meta">
+        <span class="proposal-votes">Your vote: Not voted</span>
+        <span class="proposal-deadline">Ends in 3 days</span>
+      </div>
+      <div style="display: flex; gap: 12px; margin-top: 16px;">
+        <button class="btn" style="flex: 1; margin-top: 0;" onclick="vote('for')">✅ Vote For</button>
+        <button class="btn btn-secondary" style="flex: 1; margin-top: 0;" onclick="vote('against')">❌ Vote Against</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">OpenGradient Model Hub</div>
+  <div class="footer-text">AI-powered model discovery and comparison platform</div>
+  <a href="https://x.com/graanit2" target="_blank" class="footer-link">
+    <span>𝕏</span>
+    <span>Developed by @graanit2</span>
+  </a>
+</footer>
+
+<script>
+  // Theme Toggle
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('og_theme', newTheme);
+    
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+  }
+
+  // Stake Tokens
+  function stakeTokens() {
+    const amount = document.getElementById('stake-amount').value;
+    if (!amount || amount <= 0) {
+      showToast('❌', 'Please enter a valid amount');
+      return;
+    }
+    showToast('✅', `Staked ${amount} OPG! Rewards will accrue daily.`);
+    document.getElementById('stake-amount').value = '';
+  }
+
+  // Unstake Tokens
+  function unstakeTokens() {
+    showToast('✅', 'Unstaked successfully!');
+  }
+
+  // Add Liquidity
+  function addLiquidity() {
+    const amount = document.getElementById('lp-amount').value;
+    if (!amount || amount <= 0) {
+      showToast('❌', 'Please enter a valid amount');
+      return;
+    }
+    showToast('✅', `Added ${amount} OPG to liquidity pool!`);
+    document.getElementById('lp-amount').value = '';
+  }
+
+  // Remove Liquidity
+  function removeLiquidity() {
+    showToast('✅', 'Liquidity removed successfully!');
+  }
+
+  // View Proposals
+  function viewProposals() {
+    document.getElementById('proposals-section').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Vote
+  function vote(choice) {
+    showToast('✅', `Voted ${choice} successfully!`);
+  }
+
+  // Toast
+  function showToast(icon, msg) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // Load theme
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('og_theme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+    
+    const btn = document.getElementById('theme-btn');
+    if (btn) {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      btn.textContent = isDark ? '🌙' : '☀️';
+    }
+  });
+</script>
+
+</body>
+</html>
