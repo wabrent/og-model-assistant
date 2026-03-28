@@ -2340,9 +2340,10 @@
     };
     
     if (pages[page]) {
-      // For now, show toast for pages that don't exist yet
       if (page === 'developer') {
         window.location.href = '/static/developer.html';
+      } else if (page === 'academy') {
+        window.location.href = '/static/academy.html';
       } else {
         showToast('🚧', `${page.charAt(0).toUpperCase() + page.slice(1)} - Coming Soon!`);
       }

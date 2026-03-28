@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Academy - OpenGradient</title>
+<link rel="icon" type="image/png" href="/static/logos/logo-trp-blue@2x.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text: #1a1a1a;
+    --text-light: #666666;
+    --text-tertiary: #999999;
+    --border: #e5e5e5;
+    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --radius-lg: 40px;
+    --radius-md: 24px;
+    --radius-sm: 12px;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  [data-theme="dark"] {
+    --bg: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --text: #ffffff;
+    --text-light: #a0a0a0;
+    --text-tertiary: #666666;
+    --border: #333333;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  *, *::before, *::after {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Blobs Animation */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: var(--gradient-1); animation-delay: 0s; }
+  .blob-2 { top: 30%; right: -10%; width: 500px; height: 500px; background: var(--gradient-2); animation-delay: 2s; }
+  .blob-3 { bottom: -10%; left: 10%; width: 550px; height: 550px; background: var(--gradient-3); animation-delay: 4s; }
+  .blob-4 { bottom: 20%; right: 5%; width: 400px; height: 400px; background: var(--gradient-4); animation-delay: 6s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.9); }
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .logo img { width: 40px; height: 40px; }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-btn:hover {
+    background: var(--gradient-1);
+    color: white;
+    border-color: transparent;
+    transform: rotate(180deg);
+  }
+
+  .nav-btn {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--text);
+    color: var(--bg);
+    transform: translateY(-2px);
+  }
+
+  .nav-btn.primary {
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+  }
+
+  /* Hero */
+  .academy-hero {
+    padding: 120px 48px 80px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .academy-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 64px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .academy-hero p {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto 50px;
+    line-height: 1.8;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  }
+
+  .academy-stats {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 56px;
+    font-weight: 700;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 8px;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Main Content */
+  .academy-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Course Categories */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+  }
+
+  .category-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .category-card:hover {
+    border-color: #f093fb;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-8px);
+  }
+
+  .category-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .category-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .category-count {
+    font-size: 14px;
+    color: var(--text-light);
+  }
+
+  /* Courses Grid */
+  .courses-section {
+    margin-bottom: 60px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 600;
+  }
+
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+  }
+
+  .course-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .course-card:hover {
+    border-color: #f093fb;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-8px) scale(1.02);
+  }
+
+  .course-thumbnail {
+    height: 200px;
+    background: var(--gradient-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+  }
+
+  .course-content {
+    padding: 24px;
+  }
+
+  .course-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: var(--gradient-2);
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .course-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .course-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .course-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .course-duration, .course-level {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  .course-duration { display: flex; align-items: center; gap: 6px; }
+  .course-level { display: flex; align-items: center; gap: 6px; }
+
+  /* Learning Path */
+  .path-container {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 40px;
+    margin-bottom: 60px;
+  }
+
+  .path-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .path-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .path-steps::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50px;
+    right: 50px;
+    height: 3px;
+    background: var(--gradient-2);
+    z-index: 0;
+  }
+
+  .path-step {
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .path-step-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--gradient-2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 16px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .path-step-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .path-step-desc {
+    font-size: 13px;
+    color: var(--text-light);
+  }
+
+  /* Certificates */
+  .certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .certificate-card {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .certificate-card:hover {
+    border-color: #f093fb;
+    box-shadow: var(--shadow-md);
+  }
+
+  .certificate-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .certificate-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .certificate-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 20px;
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--text);
+    color: var(--bg);
+    padding: 60px 48px;
+    text-align: center;
+    margin-top: 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .footer-text {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer-link:hover { opacity: 1; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 16px 24px; }
+    .nav-actions { display: none; }
+    .academy-hero { padding: 80px 24px 40px; }
+    .academy-hero h1 { font-size: 36px; }
+    .academy-stats { gap: 40px; }
+    .academy-container { padding: 0 20px 40px; }
+    .path-steps::before { display: none; }
+    .path-steps { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo" onclick="window.location.href='/'">
+    <img src="/static/logos/logo-gradientbg@2x.png" alt="OpenGradient">
+    <span class="logo-text">OpenGradient</span>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌓</button>
+    <a href="/" class="nav-btn">← Back to App</a>
+    <a href="/static/developer.html" class="nav-btn">Developer Hub</a>
+    <a href="https://hub.opengradient.ai" target="_blank" class="nav-btn primary">OpenGradient Hub</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="academy-hero">
+  <h1>🎓 AI Academy</h1>
+  <p>Master AI and Machine Learning with hands-on courses. From beginner to expert — learn at your own pace with practical projects.</p>
+  
+  <div class="academy-stats">
+    <div class="stat-item">
+      <div class="stat-value">50+</div>
+      <div class="stat-label">Courses</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">100%</div>
+      <div class="stat-label">Free</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">∞</div>
+      <div class="stat-label">Knowledge</div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="academy-container">
+  
+  <!-- Categories -->
+  <div class="categories-grid">
+    <div class="category-card" onclick="filterCourses('all')">
+      <div class="category-icon">📚</div>
+      <div class="category-title">All Courses</div>
+      <div class="category-count">50 courses</div>
+    </div>
+    <div class="category-card" onclick="filterCourses('beginner')">
+      <div class="category-icon">🌱</div>
+      <div class="category-title">Beginner</div>
+      <div class="category-count">20 courses</div>
+    </div>
+    <div class="category-card" onclick="filterCourses('intermediate')">
+      <div class="category-icon">🚀</div>
+      <div class="category-title">Intermediate</div>
+      <div class="category-count">18 courses</div>
+    </div>
+    <div class="category-card" onclick="filterCourses('advanced')">
+      <div class="category-icon">🔥</div>
+      <div class="category-title">Advanced</div>
+      <div class="category-count">12 courses</div>
+    </div>
+  </div>
+
+  <!-- Learning Path -->
+  <div class="path-container">
+    <h2 class="path-title">📍 Your Learning Path</h2>
+    <div class="path-steps">
+      <div class="path-step">
+        <div class="path-step-icon">🌱</div>
+        <div class="path-step-title">Start Basics</div>
+        <div class="path-step-desc">AI/ML Fundamentals</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-icon">📖</div>
+        <div class="path-step-title">Learn Core</div>
+        <div class="path-step-desc">Neural Networks</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-icon">🛠️</div>
+        <div class="path-step-title">Build Projects</div>
+        <div class="path-step-desc">Hands-on Practice</div>
+      </div>
+      <div class="path-step">
+        <div class="path-step-icon">🏆</div>
+        <div class="path-step-title">Get Certified</div>
+        <div class="path-step-desc">Earn Certificate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Section -->
+  <div class="courses-section">
+    <div class="section-header">
+      <h2 class="section-title">📖 Featured Courses</h2>
+    </div>
+    
+    <div class="courses-grid">
+      <!-- Course 1 -->
+      <div class="course-card" onclick="openCourse('ai-basics')">
+        <div class="course-thumbnail">🤖</div>
+        <div class="course-content">
+          <span class="course-badge">Beginner</span>
+          <h3 class="course-title">Introduction to AI & Machine Learning</h3>
+          <p class="course-desc">Learn the fundamentals of artificial intelligence and machine learning. Perfect for beginners.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 4 hours</span>
+            <span class="course-level">📊 Beginner</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 2 -->
+      <div class="course-card" onclick="openCourse('neural-networks')">
+        <div class="course-thumbnail">🧠</div>
+        <div class="course-content">
+          <span class="course-badge">Intermediate</span>
+          <h3 class="course-title">Neural Networks Deep Dive</h3>
+          <p class="course-desc">Understand how neural networks work. Build your first deep learning model from scratch.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 8 hours</span>
+            <span class="course-level">📊 Intermediate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 3 -->
+      <div class="course-card" onclick="openCourse('llm-apps')">
+        <div class="course-thumbnail">💬</div>
+        <div class="course-content">
+          <span class="course-badge">Advanced</span>
+          <h3 class="course-title">Building LLM Applications</h3>
+          <p class="course-desc">Create powerful applications using Large Language Models like GPT, Llama, and more.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 12 hours</span>
+            <span class="course-level">📊 Advanced</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 4 -->
+      <div class="course-card" onclick="openCourse('nlp')">
+        <div class="course-thumbnail">📝</div>
+        <div class="course-content">
+          <span class="course-badge">Intermediate</span>
+          <h3 class="course-title">Natural Language Processing</h3>
+          <p class="course-desc">Master NLP techniques for text analysis, sentiment detection, and language understanding.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 6 hours</span>
+            <span class="course-level">📊 Intermediate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 5 -->
+      <div class="course-card" onclick="openCourse('computer-vision')">
+        <div class="course-thumbnail">👁️</div>
+        <div class="course-content">
+          <span class="course-badge">Advanced</span>
+          <h3 class="course-title">Computer Vision Mastery</h3>
+          <p class="course-desc">Learn image classification, object detection, and image generation with AI.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 10 hours</span>
+            <span class="course-level">📊 Advanced</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 6 -->
+      <div class="course-card" onclick="openCourse('opengradient-api')">
+        <div class="course-thumbnail">⚡</div>
+        <div class="course-content">
+          <span class="course-badge">Beginner</span>
+          <h3 class="course-title">OpenGradient API Tutorial</h3>
+          <p class="course-desc">Learn to use OpenGradient API to access 2,000+ AI models in your applications.</p>
+          <div class="course-meta">
+            <span class="course-duration">⏱️ 3 hours</span>
+            <span class="course-level">📊 Beginner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificates Section -->
+  <div class="courses-section">
+    <div class="section-header">
+      <h2 class="section-title">🏆 Certificates</h2>
+    </div>
+    <p class="dev-section-desc" style="text-align: center; max-width: 600px; margin: 0 auto 32px;">
+      Earn certificates after completing courses. Share your achievements with the world!
+    </p>
+    
+    <div class="certificates-grid">
+      <div class="certificate-card">
+        <div class="certificate-icon">🌱</div>
+        <h3 class="certificate-title">AI Fundamentals</h3>
+        <p class="certificate-desc">Complete 5 beginner courses</p>
+        <div style="font-size: 14px; color: var(--text-light);">0 / 5 courses</div>
+      </div>
+      <div class="certificate-card">
+        <div class="certificate-icon">🚀</div>
+        <h3 class="certificate-title">ML Practitioner</h3>
+        <p class="certificate-desc">Complete 10 intermediate courses</p>
+        <div style="font-size: 14px; color: var(--text-light);">0 / 10 courses</div>
+      </div>
+      <div class="certificate-card">
+        <div class="certificate-icon">🔥</div>
+        <h3 class="certificate-title">AI Expert</h3>
+        <p class="certificate-desc">Complete all advanced courses</p>
+        <div style="font-size: 14px; color: var(--text-light);">0 / 12 courses</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">OpenGradient Model Hub</div>
+  <div class="footer-text">AI-powered model discovery and comparison platform</div>
+  <a href="https://x.com/graanit2" target="_blank" class="footer-link">
+    <span>𝕏</span>
+    <span>Developed by @graanit2</span>
+  </a>
+</footer>
+
+<script>
+  // Theme Toggle
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = body.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('og_theme', newTheme);
+    
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+  }
+
+  // Filter Courses
+  function filterCourses(level) {
+    const cards = document.querySelectorAll('.course-card');
+    cards.forEach(card => {
+      const badge = card.querySelector('.course-badge');
+      if (level === 'all' || badge.textContent.toLowerCase() === level) {
+        card.style.display = 'block';
+        card.style.animation = 'fadeInUp 0.8s ease-out';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    showToast('📚', `Showing ${level} courses`);
+  }
+
+  // Open Course
+  function openCourse(courseId) {
+    showToast('🚧', 'Course coming soon!');
+    // TODO: Navigate to course page
+    // window.location.href = '/course/' + courseId;
+  }
+
+  // Toast Notification
+  function showToast(icon, msg) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // Load theme
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('og_theme');
+    if (savedTheme) {
+      document.body.setAttribute('data-theme', savedTheme);
+    }
+    
+    const btn = document.getElementById('theme-btn');
+    if (btn) {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      btn.textContent = isDark ? '🌙' : '☀️';
+    }
+  });
+</script>
+
+</body>
+</html>
