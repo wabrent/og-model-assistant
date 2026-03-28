@@ -45,11 +45,35 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
+    font-weight: 300;
     overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
   *, *::before, *::after {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Blobs Animation */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .blob-1 { top: -10%; left: -5%; width: 600px; height: 600px; background: var(--gradient-1); animation-delay: 0s; }
+  .blob-2 { top: 30%; right: -10%; width: 500px; height: 500px; background: var(--gradient-2); animation-delay: 2s; }
+  .blob-3 { bottom: -10%; left: 10%; width: 550px; height: 550px; background: var(--gradient-3); animation-delay: 4s; }
+  .blob-4 { bottom: 20%; right: 5%; width: 400px; height: 400px; background: var(--gradient-4); animation-delay: 6s; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(50px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.9); }
   }
 
   /* Header */
@@ -63,6 +87,8 @@
     position: sticky;
     top: 0;
     z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(var(--bg), 0.8);
   }
 
   .logo {
@@ -104,9 +130,10 @@
   }
 
   .icon-btn:hover {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
+    background: var(--gradient-1);
+    color: white;
+    border-color: transparent;
+    transform: rotate(180deg);
   }
 
   .nav-btn {
@@ -125,6 +152,7 @@
   .nav-btn:hover {
     background: var(--text);
     color: var(--bg);
+    transform: translateY(-2px);
   }
 
   .nav-btn.primary {
@@ -133,45 +161,55 @@
     border: none;
   }
 
+  .nav-btn.primary:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
   /* Hero */
   .dev-hero {
-    padding: 100px 48px 60px;
+    padding: 120px 48px 80px;
     text-align: center;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    position: relative;
+    z-index: 1;
   }
 
   .dev-hero h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 6vw, 56px);
+    font-size: clamp(42px, 7vw, 64px);
     font-weight: 700;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     background: var(--gradient-1);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .dev-hero p {
     font-size: 18px;
     color: var(--text-light);
     max-width: 700px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
+    margin: 0 auto 50px;
+    line-height: 1.8;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
   }
 
   .dev-hero-stats {
     display: flex;
     justify-content: center;
-    gap: 64px;
+    gap: 80px;
     flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
   }
 
   .stat-item {
     text-align: center;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .stat-value {
-    font-size: 42px;
+    font-size: 56px;
     font-weight: 700;
     background: var(--gradient-1);
     -webkit-background-clip: text;
@@ -183,13 +221,21 @@
     font-size: 14px;
     color: var(--text-light);
     margin-top: 8px;
+    font-weight: 500;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* Main Content */
   .dev-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 24px;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
   }
 
   .dev-section-card {
@@ -199,6 +245,13 @@
     padding: 40px;
     margin-bottom: 32px;
     box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
+  }
+
+  .dev-section-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
   }
 
   .dev-section-title {
@@ -213,7 +266,7 @@
     font-size: 16px;
     color: var(--text-light);
     margin-bottom: 32px;
-    line-height: 1.6;
+    line-height: 1.8;
   }
 
   /* API Key */
@@ -227,6 +280,12 @@
     word-break: break-all;
     text-align: center;
     margin: 20px 0;
+    transition: all 0.3s ease;
+  }
+
+  .api-key-display:hover {
+    border-color: #667eea;
+    box-shadow: var(--shadow-sm);
   }
 
   .btn {
@@ -256,6 +315,7 @@
   .btn-secondary:hover {
     background: var(--text);
     color: var(--bg);
+    border-color: var(--text);
   }
 
   /* API Endpoints */
@@ -265,6 +325,13 @@
     border-radius: var(--radius-sm);
     padding: 24px;
     margin-bottom: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .api-endpoint-card:hover {
+    border-color: #667eea;
+    box-shadow: var(--shadow-md);
+    transform: translateX(8px);
   }
 
   .api-method {
@@ -299,6 +366,7 @@
     font-size: 14px;
     color: var(--text-light);
     margin-bottom: 16px;
+    line-height: 1.6;
   }
 
   .api-example {
@@ -306,6 +374,7 @@
     border-radius: var(--radius-sm);
     padding: 20px;
     overflow-x: auto;
+    margin-top: 16px;
   }
 
   .api-example pre {
@@ -333,17 +402,19 @@
     border-radius: var(--radius-sm);
     padding: 24px;
     transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .sdk-item:hover {
     border-color: #667eea;
     box-shadow: var(--shadow-md);
-    transform: translateY(-4px);
+    transform: translateY(-8px) scale(1.02);
   }
 
   .sdk-icon {
-    font-size: 40px;
+    font-size: 48px;
     margin-bottom: 16px;
+    display: block;
   }
 
   .sdk-item h4 {
@@ -387,6 +458,7 @@
     border-collapse: collapse;
     font-size: 14px;
     margin-top: 24px;
+    animation: fadeInUp 0.8s ease-out;
   }
 
   .rate-limit-table th {
@@ -403,6 +475,10 @@
     color: var(--text-light);
   }
 
+  .rate-limit-table tr:hover td {
+    background: var(--bg-secondary);
+  }
+
   .rate-limit-table code {
     font-family: 'Fira Code', monospace;
     font-size: 13px;
@@ -416,6 +492,8 @@
     padding: 60px 48px;
     text-align: center;
     margin-top: 80px;
+    position: relative;
+    z-index: 1;
   }
 
   .footer-logo {
@@ -439,22 +517,52 @@
     text-decoration: none;
     font-size: 14px;
     opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+
+  .footer-link:hover {
+    opacity: 1;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 
   /* Responsive */
   @media (max-width: 768px) {
     .header { padding: 16px 24px; }
     .nav-actions { display: none; }
-    .dev-hero { padding: 60px 24px 40px; }
-    .dev-hero h1 { font-size: 32px; }
-    .dev-hero-stats { gap: 32px; }
-    .dev-container { padding: 40px 20px; }
+    .dev-hero { padding: 80px 24px 40px; }
+    .dev-hero h1 { font-size: 36px; }
+    .dev-hero-stats { gap: 40px; }
+    .dev-container { padding: 0 20px 40px; }
     .dev-section-card { padding: 24px; }
-    .stat-value { font-size: 32px; }
+    .stat-value { font-size: 42px; }
   }
 </style>
 </head>
 <body>
+
+<!-- Blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
 
 <!-- Header -->
 <header class="header">
@@ -584,7 +692,7 @@
     <div class="sdk-grid">
       <!-- Python SDK -->
       <div class="sdk-item">
-        <div class="sdk-icon">🐍</div>
+        <span class="sdk-icon">🐍</span>
         <h4>Python SDK</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
           Official Python client with async support and type hints.
@@ -601,7 +709,7 @@ models = <span class="keyword">await</span> client.search(<span class="string">"
 
       <!-- JavaScript SDK -->
       <div class="sdk-item">
-        <div class="sdk-icon">🟨</div>
+        <span class="sdk-icon">🟨</span>
         <h4>JavaScript SDK</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
           Node.js and browser-compatible client with Promise support.
@@ -617,7 +725,7 @@ models.forEach(model => console.log(model.name))</code></pre>
 
       <!-- REST API -->
       <div class="sdk-item">
-        <div class="sdk-icon">🌐</div>
+        <span class="sdk-icon">🌐</span>
         <h4>REST API</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
           Use any HTTP client to interact with our RESTful API.
@@ -728,18 +836,7 @@ X-RateLimit-Reset: 1640000000</pre>
   // Toast Notification
   function showToast(icon, msg) {
     const toast = document.createElement('div');
-    toast.style.cssText = `
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      z-index: 10000;
-      animation: slideIn 0.3s ease;
-    `;
+    toast.className = 'toast';
     toast.innerHTML = `<span>${icon}</span> <span>${msg}</span>`;
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
