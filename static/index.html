@@ -1299,6 +1299,270 @@
     background: var(--bg-secondary);
   }
 
+  /* Developer Hub Section */
+  .developer-hub {
+    padding: 100px 24px;
+    background: var(--bg);
+    position: relative;
+    z-index: 1;
+  }
+
+  .dev-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .dev-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .dev-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 600;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .dev-subtitle {
+    font-size: 18px;
+    color: var(--text-light);
+    font-weight: 300;
+  }
+
+  .dev-stats {
+    display: flex;
+    justify-content: center;
+    gap: 64px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+  }
+
+  .dev-stat {
+    text-align: center;
+  }
+
+  .dev-stat-value {
+    font-size: 42px;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .dev-stat-label {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  .dev-section-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .dev-section-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .dev-section-desc {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 24px;
+  }
+
+  /* API Key Display */
+  .api-key-display {
+    font-family: 'Fira Code', monospace;
+    font-size: 16px;
+    padding: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    word-break: break-all;
+    text-align: center;
+  }
+
+  /* API Endpoint Cards */
+  .api-endpoint-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .api-method {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 8px;
+  }
+
+  .api-method.get {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  .api-method.post {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+
+  .api-path {
+    display: block;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .api-desc {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+  }
+
+  .api-example {
+    background: #1a1a2e;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  .api-example pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: #e0e0e0;
+    margin: 0;
+  }
+
+  /* SDK Grid */
+  .sdk-grid-inline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .sdk-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+
+  .sdk-icon-small {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .sdk-item h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .sdk-item code {
+    display: block;
+    background: var(--bg);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'Fira Code', monospace;
+    margin-bottom: 12px;
+  }
+
+  .sdk-item pre {
+    background: #1a1a2e;
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    overflow-x: auto;
+  }
+
+  .sdk-item pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 11px;
+    color: #e0e0e0;
+    display: block;
+  }
+
+  .sdk-item .keyword {
+    color: #f472b6;
+  }
+
+  .sdk-item .string {
+    color: #86efac;
+  }
+
+  /* Rate Limit Table */
+  .rate-limit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .rate-limit-table th {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+  }
+
+  .rate-limit-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .rate-limit-table code {
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+  }
+
+  /* Buttons */
+  .btn {
+    padding: 14px 28px;
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--text);
+    color: var(--bg);
+  }
+
   /* Top Models Section */
   .top-models {
     padding: 80px 24px;
@@ -1510,6 +1774,7 @@
 <div class="mobile-menu" id="mobile-menu">
   <a href="#features" onclick="toggleMobileMenu()">Features</a>
   <a href="#gallery" onclick="toggleMobileMenu()">Models</a>
+  <a href="#developer" onclick="toggleMobileMenu()">Developer Hub</a>
   <a href="#chat" onclick="toggleMobileMenu()">Try Now</a>
   <a href="#" onclick="toggleMobileMenu(); toggleTheme()">🌓 Theme</a>
   <a href="#" onclick="toggleMobileMenu(); toggleHistory()">📜 History</a>
@@ -1708,6 +1973,153 @@
         <input type="text" class="chat-input" id="input" placeholder="Describe what model you need..." onkeydown="handleKey(event)">
         <button class="chat-send" id="send-btn" onclick="sendMessage()">Send →</button>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Developer Hub -->
+<section class="developer-hub" id="developer">
+  <div class="dev-container">
+    <div class="dev-header">
+      <h2 class="dev-title">👨‍💻 Developer Hub</h2>
+      <p class="dev-subtitle">Build powerful AI applications with OpenGradient API</p>
+    </div>
+
+    <div class="dev-stats">
+      <div class="dev-stat">
+        <div class="dev-stat-value">2,247+</div>
+        <div class="dev-stat-label">AI Models</div>
+      </div>
+      <div class="dev-stat">
+        <div class="dev-stat-value">99.9%</div>
+        <div class="dev-stat-label">Uptime</div>
+      </div>
+      <div class="dev-stat">
+        <div class="dev-stat-value">&lt;100ms</div>
+        <div class="dev-stat-label">Response</div>
+      </div>
+    </div>
+
+    <!-- API Key Section -->
+    <div class="dev-section-card">
+      <h3 class="dev-section-title">🔑 Your API Key</h3>
+      <p class="dev-section-desc">Keep this key secret. Include it in the Authorization header.</p>
+      <div class="api-key-display" id="api-key-display">og_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+      <div style="display: flex; gap: 12px; justify-content: center; margin-top: 16px;">
+        <button class="btn" onclick="generateApiKey()">🔄 Generate New Key</button>
+        <button class="btn btn-secondary" onclick="copyApiKey()">📋 Copy</button>
+      </div>
+    </div>
+
+    <!-- API Endpoints -->
+    <div class="dev-section-card">
+      <h3 class="dev-section-title">📚 API Endpoints</h3>
+      
+      <div class="api-endpoint-card">
+        <div class="api-method post">POST</div>
+        <code class="api-path">/api/models/search</code>
+        <p class="api-desc">Search for AI models using natural language queries.</p>
+        <div class="api-example">
+          <pre><code>{
+  "query": "language models for text generation",
+  "limit": 5
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="api-endpoint-card">
+        <div class="api-method post">POST</div>
+        <code class="api-path">/api/chat</code>
+        <p class="api-desc">Interact with AI models using chat interface.</p>
+        <div class="api-example">
+          <pre><code>{
+  "message": "Hello!",
+  "model": "GROK-4-Fast"
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="api-endpoint-card">
+        <div class="api-method get">GET</div>
+        <code class="api-path">/api/models?limit=10</code>
+        <p class="api-desc">Get list of all available AI models.</p>
+      </div>
+
+      <div class="api-endpoint-card">
+        <div class="api-method get">GET</div>
+        <code class="api-path">/api/analytics/stats</code>
+        <p class="api-desc">Get platform statistics and analytics.</p>
+      </div>
+    </div>
+
+    <!-- SDK Section -->
+    <div class="dev-section-card">
+      <h3 class="dev-section-title">📦 SDKs & Libraries</h3>
+      
+      <div class="sdk-grid-inline">
+        <div class="sdk-item">
+          <div class="sdk-icon-small">🐍</div>
+          <h4>Python</h4>
+          <code>pip install opengradient-sdk</code>
+          <pre><code><span class="keyword">from</span> opengradient <span class="keyword">import</span> OGClient
+client = OGClient(api_key=<span class="string">"your_key"</span>)
+models = <span class="keyword">await</span> client.search(<span class="string">"language models"</span>)</code></pre>
+        </div>
+        
+        <div class="sdk-item">
+          <div class="sdk-icon-small">🟨</div>
+          <h4>JavaScript</h4>
+          <code>npm install @opengradient/sdk</code>
+          <pre><code><span class="keyword">import</span> { OGClient } <span class="keyword">from</span> <span class="string">'@opengradient/sdk'</span>
+<span class="keyword">const</span> client = <span class="keyword">new</span> OGClient(<span class="string">'your_key'</span>)
+<span class="keyword">const</span> models = <span class="keyword">await</span> client.search(<span class="string">'language models'</span>)</code></pre>
+        </div>
+        
+        <div class="sdk-item">
+          <div class="sdk-icon-small">🌐</div>
+          <h4>REST API</h4>
+          <code>Works with curl, Postman</code>
+          <pre><code><span class="keyword">curl</span> -X POST \
+  https://og-model-assistant.onrender.com/api/models/search \
+  -H <span class="string">"Authorization: Bearer YOUR_KEY"</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rate Limits -->
+    <div class="dev-section-card">
+      <h3 class="dev-section-title">⚡ Rate Limits</h3>
+      <table class="rate-limit-table">
+        <thead>
+          <tr>
+            <th>Endpoint</th>
+            <th>Limit</th>
+            <th>Window</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>/models/search</code></td>
+            <td>100 requests</td>
+            <td>per minute</td>
+          </tr>
+          <tr>
+            <td><code>/chat</code></td>
+            <td>60 requests</td>
+            <td>per minute</td>
+          </tr>
+          <tr>
+            <td><code>/models</code></td>
+            <td>200 requests</td>
+            <td>per minute</td>
+          </tr>
+          <tr>
+            <td><code>/analytics/*</code></td>
+            <td>30 requests</td>
+            <td>per minute</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -2358,6 +2770,33 @@
     }
   });
 
+  // ==================== DEVELOPER HUB ====================
+  function generateApiKey() {
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let key = 'og_live_';
+    for (let i = 0; i < 32; i++) {
+      key += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('api-key-display').textContent = key;
+    localStorage.setItem('og_api_key', key);
+    showToast('✅', 'New API key generated!');
+  }
+
+  function copyApiKey() {
+    const key = document.getElementById('api-key-display').textContent;
+    navigator.clipboard.writeText(key).then(() => {
+      showToast('📋', 'API key copied to clipboard!');
+    });
+  }
+
+  // Load saved API key on page load
+  function loadSavedApiKey() {
+    const savedKey = localStorage.getItem('og_api_key');
+    if (savedKey && document.getElementById('api-key-display')) {
+      document.getElementById('api-key-display').textContent = savedKey;
+    }
+  }
+
   // ==================== FILTERS ====================
   function applyFilters() {
     const category = document.getElementById('filter-category').value;
@@ -2425,6 +2864,7 @@
     loadTopModels(); // Load trending models
     startAutoFaucet(); // Start automatic faucet
     checkAchievements(); // Check for new achievements
+    loadSavedApiKey(); // Load saved API key for Developer Hub
   });
 
   async function checkAchievements() {
