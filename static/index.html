@@ -2295,7 +2295,14 @@
       if (data.error) {
         addMessage('bot', `❌ ${data.error}`);
       } else {
-        addMessage('bot', data.reply + (data.model_used ? `\n\n<small style="color:var(--text-tertiary)">Model: ${data.model_used}</small>` : ''));
+        let replyText = data.reply;
+        if (data.model_used) {
+          replyText += `\n\n<small style="color:var(--text-tertiary)">🤖 Model: ${data.model_used}</small>`;
+        }
+        if (data.payment_hash) {
+          replyText += `\n<small style="color:var(--text-tertiary)">🔗 <a href="https://explorer.opengradient.ai/tx/${data.payment_hash}" target="_blank" style="color:var(--accent-blue)">TEE Verified</a></small>`;
+        }
+        addMessage('bot', replyText);
         queryCount++;
       }
     } catch (e) {
