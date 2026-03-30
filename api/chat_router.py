@@ -2,12 +2,14 @@
 API Router for chat operations.
 """
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from loguru import logger
+import json
 
 from core.database import get_db
-from models.schemas import ChatRequest, ChatResponse
-from services.chat_service import chat_service
+from models.schemas import ChatRequest, ChatResponse, AvailableModelsResponse, ModelInfo
+from services.chat_service import chat_service, TEE_LLM_MODELS
 from services.analytics_service import analytics_service
 from services.token_service import token_service, PRICING
 
@@ -98,4 +100,52 @@ async def delete_chat_session(
         raise
     except Exception as e:
         logger.error(f"Delete session error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/models", response_model=AvailableModelsResponse)
+async def get_available_models():
+    """
+    Get list of available TEE models for inference.
+    """
+    models = [
+        ModelInfo(
+            id=model_id,
+            name=TEE_LLM_MODELS[model_id]["provider"] + "/" + model_id,
+            provider=TEE_LLM_MODELS[model_id]["provider"],
+            description=TEE_LLM_MODELS[model_id]["description"],
+        )
+        for model_id in TEE_LLM_MODELS
+    ]
+    
+    return {
+        "models": models,
+        "default_model": "grok-4-fast",
+    }
+
+
+@router.post("/stream")
+async def chat_stream(
+    request: ChatRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Stream chat responses for real-time interaction.
+    """
+    try:
+        request.stream = True
+        user_id = request.session_id
+        user = await token_service.get_or_create_user(db, user_id)
+        result = await chat_service.chat(db, request)
+
+        async def generate():
+            content = result.get("reply", "")
+            for i in range(0, len(content), 10):
+                chunk = content[i:i+10]
+                yield f"data: {json.dumps({'content': chunk, 'done': False})}\n\n"
+            yield f"data: {json.dumps({'content': '', 'done': True, 'model_used': result.get('model_used')})}\n\n"
+
+        return StreamingResponse(generate(), media_type="text/event-stream")
+    except Exception as e:
+        logger.error(f"Chat stream error: {e}")
         raise HTTPException(status_code=500, detail=str(e))

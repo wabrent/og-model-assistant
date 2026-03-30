@@ -14,6 +14,22 @@ from core.database import async_session_maker
 from sqlalchemy import select
 
 
+TEE_LLM_MODELS = {
+    "grok-4-fast": {"provider": "x-ai", "description": "Fast reasoning and coding"},
+    "grok-4": {"provider": "x-ai", "description": "Advanced reasoning"},
+    "grok-4.1-fast": {"provider": "x-ai", "description": "Latest fast model"},
+    "gpt-5": {"provider": "openai", "description": "Latest OpenAI model"},
+    "gpt-4.1": {"provider": "openai", "description": "OpenAI GPT-4.1"},
+    "o4-mini": {"provider": "openai", "description": "OpenAI o4-mini"},
+    "claude-opus-4-6": {"provider": "anthropic", "description": "Claude Opus 4.6"},
+    "claude-sonnet-4-6": {"provider": "anthropic", "description": "Claude Sonnet 4.6"},
+    "claude-haiku-4-5": {"provider": "anthropic", "description": "Claude Haiku 4.5"},
+    "gemini-2.5-pro": {"provider": "google", "description": "Gemini 2.5 Pro"},
+    "gemini-2.5-flash": {"provider": "google", "description": "Gemini 2.5 Flash"},
+    "gemini-3-pro": {"provider": "google", "description": "Gemini 3 Pro"},
+}
+
+
 class ChatService:
     """Service for handling AI chat conversations."""
     
@@ -29,9 +45,8 @@ class ChatService:
                 import opengradient as og
                 self._llm = og.LLM(private_key=settings.private_key)
 
-                # Ensure OPG approval (reduced from 10.0 to 1.0 for testing)
                 try:
-                    approval = self._llm.ensure_opg_approval(opg_amount=1.0)
+                    approval = self._llm.ensure_opg_approval(opg_amount=5.0)
                     logger.info(f"OPG Permit2 allowance: {approval.allowance_after}")
                 except Exception as e:
                     logger.warning(f"Could not ensure OPG approval: {e}")
@@ -40,6 +55,43 @@ class ChatService:
                 logger.error(f"Failed to initialize OpenGradient LLM: {e}")
                 raise
         return self._llm
+    
+    def _get_model_enum(self, model_name: str):
+        """Get the TEE_LLM enum from model name."""
+        import opengradient as og
+        
+        model_map = {
+            "grok-4-fast": og.TEE_LLM.GROK_4_FAST,
+            "grok-4": og.TEE_LLM.GROK_4,
+            "grok-4.1-fast": og.TEE_LLM.GROK_4_1_FAST,
+            "gpt-5": og.TEE_LLM.GPT_5,
+            "gpt-4.1": og.TEE_LLM.GPT_4_1_2025_04_14,
+            "o4-mini": og.TEE_LLM.O4_MINI,
+            "claude-opus-4-6": og.TEE_LLM.CLAUDE_OPUS_4_6,
+            "claude-opus-4-5": og.TEE_LLM.CLAUDE_OPUS_4_5,
+            "claude-sonnet-4-6": og.TEE_LLM.CLAUDE_SONNET_4_6,
+            "claude-sonnet-4-5": og.TEE_LLM.CLAUDE_SONNET_4_5,
+            "claude-haiku-4-5": og.TEE_LLM.CLAUDE_HAIKU_4_5,
+            "gemini-2.5-pro": og.TEE_LLM.GEMINI_2_5_PRO,
+            "gemini-2.5-flash": og.TEE_LLM.GEMINI_2_5_FLASH,
+            "gemini-2.5-flash-lite": og.TEE_LLM.GEMINI_2_5_FLASH_LITE,
+            "gemini-3-pro": og.TEE_LLM.GEMINI_3_PRO,
+            "gemini-3-flash": og.TEE_LLM.GEMINI_3_FLASH,
+        }
+        
+        return model_map.get(model_name.lower(), og.TEE_LLM.GROK_4_FAST)
+    
+    def _get_settlement_mode(self, mode: str):
+        """Get x402 settlement mode enum."""
+        import opengradient as og
+        
+        mode_map = {
+            "PRIVATE": og.x402SettlementMode.PRIVATE,
+            "INDIVIDUAL_FULL": og.x402SettlementMode.INDIVIDUAL_FULL,
+            "BATCH_HASHED": og.x402SettlementMode.BATCH_HASHED,
+        }
+        
+        return mode_map.get(mode.upper(), og.x402SettlementMode.BATCH_HASHED)
     
     def _build_system_prompt(self, models: List[Model]) -> str:
         """Build system prompt with model information."""
@@ -129,7 +181,8 @@ MODEL LIST:
             chat_session.message_count += 1
             
             # Call LLM
-            response_content = await self._call_llm(chat_session.messages, request)
+            llm_response = await self._call_llm(chat_session.messages, request)
+            response_content = llm_response.get("content", "")
             
             # Add assistant response
             assistant_message = {"role": "assistant", "content": response_content}
@@ -160,6 +213,9 @@ MODEL LIST:
                 "session_id": session_id,
                 "models_suggested": suggested_models,
                 "response_time_ms": response_time_ms,
+                "payment_hash": llm_response.get("payment_hash"),
+                "model_used": llm_response.get("model_used"),
+                "tool_calls": llm_response.get("tool_calls"),
             }
             
         except Exception as e:
@@ -170,32 +226,63 @@ MODEL LIST:
         self,
         messages: List[Dict[str, str]],
         request: ChatRequest,
-    ) -> str:
+    ) -> Dict[str, Any]:
         """Call OpenGradient LLM with retry logic."""
         import opengradient as og
         
+        model = self._get_model_enum(request.model or "grok-4-fast")
+        settlement_mode = self._get_settlement_mode(request.settlement_mode or "BATCH_HASHED")
+        
         for attempt in range(3):
             try:
-                # Call LLM directly (it handles async internally)
-                response = self.llm.chat(
-                    model=og.TEE_LLM.GROK_4_FAST,
-                    messages=messages,
-                    max_tokens=request.max_tokens,
-                    temperature=request.temperature,
-                )
-                # Handle both sync and async responses
-                if hasattr(response, '__await__'):
-                    response = await response
-                return response.chat_output["content"]
+                if request.stream:
+                    stream = await self.llm.chat(
+                        model=model,
+                        messages=messages,
+                        max_tokens=request.max_tokens,
+                        temperature=request.temperature,
+                        tools=request.tools,
+                        x402_settlement_mode=settlement_mode,
+                        stream=True,
+                    )
+                    full_content = ""
+                    async for chunk in stream:
+                        if chunk.choices and chunk.choices[0].delta.content:
+                            full_content += chunk.choices[0].delta.content
+                    return {"content": full_content, "model_used": request.model or "grok-4-fast", "payment_hash": None}
+                else:
+                    response = await self.llm.chat(
+                        model=model,
+                        messages=messages,
+                        max_tokens=request.max_tokens,
+                        temperature=request.temperature,
+                        tools=request.tools,
+                        x402_settlement_mode=settlement_mode,
+                        stream=False,
+                    )
+                    return {
+                        "content": response.chat_output["content"],
+                        "model_used": request.model or "grok-4-fast",
+                        "payment_hash": getattr(response, 'payment_hash', None),
+                        "tool_calls": response.chat_output.get("tool_calls", None) if isinstance(response.chat_output, dict) else None
+                    }
             except Exception as e:
-                error_msg = str(e)
                 if attempt < 2:
                     logger.warning(f"LLM call attempt {attempt + 1} failed: {e}")
                     await asyncio.sleep(2)
                 else:
                     logger.error(f"LLM call failed after 3 attempts: {e}")
-                    # Fallback response if API fails
-                    return self._get_fallback_response(messages[-1]["content"])
+                    return {"content": self._get_fallback_response(messages[-1]["content"]), "model_used": request.model or "grok-4-fast", "payment_hash": None}
+    
+    def _get_fallback_response(self, user_message: str) -> str:
+        """Get fallback response when API fails."""
+        import random
+        fallbacks = [
+            "I apologize, but I'm having trouble connecting to the OpenGradient network right now. Please try again in a few moments.",
+            "It seems there's an issue with the AI service. You can try searching for models directly on the OpenGradient Model Hub.",
+            "I'm experiencing some technical difficulties. Please check your connection and try again.",
+        ]
+        return random.choice(fallbacks)
     
     async def _get_or_create_session(
         self,

@@ -79,6 +79,10 @@ class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     max_tokens: int = Field(default=800, ge=100, le=4000)
     temperature: float = Field(default=0.7, ge=0.0, le=2.0)
+    model: Optional[str] = Field(default="grok-4-fast", description="TEE model to use: grok-4-fast, grok-4, gpt-5, gpt-4.1, claude-sonnet-4-6, gemini-2.5-pro, etc.")
+    stream: bool = Field(default=False, description="Enable streaming responses")
+    tools: Optional[List[Dict[str, Any]]] = Field(default=None, description="Function calling tools")
+    settlement_mode: Optional[str] = Field(default="BATCH_HASHED", description="x402 settlement mode: PRIVATE, INDIVIDUAL_FULL, BATCH_HASHED")
 
 
 class ChatResponse(BaseModel):
@@ -87,6 +91,9 @@ class ChatResponse(BaseModel):
     session_id: str
     models_suggested: Optional[List[str]] = []
     response_time_ms: Optional[float] = None
+    payment_hash: Optional[str] = Field(default=None, description="x402 payment transaction hash")
+    model_used: Optional[str] = Field(default=None, description="TEE model that was used")
+    tool_calls: Optional[List[Dict[str, Any]]] = Field(default=None, description="Function calls made by the model")
 
 
 # ============== Query History Schemas ==============
@@ -233,3 +240,26 @@ class ErrorResponse(BaseModel):
     detail: str
     error_code: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = None
+
+
+# ============== Streaming Schemas ==============
+
+class StreamChunk(BaseModel):
+    """Schema for streaming response chunk."""
+    content: str
+    done: bool = False
+    tool_calls: Optional[List[Dict[str, Any]]] = None
+
+
+class ModelInfo(BaseModel):
+    """Schema for available TEE models."""
+    id: str
+    name: str
+    provider: str
+    description: str
+
+
+class AvailableModelsResponse(BaseModel):
+    """Schema for available TEE models response."""
+    models: List[ModelInfo]
+    default_model: str
