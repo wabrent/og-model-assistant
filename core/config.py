@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     # OpenGradient
     private_key: Optional[str] = None
     
+    # MemSync
+    memsync_api_key: Optional[str] = None
+    
     # Database
     database_url: str = "postgresql://postgres:postgres@localhost:5432/og_assistant"
     postgres_user: str = "postgres"

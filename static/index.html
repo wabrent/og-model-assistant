@@ -1499,6 +1499,7 @@
     <button class="icon-btn" onclick="toggleVoice()" id="voice-btn" title="Voice Input">🎤</button>
     <button class="icon-btn" onclick="toggleHistory()" title="History">📜</button>
     <button class="icon-btn" onclick="toggleDashboard()" title="Dashboard & Achievements">📊</button>
+    <button class="nav-btn" id="wallet-btn" onclick="connectWallet()" title="Connect Wallet">🔗 Wallet</button>
     <button class="nav-btn" onclick="showEcosystem()">🌐 Ecosystem</button>
     <button class="nav-btn" onclick="scrollToSection('features')">Features</button>
     <button class="nav-btn" onclick="scrollToSection('gallery')">Models</button>
@@ -1834,6 +1835,47 @@
   let favorites = JSON.parse(localStorage.getItem('og_favorites') || '[]');
   let tokenBalance = 10.0;
   let faucetInterval = null;
+  let walletAddress = null;
+
+  // ==================== WALLET FUNCTIONS ====================
+  async function connectWallet() {
+    const btn = document.getElementById('wallet-btn');
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        walletAddress = accounts[0];
+        const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+        btn.textContent = '🔗 ' + shortAddr;
+        btn.style.background = 'var(--gradient-4)';
+        showToast('Wallet connected: ' + shortAddr);
+        
+        // Store in localStorage
+        localStorage.setItem('og_wallet', walletAddress);
+      } catch (e) {
+        showToast('Failed to connect wallet');
+      }
+    } else {
+      showToast('Please install MetaMask!');
+    }
+  }
+
+  // Check for existing wallet connection
+  async function checkWallet() {
+    const savedWallet = localStorage.getItem('og_wallet');
+    if (savedWallet && window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+        if (accounts.includes(savedWallet)) {
+          walletAddress = savedWallet;
+          const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+          const btn = document.getElementById('wallet-btn');
+          btn.textContent = '🔗 ' + shortAddr;
+          btn.style.background = 'var(--gradient-4)';
+        }
+      } catch (e) {}
+    }
+  }
+  checkWallet();
 
   // ==================== TOKEN FUNCTIONS ====================
   async function loadTokenBalance() {
