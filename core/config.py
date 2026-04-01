@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     # MemSync
     memsync_api_key: Optional[str] = None
     
+    # OpenGradient Model Management
+    og_email: Optional[str] = None
+    og_password: Optional[str] = None
+    
     # Database
     database_url: str = "postgresql://postgres:postgres@localhost:5432/og_assistant"
     postgres_user: str = "postgres"

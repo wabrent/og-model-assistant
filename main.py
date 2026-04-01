@@ -24,6 +24,8 @@ from api.user_stats_router import router as user_stats_router
 from api.model_status_router import router as model_status_router
 from api.memsync_router import router as memsync_router
 from api.twins_router import router as twins_router
+from api.model_management_router import router as model_management_router
+from api.ml_inference_router import router as ml_inference_router
 
 
 @asynccontextmanager
@@ -99,6 +101,8 @@ app.include_router(user_stats_router)
 app.include_router(model_status_router)
 app.include_router(memsync_router)
 app.include_router(twins_router)
+app.include_router(model_management_router)
+app.include_router(ml_inference_router)
 
 # Serve static files
 if os.path.exists("static"):
