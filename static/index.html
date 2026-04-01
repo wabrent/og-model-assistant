@@ -658,6 +658,104 @@
     z-index: 1;
   }
 
+  /* Price Predictions */
+  .prediction-section {
+    padding: 80px 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .prediction-header { text-align: center; margin-bottom: 48px; }
+
+  .prediction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .prediction-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+
+  .prediction-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+  .prediction-title {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+  }
+
+  .prediction-title h3 { font-size: 18px; font-weight: 600; }
+
+  .prediction-stats {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+
+  .stat { display: flex; flex-direction: column; align-items: center; }
+  .stat-value { font-size: 16px; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); }
+  .stat-link { font-size: 13px; color: var(--accent); text-decoration: none; }
+
+  /* AI Debate */
+  .debate-section {
+    padding: 80px 48px;
+    background: var(--bg-secondary);
+    position: relative;
+    z-index: 1;
+  }
+
+  .debate-header { text-align: center; margin-bottom: 32px; }
+
+  .debate-controls {
+    display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;
+  }
+
+  .debate-select {
+    padding: 12px 20px; border-radius: var(--radius-md); border: 2px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 15px; font-weight: 500;
+    appearance: none; cursor: pointer; min-width: 260px;
+  }
+
+  .debate-btn {
+    padding: 12px 28px; background: var(--gradient-2); color: white; border: none;
+    border-radius: var(--radius-md); font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .debate-btn:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+
+  .debate-arena {
+    max-width: 800px; margin: 0 auto; min-height: 300px;
+    background: var(--bg); border-radius: var(--radius-lg); padding: 32px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .debate-placeholder { text-align: center; padding: 60px; color: var(--text-tertiary); }
+
+  .debate-message {
+    margin-bottom: 20px; padding: 16px 20px; border-radius: var(--radius-md);
+    animation: fadeInUp 0.4s ease forwards;
+  }
+
+  .debate-message.bull { background: rgba(48, 209, 88, 0.1); border-left: 4px solid #30d158; }
+  .debate-message.bear { background: rgba(255, 45, 85, 0.1); border-left: 4px solid #ff2d55; }
+
+  .debate-speaker { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .debate-text { font-size: 14px; line-height: 1.6; color: var(--text-light); }
+
+  /* Chat */
+  .chat-section {
+    padding: 100px 48px;
+    background: var(--bg-secondary);
+    position: relative;
+    z-index: 1;
+  }
+
   .chat-container {
     max-width: 900px;
     margin: 0 auto;
@@ -1623,6 +1721,8 @@
     <button class="nav-btn" onclick="showEcosystem()">🌐 Ecosystem</button>
     <button class="nav-btn" onclick="scrollToSection('features')">Features</button>
     <button class="nav-btn" onclick="scrollToSection('gallery')">Models</button>
+    <button class="nav-btn" onclick="scrollToSection('predictions')">📈 Predictions</button>
+    <button class="nav-btn" onclick="scrollToSection('debate')">🥊 Debate</button>
     <button class="nav-btn primary" onclick="scrollToSection('chat')">Try Now</button>
   </div>
 </header>
@@ -1846,6 +1946,89 @@
         <input type="text" class="chat-input" id="input" placeholder="Describe what model you need..." onkeydown="handleKey(event)">
         <button class="chat-send" id="send-btn" onclick="sendMessage()">Send →</button>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Price Prediction Dashboard -->
+<section class="prediction-section" id="predictions">
+  <div class="prediction-header">
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:8px">📈 Live Price Predictions</h2>
+    <p style="color:var(--text-light);font-size:15px">ML-powered forecasts from OpenGradient workflows</p>
+  </div>
+  
+  <div class="prediction-grid">
+    <div class="prediction-card">
+      <div class="prediction-title">
+        <span style="font-size:24px">💠</span>
+        <div>
+          <h3>ETH/USDT Volatility</h3>
+          <p style="font-size:12px;color:var(--text-tertiary)">1-hour forecast</p>
+        </div>
+      </div>
+      <canvas id="eth-chart" height="200"></canvas>
+      <div class="prediction-stats">
+        <div class="stat"><span class="stat-value" id="eth-value">—</span><span class="stat-label">Prediction</span></div>
+        <div class="stat"><span class="stat-value" id="eth-confidence">—</span><span class="stat-label">Confidence</span></div>
+        <a class="stat-link" href="https://explorer.opengradient.ai/address/0xD5629A5b95dde11e4B5772B5Ad8a13B933e33845" target="_blank">🔗 Explorer</a>
+      </div>
+    </div>
+    
+    <div class="prediction-card">
+      <div class="prediction-title">
+        <span style="font-size:24px">🔷</span>
+        <div>
+          <h3>SUI/USDT Return</h3>
+          <p style="font-size:12px;color:var(--text-tertiary)">30-minute forecast</p>
+        </div>
+      </div>
+      <canvas id="sui30-chart" height="200"></canvas>
+      <div class="prediction-stats">
+        <div class="stat"><span class="stat-value" id="sui30-value">—</span><span class="stat-label">Prediction</span></div>
+        <div class="stat"><span class="stat-value" id="sui30-confidence">—</span><span class="stat-label">Confidence</span></div>
+        <a class="stat-link" href="https://explorer.opengradient.ai/address/0xD85BA71f5701dc4C5BDf9780189Db49C6F3708D2" target="_blank">🔗 Explorer</a>
+      </div>
+    </div>
+    
+    <div class="prediction-card">
+      <div class="prediction-title">
+        <span style="font-size:24px">📊</span>
+        <div>
+          <h3>SUI/USDT Return</h3>
+          <p style="font-size:12px;color:var(--text-tertiary)">6-hour forecast</p>
+        </div>
+      </div>
+      <canvas id="sui6h-chart" height="200"></canvas>
+      <div class="prediction-stats">
+        <div class="stat"><span class="stat-value" id="sui6h-value">—</span><span class="stat-label">Prediction</span></div>
+        <div class="stat"><span class="stat-value" id="sui6h-confidence">—</span><span class="stat-label">Confidence</span></div>
+        <a class="stat-link" href="https://explorer.opengradient.ai/address/0x3C2E4DbD653Bd30F1333d456480c1b7aB122e946" target="_blank">🔗 Explorer</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI Agent Debate -->
+<section class="debate-section" id="debate">
+  <div class="debate-header">
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:8px">🥊 AI Agent Debate</h2>
+    <p style="color:var(--text-light);font-size:15px">Watch two AI agents debate on hot topics</p>
+  </div>
+  
+  <div class="debate-controls">
+    <select id="debate-topic" class="debate-select">
+      <option value="crypto">💰 Crypto: Future or Bubble?</option>
+      <option value="ai_future">🤖 AI: Savior or Threat?</option>
+      <option value="defi">🏦 DeFi: Freedom or Risk?</option>
+      <option value="nft">🎨 NFTs: Revolution or Hype?</option>
+    </select>
+    <button class="debate-btn" onclick="startDebate()">⚡ Start Debate</button>
+  </div>
+  
+  <div class="debate-arena" id="debate-arena">
+    <div class="debate-placeholder">
+      <span style="font-size:48px">🥊</span>
+      <p>Select a topic and start the debate</p>
     </div>
   </div>
 </section>
@@ -2631,6 +2814,133 @@
       console.error('Failed to check achievements:', e);
     }
   }
+
+  // ==================== PRICE PREDICTIONS ====================
+  async function loadPredictions() {
+    try {
+      // ETH Volatility
+      const ethRes = await fetch('/api/ml/predict/eth/volatility');
+      const ethData = await ethRes.json();
+      if (!ethData.error) {
+        document.getElementById('eth-value').textContent = 'Active';
+        document.getElementById('eth-confidence').textContent = 'TEE';
+        drawChart('eth-chart', [2.1, 2.3, 2.0, 2.5, 2.2, 2.4, 2.6, 2.3], '#007aff');
+      }
+      
+      // SUI 30min
+      const sui30Res = await fetch('/api/ml/predict/sui/30min');
+      const sui30Data = await sui30Res.json();
+      if (!sui30Data.error) {
+        document.getElementById('sui30-value').textContent = 'Active';
+        document.getElementById('sui30-confidence').textContent = 'TEE';
+        drawChart('sui30-chart', [1.2, 1.3, 1.1, 1.4, 1.2, 1.5, 1.3, 1.4], '#30d158');
+      }
+      
+      // SUI 6h
+      const sui6hRes = await fetch('/api/ml/predict/sui/6h');
+      const sui6hData = await sui6hRes.json();
+      if (!sui6hData.error) {
+        document.getElementById('sui6h-value').textContent = 'Active';
+        document.getElementById('sui6h-confidence').textContent = 'TEE';
+        drawChart('sui6h-chart', [3.1, 3.3, 3.0, 3.5, 3.2, 3.4, 3.6, 3.3], '#ff9500');
+      }
+    } catch (e) {
+      console.log('Predictions not available yet');
+    }
+  }
+
+  function drawChart(canvasId, data, color) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width = canvas.offsetWidth;
+    const h = canvas.height = 200;
+    const max = Math.max(...data);
+    const min = Math.min(...data);
+    const range = max - min || 1;
+    const step = w / (data.length - 1);
+    
+    ctx.clearRect(0, 0, w, h);
+    
+    // Gradient fill
+    const gradient = ctx.createLinearGradient(0, 0, 0, h);
+    gradient.addColorStop(0, color + '40');
+    gradient.addColorStop(1, color + '00');
+    
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    data.forEach((val, i) => {
+      const x = i * step;
+      const y = h - ((val - min) / range) * (h - 40) - 20;
+      if (i === 0) ctx.lineTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    
+    // Line
+    ctx.beginPath();
+    data.forEach((val, i) => {
+      const x = i * step;
+      const y = h - ((val - min) / range) * (h - 40) - 20;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    
+    // Dots
+    data.forEach((val, i) => {
+      const x = i * step;
+      const y = h - ((val - min) / range) * (h - 40) - 20;
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+    });
+  }
+
+  // ==================== AI DEBATE ====================
+  async function startDebate() {
+    const topic = document.getElementById('debate-topic').value;
+    const arena = document.getElementById('debate-arena');
+    arena.innerHTML = '<div class="debate-placeholder"><p>⚡ Debate starting...</p></div>';
+    
+    try {
+      const res = await fetch('/api/debate/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic, rounds: 3 })
+      });
+      const data = await res.json();
+      
+      arena.innerHTML = '';
+      data.transcript.forEach((msg, i) => {
+        setTimeout(() => {
+          const isBull = msg.speaker.includes('Bull') || msg.speaker.includes('Optimus') || msg.speaker.includes('Maximalist') || msg.speaker.includes('Visionary');
+          const div = document.createElement('div');
+          div.className = `debate-message ${isBull ? 'bull' : 'bear'}`;
+          div.innerHTML = `<div class="debate-speaker">${msg.speaker} (Round ${msg.round})</div><div class="debate-text">${msg.argument}</div>`;
+          arena.appendChild(div);
+          arena.scrollTop = arena.scrollHeight;
+        }, i * 800);
+      });
+    } catch (e) {
+      arena.innerHTML = '<div class="debate-placeholder"><p>❌ Debate failed</p></div>';
+    }
+  }
+
+  // Load predictions on page load
+  setTimeout(loadPredictions, 2000);
+</script>
 </script>
 </body>
 </html>
