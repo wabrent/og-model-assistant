@@ -43,3 +43,5 @@ pytest-cov>=4.1.0
 
 # Utilities
 tenacity>=8.2.3
+slowapi>=0.1.8
+limits>=3.6.0

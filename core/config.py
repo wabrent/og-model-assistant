@@ -2,7 +2,7 @@
 Core configuration and settings for the application.
 """
 from pydantic_settings import BaseSettings
-from typing import Optional
+from typing import Optional, List
 
 
 class Settings(BaseSettings):
@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     # API
     api_host: str = "0.0.0.0"
     api_port: int = 8000
+    allowed_origins: List[str] = ["*"]
     
     # Bots
     telegram_bot_token: Optional[str] = None

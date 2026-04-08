@@ -1,13 +1,17 @@
 """
 Main FastAPI application.
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from contextlib import asynccontextmanager
 from loguru import logger
 import os
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from core.config import settings
 from core.database import init_db, close_db
@@ -72,6 +76,8 @@ async def lifespan(app: FastAPI):
     await close_db()
     logger.info("Shutdown complete")
 
+# Rate limiting configuration
+limiter = Limiter(key_func=get_remote_address, default_limits=["100/minute"])
 
 # Create FastAPI app
 app = FastAPI(
@@ -83,10 +89,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Rate limiting
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=settings.allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

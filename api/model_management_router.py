@@ -46,12 +46,20 @@ async def upload_file(
     file: UploadFile = File(...)
 ):
     """Upload a file to a model repository."""
+    # Validate file size (max 100 MB)
+    MAX_UPLOAD_SIZE = 100 * 1024 * 1024  # 100 MB
+    content = await file.read(MAX_UPLOAD_SIZE + 1)
+    if len(content) > MAX_UPLOAD_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File size exceeds maximum allowed size of {MAX_UPLOAD_SIZE // (1024*1024)} MB"
+        )
+    
     # Save file temporarily
     import tempfile
     import os
     
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.filename)[1]) as tmp:
-        content = await file.read()
         tmp.write(content)
         tmp_path = tmp.name
     
