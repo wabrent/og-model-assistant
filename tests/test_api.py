@@ -3,7 +3,8 @@ Tests for the OpenGradient Model Assistant API.
 """
 import pytest
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from httpx._transports.asgi import ASGITransport
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.pool import StaticPool
 
 from main import app
@@ -29,7 +30,7 @@ async def db_session():
     
     async_session_maker = async_sessionmaker(
         engine,
-        class_=type("AsyncSession", (), {}),
+        class_=AsyncSession,
         expire_on_commit=False,
     )
     
@@ -50,7 +51,7 @@ async def client(db_session):
     
     app.dependency_overrides[get_db] = override_get_db
     
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         yield ac
     
     app.dependency_overrides.clear()

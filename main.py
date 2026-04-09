@@ -25,13 +25,7 @@ from api.sync_router import router as sync_router
 from api.health_router import router as health_router
 from api.tokens_router import router as tokens_router
 from api.user_stats_router import router as user_stats_router
-from api.model_status_router import router as model_status_router
-from api.memsync_router import router as memsync_router
-from api.twins_router import router as twins_router
-from api.model_management_router import router as model_management_router
-from api.ml_inference_router import router as ml_inference_router
-from api.agent_debate_router import router as agent_debate_router
-from api.certificate_router import router as certificate_router
+
 
 
 @asynccontextmanager
@@ -111,13 +105,7 @@ app.include_router(sync_router)
 app.include_router(health_router)
 app.include_router(tokens_router)
 app.include_router(user_stats_router)
-app.include_router(model_status_router)
-app.include_router(memsync_router)
-app.include_router(twins_router)
-app.include_router(model_management_router)
-app.include_router(ml_inference_router)
-app.include_router(agent_debate_router)
-app.include_router(certificate_router)
+
 
 # Serve static files
 if os.path.exists("static"):
