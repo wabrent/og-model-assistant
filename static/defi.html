@@ -12,55 +12,55 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    /* Modern color palette - Apple Vision Pro inspired */
-    --primary: #0a84ff;
-    --primary-light: #64d2ff;
-    --secondary: #30d158;
-    --tertiary: #ff9f0a;
-    --danger: #ff453a;
+    /* Dark theme with neon accents - Modern cyberpunk/tech style */
+    --primary: #00f3ff;        /* Neon cyan */
+    --primary-light: #9d4edd;  /* Neon purple */
+    --secondary: #ff006e;      /* Neon pink */
+    --tertiary: #ff5400;       /* Neon orange */
+    --danger: #ff003c;         /* Neon red */
     
-    /* Backgrounds */
-    --bg: #f5f5f7;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f2f2f7;
-    --bg-glass: rgba(255, 255, 255, 0.72);
-    --bg-glass-heavy: rgba(255, 255, 255, 0.88);
+    /* Backgrounds - Dark base */
+    --bg: #0a0a0a;
+    --bg-secondary: #111111;
+    --bg-tertiary: #1a1a1a;
+    --bg-glass: rgba(26, 26, 26, 0.85);
+    --bg-glass-heavy: rgba(34, 34, 34, 0.95);
     
     /* Text */
-    --text: #1d1d1f;
-    --text-light: #424245;
-    --text-tertiary: #86868b;
+    --text: #ffffff;
+    --text-light: #b0b0b0;
+    --text-tertiary: #888888;
     
     /* Borders */
-    --border: rgba(0, 0, 0, 0.08);
+    --border: rgba(255, 255, 255, 0.12);
     
-    /* Accent (backward compatibility) */
+    /* Accent */
     --accent: var(--primary);
-    --accent-hover: #0077ed;
+    --accent-hover: #00c4cc;
     
-    /* Modern gradients */
-    --gradient-1: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 50%, #bf5af2 100%);
-    --gradient-2: linear-gradient(135deg, #30d158 0%, #34c759 50%, #5ac8fa 100%);
-    --gradient-3: linear-gradient(135deg, #ff9f0a 0%, #ffd60a 50%, #ff453a 100%);
-    --gradient-4: linear-gradient(135deg, #5e5ce6 0%, #bf5af2 50%, #ff375f 100%);
-    --gradient-5: linear-gradient(135deg, #64d2ff 0%, #5ac8fa 50%, #34c759 100%);
+    /* Simplified gradients - Neon only */
+    --gradient-1: linear-gradient(135deg, #00f3ff 0%, #9d4edd 100%);
+    --gradient-2: linear-gradient(135deg, #ff006e 0%, #ff5400 100%);
+    --gradient-3: linear-gradient(135deg, #9d4edd 0%, #00f3ff 100%);
+    --gradient-4: linear-gradient(135deg, #ff5400 0%, #ff006e 100%);
+    --gradient-5: linear-gradient(135deg, #00f3ff 0%, #ff006e 50%, #9d4edd 100%);
     --gradient-glass: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.85) 50%,
-      rgba(255, 255, 255, 0.75) 100%);
+      rgba(26, 26, 26, 0.95) 0%,
+      rgba(26, 26, 26, 0.85) 50%,
+      rgba(26, 26, 26, 0.75) 100%);
     
     /* Border radius */
-    --radius-lg: 24px;
-    --radius-md: 16px;
-    --radius-sm: 12px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
     --radius-full: 9999px;
     
-    /* Modern shadows */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.03), 0 1px 4px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --shadow-lg: 0 12px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
-    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.15),
-                   0 8px 32px rgba(10, 132, 255, 0.1);
+    /* Subtle shadows for depth */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.6), 0 4px 8px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 20px rgba(0, 243, 255, 0.3),
+                   0 0 40px rgba(157, 78, 221, 0.2);
     
     /* Fluid typography */
     --font-primary: 'Geist', 'Inter', sans-serif;
@@ -75,33 +75,49 @@
   }
 
   [data-theme="dark"] {
-    /* Dark theme colors */
-    --bg: #000000;
-    --bg-secondary: #1c1c1e;
-    --bg-tertiary: #2c2c2e;
-    --bg-glass: rgba(28, 28, 30, 0.72);
-    --bg-glass-heavy: rgba(44, 44, 46, 0.88);
+    /* Dark theme is defined in :root */
+  }
+
+  [data-theme="light"] {
+    /* Light theme - Clean and minimal */
+    --bg: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-glass: rgba(255, 255, 255, 0.9);
+    --bg-glass-heavy: rgba(255, 255, 255, 0.95);
     
     /* Text */
-    --text: #f5f5f7;
-    --text-light: #d1d1d6;
-    --text-tertiary: #8e8e93;
+    --text: #212529;
+    --text-light: #6c757d;
+    --text-tertiary: #adb5bd;
     
     /* Borders */
-    --border: rgba(255, 255, 255, 0.12);
+    --border: rgba(0, 0, 0, 0.1);
     
-    /* Glass gradient */
+    /* Muted accents for light theme */
+    --primary: #007bff;
+    --primary-light: #0056b3;
+    --secondary: #6f42c1;
+    --tertiary: #fd7e14;
+    --danger: #dc3545;
+    
+    /* Subtle gradients */
+    --gradient-1: linear-gradient(135deg, #007bff 0%, #6f42c1 100%);
+    --gradient-2: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    --gradient-3: linear-gradient(135deg, #6f42c1 0%, #007bff 100%);
+    --gradient-4: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
+    --gradient-5: linear-gradient(135deg, #007bff 0%, #28a745 50%, #6f42c1 100%);
     --gradient-glass: linear-gradient(135deg,
-      rgba(44, 44, 46, 0.95) 0%,
-      rgba(44, 44, 46, 0.85) 50%,
-      rgba(44, 44, 46, 0.75) 100%);
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.85) 50%,
+      rgba(255, 255, 255, 0.75) 100%);
     
     /* Shadows */
-    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.3);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.3);
-    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4);
-    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.2),
-                   0 8px 32px rgba(10, 132, 255, 0.15);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.08);
+    --shadow-lg: 0 10px 20px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.05);
+    --shadow-glow: 0 0 15px rgba(0, 123, 255, 0.15),
+                   0 0 30px rgba(111, 66, 193, 0.1);
   }
 
   body {
