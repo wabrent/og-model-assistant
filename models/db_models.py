@@ -360,3 +360,459 @@ class ModelStatus(Base):
             "error_message": self.error_message,
             "checked_at": self.checked_at.isoformat() if self.checked_at else None,
         }
+
+
+# ============== DeFi Models ==============
+
+class Portfolio(Base):
+    """User DeFi portfolio."""
+    __tablename__ = "portfolios"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String(100), unique=True, nullable=False, index=True)  # wallet address
+    name = Column(String(100), default="My Portfolio")
+    description = Column(Text, nullable=True)
+    
+    # Total portfolio value
+    total_value_usd = Column(Float, default=0.0)
+    total_value_change_24h = Column(Float, default=0.0)  # in USD
+    total_value_change_percent_24h = Column(Float, default=0.0)  # in percentage
+    
+    # Performance metrics
+    daily_pnl = Column(Float, default=0.0)
+    weekly_pnl = Column(Float, default=0.0)
+    monthly_pnl = Column(Float, default=0.0)
+    all_time_pnl = Column(Float, default=0.0)
+    
+    # Risk metrics
+    volatility_30d = Column(Float, default=0.0)  # 30-day volatility
+    sharpe_ratio = Column(Float, default=0.0)  # Sharpe ratio (risk-adjusted return)
+    max_drawdown = Column(Float, default=0.0)  # Maximum drawdown
+    
+    # Asset allocation
+    asset_distribution = Column(JSON, nullable=True, default=dict)  # {asset: percentage}
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_sync = Column(DateTime, nullable=True)  # Last portfolio sync time
+    
+    # Relationships
+    assets = relationship("Asset", back_populates="portfolio", cascade="all, delete-orphan")
+    staking_positions = relationship("StakingPosition", back_populates="portfolio", cascade="all, delete-orphan")
+    liquidity_positions = relationship("LiquidityPosition", back_populates="portfolio", cascade="all, delete-orphan")
+    
+    def to_dict(self) -> dict:
+        """Convert portfolio to dictionary."""
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "name": self.name,
+            "description": self.description,
+            "total_value_usd": round(self.total_value_usd, 2),
+            "total_value_change_24h": round(self.total_value_change_24h, 2),
+            "total_value_change_percent_24h": round(self.total_value_change_percent_24h, 2),
+            "daily_pnl": round(self.daily_pnl, 2),
+            "weekly_pnl": round(self.weekly_pnl, 2),
+            "monthly_pnl": round(self.monthly_pnl, 2),
+            "all_time_pnl": round(self.all_time_pnl, 2),
+            "volatility_30d": round(self.volatility_30d, 2),
+            "sharpe_ratio": round(self.sharpe_ratio, 2),
+            "max_drawdown": round(self.max_drawdown, 2),
+            "asset_distribution": self.asset_distribution or {},
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "last_sync": self.last_sync.isoformat() if self.last_sync else None,
+            "asset_count": len(self.assets) if self.assets else 0,
+            "staking_count": len(self.staking_positions) if self.staking_positions else 0,
+            "liquidity_count": len(self.liquidity_positions) if self.liquidity_positions else 0,
+        }
+
+
+class Asset(Base):
+    """Individual asset in a portfolio."""
+    __tablename__ = "assets"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    portfolio_id = Column(Integer, ForeignKey("portfolios.id"), nullable=False, index=True)
+    
+    # Asset identification
+    symbol = Column(String(20), nullable=False, index=True)  # BTC, ETH, etc.
+    name = Column(String(100), nullable=False)  # Bitcoin, Ethereum
+    blockchain = Column(String(50), nullable=True)  # Ethereum, Solana, etc.
+    contract_address = Column(String(100), nullable=True)  # Token contract address
+    asset_type = Column(String(50), default="crypto")  # crypto, stock, nft, stablecoin
+    
+    # Holdings
+    quantity = Column(Float, default=0.0)
+    average_buy_price = Column(Float, default=0.0)  # Average purchase price in USD
+    current_price = Column(Float, default=0.0)  # Current price in USD
+    
+    # Value calculations
+    cost_basis = Column(Float, default=0.0)  # quantity * average_buy_price
+    current_value = Column(Float, default=0.0)  # quantity * current_price
+    unrealized_pnl = Column(Float, default=0.0)  # current_value - cost_basis
+    unrealized_pnl_percent = Column(Float, default=0.0)  # (unrealized_pnl / cost_basis) * 100
+    
+    # Performance
+    price_change_24h = Column(Float, default=0.0)
+    price_change_percent_24h = Column(Float, default=0.0)
+    
+    # Metadata
+    is_staked = Column(Boolean, default=False)  # Is asset currently staked?
+    last_updated = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    portfolio = relationship("Portfolio", back_populates="assets")
+    
+    __table_args__ = (
+        Index('ix_assets_portfolio_symbol', 'portfolio_id', 'symbol'),
+    )
+    
+    def to_dict(self) -> dict:
+        """Convert asset to dictionary."""
+        return {
+            "id": self.id,
+            "portfolio_id": self.portfolio_id,
+            "symbol": self.symbol,
+            "name": self.name,
+            "blockchain": self.blockchain,
+            "contract_address": self.contract_address,
+            "asset_type": self.asset_type,
+            "quantity": round(self.quantity, 6),
+            "average_buy_price": round(self.average_buy_price, 2),
+            "current_price": round(self.current_price, 2),
+            "cost_basis": round(self.cost_basis, 2),
+            "current_value": round(self.current_value, 2),
+            "unrealized_pnl": round(self.unrealized_pnl, 2),
+            "unrealized_pnl_percent": round(self.unrealized_pnl_percent, 2),
+            "price_change_24h": round(self.price_change_24h, 2),
+            "price_change_percent_24h": round(self.price_change_percent_24h, 2),
+            "is_staked": self.is_staked,
+            "last_updated": self.last_updated.isoformat() if self.last_updated else None,
+        }
+
+
+class StakingPosition(Base):
+    """Staking position in DeFi protocols."""
+    __tablename__ = "staking_positions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    portfolio_id = Column(Integer, ForeignKey("portfolios.id"), nullable=False, index=True)
+    
+    # Protocol information
+    protocol_name = Column(String(100), nullable=False)  # Lido, Rocket Pool, etc.
+    protocol_url = Column(String(255), nullable=True)
+    blockchain = Column(String(50), nullable=False)  # Ethereum, Solana, etc.
+    
+    # Asset details
+    staked_asset_symbol = Column(String(20), nullable=False)
+    staked_asset_name = Column(String(100), nullable=False)
+    staked_amount = Column(Float, default=0.0)
+    
+    # Rewards
+    reward_asset_symbol = Column(String(20), nullable=True)  # stETH, rETH, etc.
+    reward_asset_name = Column(String(100), nullable=True)
+    pending_rewards = Column(Float, default=0.0)
+    total_rewards_earned = Column(Float, default=0.0)
+    
+    # APY/APR
+    apy = Column(Float, default=0.0)  # Annual Percentage Yield
+    apr = Column(Float, default=0.0)  # Annual Percentage Rate
+    
+    # Position value
+    staked_value_usd = Column(Float, default=0.0)
+    rewards_value_usd = Column(Float, default=0.0)
+    total_value_usd = Column(Float, default=0.0)
+    
+    # Status
+    lock_period_days = Column(Integer, nullable=True)  # Lock period in days
+    unlock_date = Column(DateTime, nullable=True)  # When position unlocks
+    is_locked = Column(Boolean, default=False)  # Is position currently locked?
+    
+    # Metadata
+    position_start_date = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationship
+    portfolio = relationship("Portfolio", back_populates="staking_positions")
+    
+    def to_dict(self) -> dict:
+        """Convert staking position to dictionary."""
+        return {
+            "id": self.id,
+            "portfolio_id": self.portfolio_id,
+            "protocol_name": self.protocol_name,
+            "protocol_url": self.protocol_url,
+            "blockchain": self.blockchain,
+            "staked_asset_symbol": self.staked_asset_symbol,
+            "staked_asset_name": self.staked_asset_name,
+            "staked_amount": round(self.staked_amount, 6),
+            "reward_asset_symbol": self.reward_asset_symbol,
+            "reward_asset_name": self.reward_asset_name,
+            "pending_rewards": round(self.pending_rewards, 6),
+            "total_rewards_earned": round(self.total_rewards_earned, 6),
+            "apy": round(self.apy, 2),
+            "apr": round(self.apr, 2),
+            "staked_value_usd": round(self.staked_value_usd, 2),
+            "rewards_value_usd": round(self.rewards_value_usd, 2),
+            "total_value_usd": round(self.total_value_usd, 2),
+            "lock_period_days": self.lock_period_days,
+            "unlock_date": self.unlock_date.isoformat() if self.unlock_date else None,
+            "is_locked": self.is_locked,
+            "position_start_date": self.position_start_date.isoformat() if self.position_start_date else None,
+            "last_updated": self.last_updated.isoformat() if self.last_updated else None,
+        }
+
+
+class LiquidityPosition(Base):
+    """Liquidity pool position."""
+    __tablename__ = "liquidity_positions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    portfolio_id = Column(Integer, ForeignKey("portfolios.id"), nullable=False, index=True)
+    
+    # Pool information
+    protocol_name = Column(String(100), nullable=False)  # Uniswap, Curve, etc.
+    pool_name = Column(String(100), nullable=False)  # ETH/USDT, etc.
+    pool_address = Column(String(100), nullable=True)
+    blockchain = Column(String(50), nullable=False)
+    
+    # Assets in pool
+    token0_symbol = Column(String(20), nullable=False)
+    token0_amount = Column(Float, default=0.0)
+    token0_value_usd = Column(Float, default=0.0)
+    
+    token1_symbol = Column(String(20), nullable=False)
+    token1_amount = Column(Float, default=0.0)
+    token1_value_usd = Column(Float, default=0.0)
+    
+    # Position details
+    lp_token_amount = Column(Float, default=0.0)  # LP tokens held
+    lp_token_value_usd = Column(Float, default=0.0)  # Total value of LP tokens
+    share_of_pool = Column(Float, default=0.0)  # % of pool owned
+    
+    # Rewards
+    reward_asset_symbol = Column(String(20), nullable=True)
+    pending_rewards = Column(Float, default=0.0)
+    total_rewards_earned = Column(Float, default=0.0)
+    
+    # APY/Impermanent loss
+    apy = Column(Float, default=0.0)
+    impermanent_loss_percent = Column(Float, default=0.0)  # % impermanent loss
+    
+    # Metadata
+    position_start_date = Column(DateTime, default=datetime.utcnow)
+    last_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Relationship
+    portfolio = relationship("Portfolio", back_populates="liquidity_positions")
+    
+    def to_dict(self) -> dict:
+        """Convert liquidity position to dictionary."""
+        return {
+            "id": self.id,
+            "portfolio_id": self.portfolio_id,
+            "protocol_name": self.protocol_name,
+            "pool_name": self.pool_name,
+            "pool_address": self.pool_address,
+            "blockchain": self.blockchain,
+            "token0_symbol": self.token0_symbol,
+            "token0_amount": round(self.token0_amount, 6),
+            "token0_value_usd": round(self.token0_value_usd, 2),
+            "token1_symbol": self.token1_symbol,
+            "token1_amount": round(self.token1_amount, 6),
+            "token1_value_usd": round(self.token1_value_usd, 2),
+            "lp_token_amount": round(self.lp_token_amount, 6),
+            "lp_token_value_usd": round(self.lp_token_value_usd, 2),
+            "share_of_pool": round(self.share_of_pool, 4),
+            "reward_asset_symbol": self.reward_asset_symbol,
+            "pending_rewards": round(self.pending_rewards, 6),
+            "total_rewards_earned": round(self.total_rewards_earned, 6),
+            "apy": round(self.apy, 2),
+            "impermanent_loss_percent": round(self.impermanent_loss_percent, 2),
+            "position_start_date": self.position_start_date.isoformat() if self.position_start_date else None,
+            "last_updated": self.last_updated.isoformat() if self.last_updated else None,
+        }
+
+
+class MarketData(Base):
+    """Historical market data for assets."""
+    __tablename__ = "market_data"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String(20), nullable=False, index=True)
+    timestamp = Column(DateTime, nullable=False, index=True)
+    
+    # Price data
+    price_usd = Column(Float, nullable=False)
+    open = Column(Float, nullable=True)
+    high = Column(Float, nullable=True)
+    low = Column(Float, nullable=True)
+    close = Column(Float, nullable=True)
+    volume_24h = Column(Float, nullable=True)
+    market_cap = Column(Float, nullable=True)
+    
+    # Derived metrics
+    price_change_24h = Column(Float, default=0.0)
+    price_change_percent_24h = Column(Float, default=0.0)
+    volume_change_24h = Column(Float, default=0.0)
+    
+    # Market sentiment
+    fear_greed_index = Column(Float, nullable=True)  # 0-100 scale
+    social_volume = Column(Float, nullable=True)  # Social media mentions
+    
+    # Metadata
+    source = Column(String(50), default="coingecko")  # coingecko, binance, etc.
+    
+    __table_args__ = (
+        Index('ix_market_symbol_timestamp', 'symbol', 'timestamp'),
+    )
+    
+    def to_dict(self) -> dict:
+        """Convert market data to dictionary."""
+        return {
+            "id": self.id,
+            "symbol": self.symbol,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "price_usd": round(self.price_usd, 2),
+            "open": round(self.open, 2) if self.open else None,
+            "high": round(self.high, 2) if self.high else None,
+            "low": round(self.low, 2) if self.low else None,
+            "close": round(self.close, 2) if self.close else None,
+            "volume_24h": round(self.volume_24h, 2) if self.volume_24h else None,
+            "market_cap": round(self.market_cap, 2) if self.market_cap else None,
+            "price_change_24h": round(self.price_change_24h, 2),
+            "price_change_percent_24h": round(self.price_change_percent_24h, 2),
+            "volume_change_24h": round(self.volume_change_24h, 2),
+            "fear_greed_index": round(self.fear_greed_index, 2) if self.fear_greed_index else None,
+            "social_volume": round(self.social_volume, 2) if self.social_volume else None,
+            "source": self.source,
+        }
+
+
+class GovernanceProposal(Base):
+    """DAO governance proposals."""
+    __tablename__ = "governance_proposals"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    proposal_id = Column(String(100), unique=True, nullable=False, index=True)
+    
+    # DAO information
+    dao_name = Column(String(100), nullable=False)
+    dao_logo = Column(String(255), nullable=True)
+    blockchain = Column(String(50), nullable=False)
+    
+    # Proposal details
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    proposal_type = Column(String(50), default="governance")  # governance, treasury, parameter
+    status = Column(String(50), default="pending")  # pending, active, passed, rejected, executed
+    
+    # Voting
+    voting_start = Column(DateTime, nullable=True)
+    voting_end = Column(DateTime, nullable=True)
+    quorum = Column(Float, default=0.0)  # % required
+    current_quorum = Column(Float, default=0.0)  # % achieved
+    
+    # Vote results
+    votes_for = Column(Float, default=0.0)
+    votes_against = Column(Float, default=0.0)
+    votes_abstain = Column(Float, default=0.0)
+    total_votes = Column(Float, default=0.0)
+    
+    # User interaction
+    user_vote = Column(String(20), nullable=True)  # for, against, abstain
+    user_voting_power = Column(Float, default=0.0)
+    
+    # Metadata
+    creator_address = Column(String(100), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def to_dict(self) -> dict:
+        """Convert proposal to dictionary."""
+        return {
+            "id": self.id,
+            "proposal_id": self.proposal_id,
+            "dao_name": self.dao_name,
+            "dao_logo": self.dao_logo,
+            "blockchain": self.blockchain,
+            "title": self.title,
+            "description": self.description,
+            "proposal_type": self.proposal_type,
+            "status": self.status,
+            "voting_start": self.voting_start.isoformat() if self.voting_start else None,
+            "voting_end": self.voting_end.isoformat() if self.voting_end else None,
+            "quorum": round(self.quorum, 2),
+            "current_quorum": round(self.current_quorum, 2),
+            "votes_for": round(self.votes_for, 2),
+            "votes_against": round(self.votes_against, 2),
+            "votes_abstain": round(self.votes_abstain, 2),
+            "total_votes": round(self.total_votes, 2),
+            "user_vote": self.user_vote,
+            "user_voting_power": round(self.user_voting_power, 2),
+            "creator_address": self.creator_address,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
+class Prediction(Base):
+    """AI predictions for asset prices."""
+    __tablename__ = "predictions"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String(20), nullable=False, index=True)
+    model_id = Column(String(100), nullable=False)  # OpenGradient model ID
+    model_name = Column(String(100), nullable=False)  # BitQuant, etc.
+    
+    # Prediction details
+    prediction_type = Column(String(50), default="price")  # price, volatility, sentiment
+    horizon = Column(String(20), default="24h")  # 1h, 24h, 7d, 30d
+    timestamp = Column(DateTime, nullable=False, index=True)
+    
+    # Prediction values
+    predicted_price = Column(Float, nullable=True)
+    predicted_change = Column(Float, nullable=True)  # % change
+    predicted_high = Column(Float, nullable=True)
+    predicted_low = Column(Float, nullable=True)
+    
+    # Confidence metrics
+    confidence_score = Column(Float, default=0.0)  # 0-1
+    accuracy_score = Column(Float, nullable=True)  # Historical accuracy
+    volatility_prediction = Column(Float, nullable=True)
+    
+    # Risk assessment
+    risk_level = Column(String(20), default="medium")  # low, medium, high
+    recommendation = Column(String(50), nullable=True)  # buy, hold, sell
+    
+    # Metadata
+    features_used = Column(JSON, nullable=True, default=list)  # Features used for prediction
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    __table_args__ = (
+        Index('ix_predictions_symbol_horizon', 'symbol', 'horizon'),
+    )
+    
+    def to_dict(self) -> dict:
+        """Convert prediction to dictionary."""
+        return {
+            "id": self.id,
+            "symbol": self.symbol,
+            "model_id": self.model_id,
+            "model_name": self.model_name,
+            "prediction_type": self.prediction_type,
+            "horizon": self.horizon,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "predicted_price": round(self.predicted_price, 2) if self.predicted_price else None,
+            "predicted_change": round(self.predicted_change, 2) if self.predicted_change else None,
+            "predicted_high": round(self.predicted_high, 2) if self.predicted_high else None,
+            "predicted_low": round(self.predicted_low, 2) if self.predicted_low else None,
+            "confidence_score": round(self.confidence_score, 3),
+            "accuracy_score": round(self.accuracy_score, 3) if self.accuracy_score else None,
+            "volatility_prediction": round(self.volatility_prediction, 3) if self.volatility_prediction else None,
+            "risk_level": self.risk_level,
+            "recommendation": self.recommendation,
+            "features_used": self.features_used or [],
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }

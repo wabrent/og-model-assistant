@@ -9,7 +9,12 @@ from alembic import context
 
 from core.database import Base
 from core.config import settings
-from models.db_models import Model, UserQuery, ChatSession, ModelAnalytics, GlobalAnalytics
+from models.db_models import (
+    Model, UserQuery, ChatSession, ModelAnalytics, GlobalAnalytics,
+    UserToken, TokenTransaction, UserAchievement, UserStats, ModelStatus,
+    Portfolio, Asset, StakingPosition, LiquidityPosition, 
+    MarketData, GovernanceProposal, Prediction
+)
 
 # Alembic Config object
 config = context.config
@@ -24,7 +29,11 @@ target_metadata = Base.metadata
 
 def get_url():
     """Get database URL from settings."""
-    return settings.database_url
+    url = settings.database_url
+    # Replace aiosqlite with sqlite for Alembic compatibility
+    if url.startswith("sqlite+aiosqlite://"):
+        url = url.replace("sqlite+aiosqlite://", "sqlite://")
+    return url
 
 
 def run_migrations_offline() -> None:

@@ -25,6 +25,7 @@ from api.sync_router import router as sync_router
 from api.health_router import router as health_router
 from api.tokens_router import router as tokens_router
 from api.user_stats_router import router as user_stats_router
+from api.defi_router import router as defi_router
 
 
 
@@ -105,6 +106,7 @@ app.include_router(sync_router)
 app.include_router(health_router)
 app.include_router(tokens_router)
 app.include_router(user_stats_router)
+app.include_router(defi_router)
 
 
 # Serve static files
@@ -153,7 +155,16 @@ async def academy():
 
 @app.get("/defi")
 async def defi():
-    """DeFi page (coming soon)."""
+    """DeFi Hub page."""
+    if os.path.exists("static/defi.html"):
+        return FileResponse(
+            "static/defi.html",
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
+        )
     return {"message": "DeFi Hub - Coming Soon"}
 
 
