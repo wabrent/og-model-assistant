@@ -5,46 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Developer Hub - OpenGradient</title>
 <link rel="icon" type="image/png" href="/static/logos/logo-trp-blue@2x.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --text: #1a1a1a;
-    --text-light: #666666;
-    --text-tertiary: #999999;
-    --border: #e5e5e5;
-    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    --radius-lg: 40px;
-    --radius-md: 24px;
+    /* Modern color palette - Apple Vision Pro inspired */
+    --primary: #0a84ff;
+    --primary-light: #64d2ff;
+    --secondary: #30d158;
+    --tertiary: #ff9f0a;
+    --danger: #ff453a;
+    
+    /* Backgrounds */
+    --bg: #f5f5f7;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f2f2f7;
+    --bg-glass: rgba(255, 255, 255, 0.72);
+    --bg-glass-heavy: rgba(255, 255, 255, 0.88);
+    
+    /* Text */
+    --text: #1d1d1f;
+    --text-light: #424245;
+    --text-tertiary: #86868b;
+    
+    /* Borders */
+    --border: rgba(0, 0, 0, 0.08);
+    
+    /* Accent (backward compatibility) */
+    --accent: var(--primary);
+    --accent-hover: #0077ed;
+    
+    /* Modern gradients */
+    --gradient-1: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 50%, #bf5af2 100%);
+    --gradient-2: linear-gradient(135deg, #30d158 0%, #34c759 50%, #5ac8fa 100%);
+    --gradient-3: linear-gradient(135deg, #ff9f0a 0%, #ffd60a 50%, #ff453a 100%);
+    --gradient-4: linear-gradient(135deg, #5e5ce6 0%, #bf5af2 50%, #ff375f 100%);
+    --gradient-5: linear-gradient(135deg, #64d2ff 0%, #5ac8fa 50%, #34c759 100%);
+    --gradient-glass: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.85) 50%,
+      rgba(255, 255, 255, 0.75) 100%);
+    
+    /* Border radius */
+    --radius-lg: 24px;
+    --radius-md: 16px;
     --radius-sm: 12px;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+    --radius-full: 9999px;
+    
+    /* Modern shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.03), 0 1px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.15),
+                   0 8px 32px rgba(10, 132, 255, 0.1);
+    
+    /* Fluid typography */
+    --font-primary: 'Geist', 'Inter', sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+    --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    --text-3xl: clamp(2rem, 1.6rem + 2vw, 3rem);
   }
 
   [data-theme="dark"] {
-    --bg: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --text: #ffffff;
-    --text-light: #a0a0a0;
-    --text-tertiary: #666666;
-    --border: #333333;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+    /* Dark theme colors */
+    --bg: #000000;
+    --bg-secondary: #1c1c1e;
+    --bg-tertiary: #2c2c2e;
+    --bg-glass: rgba(28, 28, 30, 0.72);
+    --bg-glass-heavy: rgba(44, 44, 46, 0.88);
+    
+    /* Text */
+    --text: #f5f5f7;
+    --text-light: #d1d1d6;
+    --text-tertiary: #8e8e93;
+    
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.12);
+    
+    /* Glass gradient */
+    --gradient-glass: linear-gradient(135deg,
+      rgba(44, 44, 46, 0.95) 0%,
+      rgba(44, 44, 46, 0.85) 50%,
+      rgba(44, 44, 46, 0.75) 100%);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.3);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.2),
+                   0 8px 32px rgba(10, 132, 255, 0.15);
   }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 300;
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
@@ -554,6 +617,72 @@
     .dev-section-card { padding: 24px; }
     .stat-value { font-size: 42px; }
   }
+
+  /* Modern CSS Classes */
+  .glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-panel:hover {
+    background: var(--bg-glass-heavy);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  
+  .btn-modern {
+    padding: 14px 28px;
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow), var(--shadow-lg);
+  }
+  
+  .btn-modern:hover::before {
+    left: 100%;
+  }
+  
+  .btn-modern:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+  }
 </style>
 </head>
 <body>
@@ -602,7 +731,7 @@
 <div class="dev-container">
   
   <!-- API Key Section -->
-  <div class="dev-section-card">
+  <div class="dev-section-card glass-panel hover-lift">
     <h2 class="dev-section-title">🔑 Your API Key</h2>
     <p class="dev-section-desc">
       All API requests require authentication using an API key. 
@@ -610,13 +739,13 @@
     </p>
     <div class="api-key-display" id="api-key-display">og_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
     <div style="text-align: center; margin-top: 20px;">
-      <button class="btn" onclick="generateApiKey()">🔄 Generate New Key</button>
+      <button class="btn btn-modern" onclick="generateApiKey()">🔄 Generate New Key</button>
       <button class="btn btn-secondary" onclick="copyApiKey()">📋 Copy</button>
     </div>
   </div>
 
   <!-- Authentication Section -->
-  <div class="dev-section-card">
+  <div class="dev-section-card glass-panel hover-lift">
     <h2 class="dev-section-title">🔐 Authentication</h2>
     <p class="dev-section-desc">
       Include your API key in the Authorization header of every request:
@@ -627,14 +756,14 @@
   </div>
 
   <!-- API Endpoints Section -->
-  <div class="dev-section-card">
+  <div class="dev-section-card glass-panel hover-lift">
     <h2 class="dev-section-title">📚 API Endpoints</h2>
     <p class="dev-section-desc">
       Base URL: <code style="background: var(--bg-secondary); padding: 4px 8px; border-radius: 4px;">https://og-model-assistant.onrender.com/api</code>
     </p>
 
     <!-- Search Models -->
-    <div class="api-endpoint-card">
+    <div class="api-endpoint-card glass-panel hover-lift">
       <span class="api-method post">POST</span>
       <code class="api-path">/api/models/search</code>
       <p class="api-desc">Search for AI models using natural language queries.</p>
@@ -647,7 +776,7 @@
     </div>
 
     <!-- Chat -->
-    <div class="api-endpoint-card">
+    <div class="api-endpoint-card glass-panel hover-lift">
       <span class="api-method post">POST</span>
       <code class="api-path">/api/chat</code>
       <p class="api-desc">Interact with AI models using chat interface.</p>
@@ -660,7 +789,7 @@
     </div>
 
     <!-- Get Models -->
-    <div class="api-endpoint-card">
+    <div class="api-endpoint-card glass-panel hover-lift">
       <span class="api-method get">GET</span>
       <code class="api-path">/api/models?limit=10&offset=0</code>
       <p class="api-desc">Get list of all available AI models with pagination.</p>
@@ -671,7 +800,7 @@
     </div>
 
     <!-- Analytics -->
-    <div class="api-endpoint-card">
+    <div class="api-endpoint-card glass-panel hover-lift">
       <span class="api-method get">GET</span>
       <code class="api-path">/api/analytics/stats</code>
       <p class="api-desc">Get platform statistics and analytics.</p>
@@ -683,7 +812,7 @@
   </div>
 
   <!-- SDKs Section -->
-  <div class="dev-section-card">
+  <div class="dev-section-card glass-panel hover-lift">
     <h2 class="dev-section-title">📦 SDKs & Libraries</h2>
     <p class="dev-section-desc">
       Official SDKs for popular programming languages. Get started quickly with pre-built clients.
@@ -691,7 +820,7 @@
 
     <div class="sdk-grid">
       <!-- Python SDK -->
-      <div class="sdk-item">
+      <div class="sdk-item glass-panel hover-lift">
         <span class="sdk-icon">🐍</span>
         <h4>Python SDK</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
@@ -708,7 +837,7 @@ models = <span class="keyword">await</span> client.search(<span class="string">"
       </div>
 
       <!-- JavaScript SDK -->
-      <div class="sdk-item">
+      <div class="sdk-item glass-panel hover-lift">
         <span class="sdk-icon">🟨</span>
         <h4>JavaScript SDK</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
@@ -724,7 +853,7 @@ models.forEach(model => console.log(model.name))</code></pre>
       </div>
 
       <!-- REST API -->
-      <div class="sdk-item">
+      <div class="sdk-item glass-panel hover-lift">
         <span class="sdk-icon">🌐</span>
         <h4>REST API</h4>
         <p style="font-size: 14px; color: var(--text-light); margin-bottom: 12px;">
@@ -741,7 +870,7 @@ models.forEach(model => console.log(model.name))</code></pre>
   </div>
 
   <!-- Rate Limits Section -->
-  <div class="dev-section-card">
+  <div class="dev-section-card glass-panel hover-lift">
     <h2 class="dev-section-title">⚡ Rate Limits</h2>
     <p class="dev-section-desc">
       API rate limits ensure fair usage for all developers. Every response includes headers with your current rate limit status.

@@ -5,46 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Academy - OpenGradient</title>
 <link rel="icon" type="image/png" href="/static/logos/logo-trp-blue@2x.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #ffffff;
-    --bg-secondary: #f8f9fa;
-    --text: #1a1a1a;
-    --text-light: #666666;
-    --text-tertiary: #999999;
-    --border: #e5e5e5;
-    --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    --radius-lg: 40px;
-    --radius-md: 24px;
+    /* Modern color palette - Apple Vision Pro inspired */
+    --primary: #0a84ff;
+    --primary-light: #64d2ff;
+    --secondary: #30d158;
+    --tertiary: #ff9f0a;
+    --danger: #ff453a;
+    
+    /* Backgrounds */
+    --bg: #f5f5f7;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f2f2f7;
+    --bg-glass: rgba(255, 255, 255, 0.72);
+    --bg-glass-heavy: rgba(255, 255, 255, 0.88);
+    
+    /* Text */
+    --text: #1d1d1f;
+    --text-light: #424245;
+    --text-tertiary: #86868b;
+    
+    /* Borders */
+    --border: rgba(0, 0, 0, 0.08);
+    
+    /* Accent (backward compatibility) */
+    --accent: var(--primary);
+    --accent-hover: #0077ed;
+    
+    /* Modern gradients */
+    --gradient-1: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 50%, #bf5af2 100%);
+    --gradient-2: linear-gradient(135deg, #30d158 0%, #34c759 50%, #5ac8fa 100%);
+    --gradient-3: linear-gradient(135deg, #ff9f0a 0%, #ffd60a 50%, #ff453a 100%);
+    --gradient-4: linear-gradient(135deg, #5e5ce6 0%, #bf5af2 50%, #ff375f 100%);
+    --gradient-5: linear-gradient(135deg, #64d2ff 0%, #5ac8fa 50%, #34c759 100%);
+    --gradient-glass: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.85) 50%,
+      rgba(255, 255, 255, 0.75) 100%);
+    
+    /* Border radius */
+    --radius-lg: 24px;
+    --radius-md: 16px;
     --radius-sm: 12px;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+    --radius-full: 9999px;
+    
+    /* Modern shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.03), 0 1px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.15),
+                   0 8px 32px rgba(10, 132, 255, 0.1);
+    
+    /* Fluid typography */
+    --font-primary: 'Geist', 'Inter', sans-serif;
+    --font-mono: 'SF Mono', 'Fira Code', monospace;
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
+    --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1.05rem + 0.375vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    --text-3xl: clamp(2rem, 1.6rem + 2vw, 3rem);
   }
 
   [data-theme="dark"] {
-    --bg: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --text: #ffffff;
-    --text-light: #a0a0a0;
-    --text-tertiary: #666666;
-    --border: #333333;
-    --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
-    --shadow-md: 0 4px 20px rgba(0,0,0,0.4);
-    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+    /* Dark theme colors */
+    --bg: #000000;
+    --bg-secondary: #1c1c1e;
+    --bg-tertiary: #2c2c2e;
+    --bg-glass: rgba(28, 28, 30, 0.72);
+    --bg-glass-heavy: rgba(44, 44, 46, 0.88);
+    
+    /* Text */
+    --text: #f5f5f7;
+    --text-light: #d1d1d6;
+    --text-tertiary: #8e8e93;
+    
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.12);
+    
+    /* Glass gradient */
+    --gradient-glass: linear-gradient(135deg,
+      rgba(44, 44, 46, 0.95) 0%,
+      rgba(44, 44, 46, 0.85) 50%,
+      rgba(44, 44, 46, 0.75) 100%);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.2), 0 1px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.3);
+    --shadow-lg: 0 12px 32px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-glow: 0 0 40px rgba(10, 132, 255, 0.2),
+                   0 8px 32px rgba(10, 132, 255, 0.15);
   }
 
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
     font-weight: 300;
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
@@ -534,6 +597,72 @@
     .path-steps::before { display: none; }
     .path-steps { flex-direction: column; }
   }
+
+  /* Modern CSS Classes */
+  .glass-panel {
+    background: var(--bg-glass);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-panel:hover {
+    background: var(--bg-glass-heavy);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  
+  .btn-modern {
+    padding: 14px 28px;
+    background: var(--gradient-1);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow), var(--shadow-lg);
+  }
+  
+  .btn-modern:hover::before {
+    left: 100%;
+  }
+  
+  .btn-modern:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+  }
 </style>
 </head>
 <body>
@@ -554,7 +683,7 @@
     <button class="icon-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle Theme">🌓</button>
     <a href="/" class="nav-btn">← Back to App</a>
     <a href="/static/developer.html" class="nav-btn">Developer Hub</a>
-    <a href="https://hub.opengradient.ai" target="_blank" class="nav-btn primary">OpenGradient Hub</a>
+    <a href="https://hub.opengradient.ai" target="_blank" class="nav-btn primary btn-modern">OpenGradient Hub</a>
   </div>
 </header>
 
@@ -584,22 +713,22 @@
   
   <!-- Categories -->
   <div class="categories-grid">
-    <div class="category-card" onclick="filterCourses('all')">
+    <div class="category-card glass-panel hover-lift" onclick="filterCourses('all')">
       <div class="category-icon">📚</div>
       <div class="category-title">All Courses</div>
       <div class="category-count">50 courses</div>
     </div>
-    <div class="category-card" onclick="filterCourses('beginner')">
+    <div class="category-card glass-panel hover-lift" onclick="filterCourses('beginner')">
       <div class="category-icon">🌱</div>
       <div class="category-title">Beginner</div>
       <div class="category-count">20 courses</div>
     </div>
-    <div class="category-card" onclick="filterCourses('intermediate')">
+    <div class="category-card glass-panel hover-lift" onclick="filterCourses('intermediate')">
       <div class="category-icon">🚀</div>
       <div class="category-title">Intermediate</div>
       <div class="category-count">18 courses</div>
     </div>
-    <div class="category-card" onclick="filterCourses('advanced')">
+    <div class="category-card glass-panel hover-lift" onclick="filterCourses('advanced')">
       <div class="category-icon">🔥</div>
       <div class="category-title">Advanced</div>
       <div class="category-count">12 courses</div>
@@ -641,7 +770,7 @@
     
     <div class="courses-grid">
       <!-- Course 1 -->
-      <div class="course-card" onclick="openCourse('ai-basics')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('ai-basics')">
         <div class="course-thumbnail">🤖</div>
         <div class="course-content">
           <span class="course-badge">Beginner</span>
@@ -655,7 +784,7 @@
       </div>
 
       <!-- Course 2 -->
-      <div class="course-card" onclick="openCourse('neural-networks')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('neural-networks')">
         <div class="course-thumbnail">🧠</div>
         <div class="course-content">
           <span class="course-badge">Intermediate</span>
@@ -669,7 +798,7 @@
       </div>
 
       <!-- Course 3 -->
-      <div class="course-card" onclick="openCourse('llm-apps')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('llm-apps')">
         <div class="course-thumbnail">💬</div>
         <div class="course-content">
           <span class="course-badge">Advanced</span>
@@ -683,7 +812,7 @@
       </div>
 
       <!-- Course 4 -->
-      <div class="course-card" onclick="openCourse('nlp')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('nlp')">
         <div class="course-thumbnail">📝</div>
         <div class="course-content">
           <span class="course-badge">Intermediate</span>
@@ -697,7 +826,7 @@
       </div>
 
       <!-- Course 5 -->
-      <div class="course-card" onclick="openCourse('computer-vision')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('computer-vision')">
         <div class="course-thumbnail">👁️</div>
         <div class="course-content">
           <span class="course-badge">Advanced</span>
@@ -711,7 +840,7 @@
       </div>
 
       <!-- Course 6 -->
-      <div class="course-card" onclick="openCourse('opengradient-api')">
+      <div class="course-card glass-panel hover-lift" onclick="openCourse('opengradient-api')">
         <div class="course-thumbnail">⚡</div>
         <div class="course-content">
           <span class="course-badge">Beginner</span>
@@ -736,19 +865,19 @@
     </p>
     
     <div class="certificates-grid">
-      <div class="certificate-card">
+      <div class="certificate-card glass-panel hover-lift">
         <div class="certificate-icon">🌱</div>
         <h3 class="certificate-title">AI Fundamentals</h3>
         <p class="certificate-desc">Complete 5 beginner courses</p>
         <div style="font-size: 14px; color: var(--text-light);">0 / 5 courses</div>
       </div>
-      <div class="certificate-card">
+      <div class="certificate-card glass-panel hover-lift">
         <div class="certificate-icon">🚀</div>
         <h3 class="certificate-title">ML Practitioner</h3>
         <p class="certificate-desc">Complete 10 intermediate courses</p>
         <div style="font-size: 14px; color: var(--text-light);">0 / 10 courses</div>
       </div>
-      <div class="certificate-card">
+      <div class="certificate-card glass-panel hover-lift">
         <div class="certificate-icon">🔥</div>
         <h3 class="certificate-title">AI Expert</h3>
         <p class="certificate-desc">Complete all advanced courses</p>
