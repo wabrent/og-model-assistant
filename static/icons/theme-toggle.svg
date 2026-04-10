@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <linearGradient id="neon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f3ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9d4edd;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+      <feFlood flood-color="#00f3ff" flood-opacity="0.6" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g filter="url(#glow)">
+    <circle cx="12" cy="12" r="10" fill="url(#neon-gradient)" stroke="#00f3ff" stroke-width="0.5"/>
+    <!-- Sun rays -->
+    <g id="sun" opacity="1">
+      <circle cx="12" cy="7" r="1.5" fill="#ffffff"/>
+      <circle cx="12" cy="17" r="1.5" fill="#ffffff"/>
+      <circle cx="7" cy="12" r="1.5" fill="#ffffff"/>
+      <circle cx="17" cy="12" r="1.5" fill="#ffffff"/>
+      <circle cx="9" cy="9" r="1.5" fill="#ffffff"/>
+      <circle cx="15" cy="15" r="1.5" fill="#ffffff"/>
+      <circle cx="9" cy="15" r="1.5" fill="#ffffff"/>
+      <circle cx="15" cy="9" r="1.5" fill="#ffffff"/>
+    </g>
+    <!-- Crescent moon -->
+    <g id="moon" opacity="0">
+      <circle cx="15" cy="12" r="6" fill="#ffffff"/>
+      <circle cx="13" cy="12" r="6" fill="#1a1a1a"/>
+    </g>
+  </g>
+  <style>
+    @keyframes sunToMoon {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    @keyframes moonToSun {
+      0% { opacity: 0; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    [data-theme="dark"] #sun { opacity: 0; }
+    [data-theme="dark"] #moon { opacity: 1; }
+    [data-theme="light"] #sun { opacity: 1; }
+    [data-theme="light"] #moon { opacity: 0; }
+  </style>
+</svg>
