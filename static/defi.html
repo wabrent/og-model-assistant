@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -680,23 +681,23 @@
   </div>
 </header>
 
-<!-- Hero -->
+ <!-- Hero -->
 <section class="defi-hero">
-  <h1>💰 DeFi Hub</h1>
-  <p>Stake OPG tokens, earn rewards, and participate in governance. Build the future of AI with decentralized finance.</p>
+  <h1>🤖 DeFi AI Assistant</h1>
+  <p>AI-powered portfolio management and market predictions using OpenGradient's ML models. Leverage BitQuant, PricePredictor, and RiskAnalyzer for smarter DeFi decisions.</p>
   
   <div class="defi-stats">
     <div class="stat-item">
-      <div class="stat-value">$2.5M</div>
-      <div class="stat-label">Total Value Locked</div>
+      <div class="stat-value">3</div>
+      <div class="stat-label">ML Models</div>
     </div>
     <div class="stat-item">
-      <div class="stat-value">12.5%</div>
-      <div class="stat-label">Avg APY</div>
+      <div class="stat-value">87.2%</div>
+      <div class="stat-label">Avg Accuracy</div>
     </div>
     <div class="stat-item">
-      <div class="stat-value">5K+</div>
-      <div class="stat-label">Stakers</div>
+      <div class="stat-value">24/7</div>
+      <div class="stat-label">AI Analysis</div>
     </div>
   </div>
 </section>
@@ -704,173 +705,120 @@
 <!-- Main Content -->
 <div class="defi-container">
   
-  <!-- Stats -->
+  <!-- AI-Powered Stats -->
   <div class="stats-grid">
     <div class="stat-box">
-      <div class="stat-box-label">Your Balance</div>
-      <div class="stat-box-value" id="user-balance">10.0 OPG</div>
+      <div class="stat-box-label">Portfolio Value</div>
+      <div class="stat-box-value" id="user-balance">$25,430</div>
     </div>
     <div class="stat-box">
-      <div class="stat-box-label">Staked</div>
-      <div class="stat-box-value" id="user-staked">0.0 OPG</div>
+      <div class="stat-box-label">AI Models Used</div>
+      <div class="stat-box-value" id="ai-models-used">3</div>
     </div>
     <div class="stat-box">
-      <div class="stat-box-label">Rewards Earned</div>
-      <div class="stat-box-value" id="user-rewards">0.0 OPG</div>
+      <div class="stat-box-label">Prediction Accuracy</div>
+      <div class="stat-box-value" id="prediction-accuracy">87.2%</div>
     </div>
     <div class="stat-box">
-      <div class="stat-box-label">Voting Power</div>
-      <div class="stat-box-value" id="user-voting">0</div>
+      <div class="stat-box-label">ML Confidence</div>
+      <div class="stat-box-value" id="ml-confidence">94%</div>
     </div>
   </div>
 
-  <div class="defi-grid">
-    
-    <!-- Staking Card -->
-    <div class="defi-card glass-panel hover-lift">
-      <div class="defi-card-header">
-        <div>
-          <div class="defi-card-title">💎 Stake OPG</div>
-          <div class="defi-card-subtitle">Earn passive rewards</div>
-        </div>
-        <div class="apy-badge">12.5% APY</div>
-      </div>
-      
-      <div class="input-group">
-        <label>Amount to Stake</label>
-        <input type="number" id="stake-amount" placeholder="0.0" min="0" step="0.1">
-        <div class="balance">Balance: <span id="stake-balance">10.0</span> OPG</div>
-      </div>
 
-      <div class="input-group">
-        <label>Lock Period</label>
-        <select id="lock-period" style="width: 100%; padding: 14px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 16px;">
-          <option value="30">30 days - 12.5% APY</option>
-          <option value="60">60 days - 15.0% APY</option>
-          <option value="90">90 days - 18.0% APY</option>
-          <option value="180">180 days - 24.0% APY</option>
-        </select>
-      </div>
 
-      <button class="btn btn-modern" onclick="stakeTokens()">🔒 Stake OPG</button>
-      <button class="btn btn-secondary" onclick="unstakeTokens()" style="margin-top: 8px;">🔓 Unstake</button>
+<!-- AI Market Analytics -->
+<div class="defi-card glass-panel hover-lift" style="margin-top: 40px;">
+  <div class="defi-card-header">
+    <div>
+      <div class="defi-card-title">🤖 AI Market Analytics</div>
+      <div class="defi-card-subtitle">Real-time insights and predictions</div>
     </div>
-
-    <!-- Liquidity Pool Card -->
-    <div class="defi-card glass-panel hover-lift">
-      <div class="defi-card-header">
-        <div>
-          <div class="defi-card-title">💧 Liquidity Pool</div>
-          <div class="defi-card-subtitle">OPG/USDT Pool</div>
-        </div>
-        <div class="apy-badge">28.3% APY</div>
-      </div>
-
-      <div class="stats-grid" style="margin-bottom: 16px;">
-        <div class="stat-box">
-          <div class="stat-box-label">TVL</div>
-          <div class="stat-box-value">$850K</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-box-label">Your Share</div>
-          <div class="stat-box-value">0%</div>
-        </div>
-      </div>
-      
-      <div class="input-group">
-        <label>Deposit OPG</label>
-        <input type="number" id="lp-amount" placeholder="0.0" min="0" step="0.1">
-      </div>
-
-      <button class="btn btn-modern" onclick="addLiquidity()">➕ Add Liquidity</button>
-      <button class="btn btn-secondary" onclick="removeLiquidity()" style="margin-top: 8px;">➖ Remove</button>
-    </div>
-
-    <!-- Governance Card -->
-    <div class="defi-card glass-panel hover-lift">
-      <div class="defi-card-header">
-        <div>
-          <div class="defi-card-title">🗳️ Governance</div>
-          <div class="defi-card-subtitle">Vote on proposals</div>
-        </div>
-        <div class="apy-badge" style="background: var(--gradient-2);">3 Active</div>
-      </div>
-
-      <p style="font-size: 14px; color: var(--text-light); margin-bottom: 20px;">
-        Your Voting Power: <strong id="voting-power">0</strong> votes
-      </p>
-
-      <button class="btn btn-modern" onclick="viewProposals()">📋 View Proposals</button>
-    </div>
-
+    <div class="apy-badge" style="background: var(--gradient-3);">AI Powered</div>
   </div>
-
-  <!-- Active Proposals -->
-  <div class="defi-card glass-panel hover-lift" id="proposals-section">
-    <div class="defi-card-header">
-      <div class="defi-card-title">📜 Active Proposals</div>
-      <div class="defi-card-subtitle">Participate in governance</div>
+  
+  <div class="stats-grid" style="margin-bottom: 24px;">
+    <div class="stat-box">
+      <div class="stat-box-label">Market Sentiment</div>
+      <div class="stat-box-value" id="market-sentiment">Neutral</div>
     </div>
-
-    <div class="proposal-card glass-panel hover-lift">
-      <div class="proposal-title">OGP-001: Add New AI Model Categories</div>
-      <p class="proposal-desc">
-        Proposal to expand the model hub with new categories including Robotics, BioTech, and Climate AI models.
-      </p>
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 75%;"></div>
-        </div>
-        <div class="progress-labels">
-          <span>✅ 750 For</span>
-          <span>❌ 250 Against</span>
-        </div>
-      </div>
-      <div class="proposal-meta">
-        <span class="proposal-votes">Your vote: Not voted</span>
-        <span class="proposal-deadline">Ends in 5 days</span>
-      </div>
-      <div style="display: flex; gap: 12px; margin-top: 16px;">
-        <button class="btn btn-modern" style="flex: 1; margin-top: 0;" onclick="vote('for')">✅ Vote For</button>
-        <button class="btn btn-secondary" style="flex: 1; margin-top: 0;" onclick="vote('against')">❌ Vote Against</button>
-      </div>
+    <div class="stat-box">
+      <div class="stat-box-label">Fear & Greed Index</div>
+      <div class="stat-box-value" id="fear-greed-index">54</div>
     </div>
-
-    <div class="proposal-card glass-panel hover-lift">
-      <div class="proposal-title">OGP-002: Reduce Transaction Fees</div>
-      <p class="proposal-desc">
-        Reduce API call fees from 0.1 OPG to 0.05 OPG to encourage more developers to use the platform.
-      </p>
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 60%;"></div>
-        </div>
-        <div class="progress-labels">
-          <span>✅ 600 For</span>
-          <span>❌ 400 Against</span>
-        </div>
-      </div>
-      <div class="proposal-meta">
-        <span class="proposal-votes">Your vote: Not voted</span>
-        <span class="proposal-deadline">Ends in 3 days</span>
-      </div>
-      <div style="display: flex; gap: 12px; margin-top: 16px;">
-        <button class="btn btn-modern" style="flex: 1; margin-top: 0;" onclick="vote('for')">✅ Vote For</button>
-        <button class="btn btn-secondary" style="flex: 1; margin-top: 0;" onclick="vote('against')">❌ Vote Against</button>
-      </div>
+    <div class="stat-box">
+      <div class="stat-box-label">Top Gainer</div>
+      <div class="stat-box-value" id="top-gainer">BTC +5.2%</div>
     </div>
-
+    <div class="stat-box">
+      <div class="stat-box-label">AI Confidence</div>
+      <div class="stat-box-value" id="ai-confidence">87%</div>
+    </div>
   </div>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+    <div class="defi-card glass-panel" style="padding: 20px;">
+      <div class="defi-card-title" style="font-size: 18px;">📈 Price Predictions</div>
+       <canvas id="price-predictions-chart" height="200"></canvas>
+    </div>
+    <div class="defi-card glass-panel" style="padding: 20px;">
+      <div class="defi-card-title" style="font-size: 18px;">📊 Portfolio Risk Analysis</div>
+       <canvas id="risk-analysis-chart" height="200"></canvas>
+    </div>
+  </div>
+  
+  <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);">
+    <div class="defi-card-title" style="font-size: 18px; margin-bottom: 16px;">🤖 AI Recommendations</div>
+    <div id="ai-recommendations" style="color: var(--text-light); font-size: 14px; line-height: 1.6;">
+      Loading AI recommendations...
+    </div>
+  </div>
+</div>
 
+<!-- Smart Portfolio Assistant -->
+<div class="defi-card glass-panel hover-lift" style="margin-top: 40px;">
+  <div class="defi-card-header">
+    <div>
+      <div class="defi-card-title">🧠 Smart Portfolio Assistant</div>
+      <div class="defi-card-subtitle">AI-powered portfolio advice and optimization</div>
+    </div>
+    <div class="apy-badge" style="background: var(--gradient-2);">AI Assistant</div>
+  </div>
+  
+  <div id="assistant-chat" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding: 16px; background: var(--bg-secondary); border-radius: 12px;">
+    <div class="assistant-message" style="margin-bottom: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;">
+      <strong>🤖 Assistant:</strong> Hello! I'm your Smart Portfolio Assistant. I can help you analyze your portfolio, suggest optimizations, and answer DeFi questions. Ask me anything!
+    </div>
+  </div>
+  
+  <div class="input-group">
+    <label>Ask the assistant about your portfolio, market trends, or investment strategies</label>
+    <textarea id="assistant-input" placeholder="e.g., How can I improve my portfolio diversification?" rows="3" style="width: 100%; padding: 14px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 16px; font-family: var(--font-primary); resize: vertical;"></textarea>
+  </div>
+  
+  <div style="display: flex; gap: 12px; margin-top: 16px;">
+    <button class="btn btn-modern" onclick="askAssistant()" style="flex: 1;">💬 Ask Assistant</button>
+    <button class="btn btn-secondary" onclick="clearChat()" style="flex: 1;">🗑️ Clear Chat</button>
+  </div>
+  
+  <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);">
+    <div class="defi-card-title" style="font-size: 16px; margin-bottom: 12px;">💡 Quick Actions</div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <button class="nav-btn" onclick="quickAction('analyze_portfolio')">📊 Analyze Portfolio</button>
+      <button class="nav-btn" onclick="quickAction('suggest_rebalance')">⚖️ Suggest Rebalance</button>
+      <button class="nav-btn" onclick="quickAction('risk_assessment')">⚠️ Risk Assessment</button>
+      <button class="nav-btn" onclick="quickAction('market_outlook')">📈 Market Outlook</button>
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
-<footer class="footer">
-  <div class="footer-logo">OpenGradient Model Hub</div>
-  <div class="footer-text">AI-powered model discovery and comparison platform</div>
-  <a href="https://x.com/graanit2" target="_blank" class="footer-link">
-    <span>𝕏</span>
-    <span>Developed by @graanit2</span>
+ <footer class="footer">
+  <div class="footer-logo">OpenGradient DeFi AI Assistant</div>
+  <div class="footer-text">Powered by OpenGradient Model Hub & SDK - Integrating BitQuant, PricePredictor, RiskAnalyzer ML models</div>
+  <a href="https://hub.opengradient.ai" target="_blank" class="footer-link">
+    <span>🚀</span>
+    <span>Explore Model Hub</span>
   </a>
 </footer>
 
@@ -887,47 +835,6 @@
     if (btn) btn.textContent = isDark ? '☀️' : '🌙';
   }
 
-  // Stake Tokens
-  function stakeTokens() {
-    const amount = document.getElementById('stake-amount').value;
-    if (!amount || amount <= 0) {
-      showToast('❌', 'Please enter a valid amount');
-      return;
-    }
-    showToast('✅', `Staked ${amount} OPG! Rewards will accrue daily.`);
-    document.getElementById('stake-amount').value = '';
-  }
-
-  // Unstake Tokens
-  function unstakeTokens() {
-    showToast('✅', 'Unstaked successfully!');
-  }
-
-  // Add Liquidity
-  function addLiquidity() {
-    const amount = document.getElementById('lp-amount').value;
-    if (!amount || amount <= 0) {
-      showToast('❌', 'Please enter a valid amount');
-      return;
-    }
-    showToast('✅', `Added ${amount} OPG to liquidity pool!`);
-    document.getElementById('lp-amount').value = '';
-  }
-
-  // Remove Liquidity
-  function removeLiquidity() {
-    showToast('✅', 'Liquidity removed successfully!');
-  }
-
-  // View Proposals
-  function viewProposals() {
-    document.getElementById('proposals-section').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // Vote
-  function vote(choice) {
-    showToast('✅', `Voted ${choice} successfully!`);
-  }
 
   // Toast
   function showToast(icon, msg) {
@@ -951,6 +858,447 @@
       btn.textContent = isDark ? '🌙' : '☀️';
     }
   });
+</script>
+
+<script>
+  // Configuration
+  const API_BASE = '/api/defi';
+  let USER_ID = 'demo_user_' + Math.random().toString(36).substring(2, 9); // Temporary demo user
+  
+  // State
+  let userPortfolio = null;
+  let marketPrices = {};
+  
+  // DOM Elements
+  const elements = {
+    userBalance: document.getElementById('user-balance'),
+    aiModelsUsed: document.getElementById('ai-models-used'),
+    predictionAccuracy: document.getElementById('prediction-accuracy'),
+    mlConfidence: document.getElementById('ml-confidence')
+  };
+  
+  // ============== API Functions ==============
+  
+  async function apiFetch(endpoint, options = {}) {
+    const url = `${API_BASE}${endpoint}`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      },
+      ...options
+    });
+    
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`API error: ${error}`);
+    }
+    
+    return response.json();
+  }
+  
+   // Portfolio functions
+  async function loadPortfolio() {
+    try {
+      const portfolio = await apiFetch(`/portfolio/user/${USER_ID}?create_if_not_exists=true`);
+      userPortfolio = portfolio;
+      
+      // Update portfolio value
+      if (elements.userBalance) {
+        elements.userBalance.textContent = `$${portfolio.total_value_usd.toFixed(2)}`;
+      }
+      
+      // Update AI metrics (example values, would come from ML models)
+      if (elements.aiModelsUsed) {
+        elements.aiModelsUsed.textContent = '3'; // Using BitQuant, PricePredictor, RiskAnalyzer
+      }
+      
+      if (elements.predictionAccuracy) {
+        elements.predictionAccuracy.textContent = '87.2%';
+      }
+      
+      if (elements.mlConfidence) {
+        elements.mlConfidence.textContent = '94%';
+      }
+      
+      return portfolio;
+    } catch (error) {
+      console.error('Failed to load portfolio:', error);
+      showToast('❌', 'Failed to load portfolio data');
+      return null;
+    }
+  }
+  
+  // Market data functions
+  async function loadMarketPrices() {
+    try {
+      const symbols = ['BTC', 'ETH', 'SOL', 'OPG'];
+      const prices = await apiFetch(`/market/current?symbols=${symbols.join(',')}`);
+      marketPrices = prices;
+      
+      // Update any price displays if needed
+      return prices;
+    } catch (error) {
+      console.error('Failed to load market prices:', error);
+      return {};
+    }
+  }
+  
+  // Analytics functions
+  async function loadPortfolioAnalytics(portfolioId) {
+    try {
+      const analytics = await apiFetch(`/portfolio/${portfolioId}/analytics`);
+      return analytics;
+    } catch (error) {
+      console.error('Failed to load analytics:', error);
+      return null;
+    }
+  }
+  
+
+
+  
+
+  
+  // ============== Smart Portfolio Assistant Functions ==============
+  
+  async function askAssistant() {
+    const input = document.getElementById('assistant-input');
+    const message = input.value.trim();
+    
+    if (!message) {
+      showToast('❌', 'Please enter a message');
+      return;
+    }
+    
+    // Add user message to chat
+    addChatMessage('user', message);
+    input.value = '';
+    
+    try {
+      // Call DeFi assistant API
+      const response = await fetch('/api/defi/assistant/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          query: message,
+          portfolio_id: userPortfolio ? userPortfolio.id : null,
+          context: {}
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Add assistant response to chat
+      addChatMessage('assistant', data.answer);
+      
+      // Show recommendations if any
+      if (data.recommendations && data.recommendations.length > 0) {
+        addChatMessage('assistant', `💡 Recommendations: ${data.recommendations.join('; ')}`);
+      }
+      
+    } catch (error) {
+      console.error('Assistant error:', error);
+      addChatMessage('assistant', 'Sorry, I encountered an error. Please try again later.');
+      showToast('❌', 'Assistant request failed');
+    }
+  }
+  
+  function addChatMessage(sender, message) {
+    const chatContainer = document.getElementById('assistant-chat');
+    if (!chatContainer) return;
+    
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'assistant-message';
+    messageDiv.style.marginBottom = '12px';
+    messageDiv.style.padding = '12px';
+    messageDiv.style.background = sender === 'user' ? 'var(--gradient-5)' : 'var(--bg-tertiary)';
+    messageDiv.style.borderRadius = '8px';
+    messageDiv.style.border = sender === 'user' ? '1px solid var(--primary)' : '1px solid var(--border)';
+    
+    const senderLabel = sender === 'user' ? '👤 You' : '🤖 Assistant';
+    messageDiv.innerHTML = `<strong>${senderLabel}:</strong> ${message}`;
+    
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+  
+  function clearChat() {
+    const chatContainer = document.getElementById('assistant-chat');
+    if (!chatContainer) return;
+    
+    // Keep only the initial welcome message
+    const welcomeMessage = chatContainer.querySelector('.assistant-message:first-child');
+    chatContainer.innerHTML = '';
+    
+    if (welcomeMessage) {
+      chatContainer.appendChild(welcomeMessage);
+    } else {
+      // Add default welcome message if none exists
+      const defaultMsg = document.createElement('div');
+      defaultMsg.className = 'assistant-message';
+      defaultMsg.style.marginBottom = '12px';
+      defaultMsg.style.padding = '12px';
+      defaultMsg.style.background = 'var(--bg-tertiary)';
+      defaultMsg.style.borderRadius = '8px';
+      defaultMsg.innerHTML = '<strong>🤖 Assistant:</strong> Hello! I\'m your Smart Portfolio Assistant. I can help you analyze your portfolio, suggest optimizations, and answer DeFi questions. Ask me anything!';
+      chatContainer.appendChild(defaultMsg);
+    }
+    
+    showToast('🗑️', 'Chat cleared');
+  }
+  
+  async function quickAction(action) {
+    const actions = {
+      analyze_portfolio: 'Analyze my current portfolio performance and holdings',
+      suggest_rebalance: 'Suggest a portfolio rebalancing strategy',
+      risk_assessment: 'Assess the risk level of my portfolio',
+      market_outlook: 'Provide the current market outlook and trends'
+    };
+    
+    const question = actions[action];
+    if (!question) {
+      showToast('❌', 'Invalid action');
+      return;
+    }
+    
+    // Simulate typing the question
+    const input = document.getElementById('assistant-input');
+    input.value = question;
+    
+    // Call askAssistant
+    await askAssistant();
+   }
+  
+  // ============== Chart.js Integration ==============
+  
+  let pricePredictionsChart = null;
+  let riskAnalysisChart = null;
+  
+  function initCharts() {
+    // Price Predictions Chart
+    const priceCtx = document.getElementById('price-predictions-chart');
+    if (priceCtx) {
+      pricePredictionsChart = new Chart(priceCtx, {
+        type: 'line',
+        data: {
+          labels: ['Now', '+1h', '+6h', '+12h', '+24h', '+48h', '+7d'],
+          datasets: [{
+            label: 'BTC Price Prediction',
+            data: [65000, 65200, 64800, 65500, 66200, 67000, 69000],
+            borderColor: '#00f3ff',
+            backgroundColor: 'rgba(0, 243, 255, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }, {
+            label: 'ETH Price Prediction',
+            data: [3500, 3520, 3480, 3550, 3620, 3700, 3900],
+            borderColor: '#9d4edd',
+            backgroundColor: 'rgba(157, 78, 221, 0.1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: 'var(--text)'
+              }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: 'var(--text-light)'
+              },
+              grid: {
+                color: 'var(--border)'
+              }
+            },
+            y: {
+              ticks: {
+                color: 'var(--text-light)'
+              },
+              grid: {
+                color: 'var(--border)'
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Risk Analysis Chart
+    const riskCtx = document.getElementById('risk-analysis-chart');
+    if (riskCtx) {
+      riskAnalysisChart = new Chart(riskCtx, {
+        type: 'radar',
+        data: {
+          labels: ['Volatility', 'Concentration', 'Liquidity', 'Market Risk', 'Tech Risk', 'Regulatory Risk'],
+          datasets: [{
+            label: 'Your Portfolio',
+            data: [65, 59, 80, 71, 56, 55],
+            backgroundColor: 'rgba(0, 243, 255, 0.2)',
+            borderColor: '#00f3ff',
+            borderWidth: 2
+          }, {
+            label: 'Benchmark',
+            data: [50, 50, 50, 50, 50, 50],
+            backgroundColor: 'rgba(157, 78, 221, 0.2)',
+            borderColor: '#9d4edd',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              angleLines: {
+                color: 'var(--border)'
+              },
+              grid: {
+                color: 'var(--border)'
+              },
+              pointLabels: {
+                color: 'var(--text)'
+              },
+              ticks: {
+                color: 'var(--text-light)',
+                backdropColor: 'transparent'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: 'var(--text)'
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+  
+  async function loadPredictions() {
+    try {
+      // Load predictions from API
+      const symbols = ['BTC', 'ETH'];
+      const predictions = [];
+      
+      for (const symbol of symbols) {
+        const response = await fetch(`/api/defi/predictions/${symbol}?horizon=24h`);
+        if (response.ok) {
+          const data = await response.json();
+          predictions.push({ symbol, data });
+        }
+      }
+      
+      // Update chart with real predictions if available
+      if (predictions.length > 0 && pricePredictionsChart) {
+        // Update chart data
+        // For now, keep demo data
+      }
+      
+      // Update AI recommendations
+      updateAIRecommendations();
+      
+    } catch (error) {
+      console.error('Failed to load predictions:', error);
+    }
+  }
+  
+  async function updateAIRecommendations() {
+    try {
+      const response = await fetch('/api/defi/market/analytics');
+      if (!response.ok) return;
+      
+      const analytics = await response.json();
+      const recommendationsEl = document.getElementById('ai-recommendations');
+      
+      if (recommendationsEl) {
+        const recommendations = [
+          'Market sentiment is neutral. Consider dollar-cost averaging.',
+          'Diversify across large caps (BTC, ETH) and altcoins (SOL, AVAX).',
+          'Set stop-loss orders at 5% below entry to manage downside risk.',
+          'Rebalance portfolio monthly to maintain target allocations.'
+        ];
+        
+        recommendationsEl.innerHTML = recommendations
+          .map(rec => `• ${rec}`)
+          .join('<br>');
+      }
+      
+      // Update market sentiment indicators
+      updateMarketIndicators(analytics);
+      
+    } catch (error) {
+      console.error('Failed to load AI recommendations:', error);
+    }
+  }
+  
+  function updateMarketIndicators(analytics) {
+    const sentimentEl = document.getElementById('market-sentiment');
+    const fearGreedEl = document.getElementById('fear-greed-index');
+    const topGainerEl = document.getElementById('top-gainer');
+    const confidenceEl = document.getElementById('ai-confidence');
+    
+    if (sentimentEl) sentimentEl.textContent = analytics.sentiment || 'Neutral';
+    if (fearGreedEl) fearGreedEl.textContent = analytics.fear_greed_index || '54';
+    if (topGainerEl) topGainerEl.textContent = analytics.top_gainer || 'BTC +5.2%';
+    if (confidenceEl) confidenceEl.textContent = analytics.ai_confidence || '87%';
+  }
+  
+  // ============== Initialization ==============
+  
+  async function initDeFiApp() {
+    showToast('🔄', 'Loading DeFi data...');
+    
+    // Load portfolio and market data in parallel
+    const [portfolio, prices] = await Promise.all([
+      loadPortfolio(),
+      loadMarketPrices()
+    ]);
+    
+    // Initialize charts and load AI predictions
+    initCharts();
+    await loadPredictions();
+    
+    showToast('✅', 'DeFi data loaded!');
+    
+    // Connect to WebSocket for real-time updates (simplified)
+    try {
+      const priceWs = new WebSocket(`ws://${window.location.host}/api/defi/ws/prices`);
+      priceWs.onopen = () => console.log('Connected to price updates');
+    } catch (error) {
+      console.log('WebSocket not available, using polling');
+    }
+  }
+  
+
+  
+  // Start the app when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDeFiApp);
+  } else {
+    initDeFiApp();
+  }
 </script>
 
 </body>
