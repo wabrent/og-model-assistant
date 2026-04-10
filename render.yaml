@@ -22,6 +22,18 @@ services:
         value: 10000
       - key: LOG_LEVEL
         value: INFO
+      - key: ALLOWED_ORIGINS
+        value: "*"
+      - key: PRIVATE_KEY
+        value: your_opengradient_private_key_here
+      - key: MEMSYNC_API_KEY
+        value: your_memsync_api_key
+      - key: TWINS_API_KEY
+        value: your_twins_api_key
+      - key: OG_EMAIL
+        value: your_email@example.com
+      - key: OG_PASSWORD
+        value: your_password
     disk:
       name: logs
       mountPath: /app/logs
