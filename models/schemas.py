@@ -74,7 +74,7 @@ class ChatMessage(BaseModel):
 
 class ChatRequest(BaseModel):
     """Schema for chat request."""
-    message: str
+    message: str = Field(..., min_length=1)
     session_id: Optional[str] = None
     user_id: Optional[str] = None
     max_tokens: int = Field(default=800, ge=100, le=4000)
