@@ -9,7 +9,7 @@ import os
 
 def run_tests():
     """Run OpenGradient SDK tests."""
-    print("🚀 Running OpenGradient SDK Integration Tests")
+    print(">>> Running OpenGradient SDK Integration Tests")
     print("=" * 60)
     
     # Run pytest with specific test file
@@ -37,9 +37,9 @@ def run_tests():
     
     # Summary
     if result.returncode == 0:
-        print("✅ All tests passed!")
+        print("[PASS] All tests passed!")
     else:
-        print("❌ Some tests failed")
+        print("[FAIL] Some tests failed")
     
     return result.returncode
 
