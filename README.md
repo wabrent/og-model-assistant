@@ -100,6 +100,7 @@ og-model-assistant-pro/
 │   └── logos/              # Brand assets
 ├── tests/                  # Tests
 │   ├── test_api.py
+│   ├── test_opengradient_sdk.py  # OpenGradient SDK integration tests
 │   └── conftest.py
 ├── logs/                   # Application logs
 ├── main.py                 # Application entry point
@@ -212,6 +213,7 @@ Click the 📷 button to upload an image for AI analysis.
 
 ## 🧪 Testing
 
+### Core API Tests
 ```bash
 # Run all tests
 pytest
@@ -222,6 +224,26 @@ pytest --cov=. --cov-report=html
 # Run specific test file
 pytest tests/test_api.py -v
 ```
+
+### OpenGradient SDK Integration Tests
+Test the integration with OpenGradient's SDK including LLM, Alpha (model inference), Twins (digital twins), and workflow models.
+
+```bash
+# Run all SDK integration tests
+pytest tests/test_opengradient_sdk.py -v
+
+# Run specific SDK test class
+pytest tests/test_opengradient_sdk.py::TestOpenGradientSDKImport -v
+pytest tests/test_opengradient_sdk.py::TestIntegrationPoints -v
+
+# Run tests with real OpenGradient API key (requires .env configuration)
+pytest tests/test_opengradient_sdk.py::TestRealSDKIntegration -v
+```
+
+### Test Categories
+- **Unit Tests**: Mocked SDK tests that don't require API keys
+- **Integration Tests**: Verify our services integrate correctly with SDK interfaces
+- **Real SDK Tests**: Tests that use actual OpenGradient API (skipped without valid key)
 
 ## 🐳 Docker Deployment
 

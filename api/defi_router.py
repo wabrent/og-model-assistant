@@ -22,6 +22,8 @@ from models.schemas_defi import (
 )
 from services.defi_service import defi_service
 from services.chat_service import chat_service
+from services.ml_model_service import ml_model_service
+from services.twin_service import twin_service
 
 router = APIRouter(prefix="/api/defi", tags=["DeFi"])
 
@@ -431,6 +433,215 @@ async def broadcast_portfolio_update(portfolio_id: int, portfolio_data: Dict[str
             logger.error(f"Failed to send portfolio update: {e}")
 
 
+# ============== ML Model Endpoints ==============
+
+@router.get("/ml-models")
+async def get_ml_models():
+    """Get available ML models from OpenGradient."""
+    models = await ml_model_service.get_available_ml_models()
+    return {
+        "models": models,
+        "count": len(models),
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
+@router.post("/predict/bitquant")
+async def predict_bitquant(
+    symbol: str = Query(..., description="Trading pair symbol (e.g., ETH/USDT)"),
+    horizon: str = Query("24h", pattern="^(1h|24h|7d|30d)$", description="Prediction horizon"),
+    features: Optional[Dict[str, Any]] = None
+):
+    """Get BitQuant prediction for a symbol."""
+    try:
+        prediction = await ml_model_service.call_bitquant(symbol, horizon, features)
+        
+        # Save prediction to database
+        from sqlalchemy.ext.asyncio import AsyncSession
+        from core.database import async_session_maker
+        
+        async with async_session_maker() as db:
+            await defi_service.save_prediction(
+                db,
+                symbol=symbol,
+                model_id="bitquant-v1",
+                model_name="BitQuant",
+                predicted_price=prediction.get("predicted_price"),
+                predicted_change=prediction.get("predicted_change_percent"),
+                confidence_score=prediction.get("confidence_score", 0.0),
+                prediction_type="price",
+                predicted_high=prediction.get("predicted_price") * 1.02,  # +2%
+                predicted_low=prediction.get("predicted_price") * 0.98,   # -2%
+                volatility_prediction=prediction.get("risk_metrics", {}).get("volatility"),
+                metadata=prediction
+            )
+        
+        return prediction
+    except Exception as e:
+        logger.error(f"Error in BitQuant prediction: {e}")
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
+
+@router.post("/predict/pricepredictor")
+async def predict_pricepredictor(
+    symbol: str = Query(..., description="Trading pair symbol"),
+    horizon: str = Query("24h", pattern="^(1h|24h|7d|30d)$")
+):
+    """Get PricePredictor forecast for a symbol."""
+    try:
+        prediction = await ml_model_service.call_price_predictor(symbol, horizon)
+        
+        # Save to database
+        from sqlalchemy.ext.asyncio import AsyncSession
+        from core.database import async_session_maker
+        
+        async with async_session_maker() as db:
+            await defi_service.save_prediction(
+                db,
+                symbol=symbol,
+                model_id="pricepredictor-v2",
+                model_name="PricePredictor",
+                predicted_price=prediction.get("predicted_price"),
+                predicted_change=prediction.get("predicted_change_percent"),
+                confidence_score=prediction.get("confidence_score", 0.0),
+                prediction_type="price",
+                metadata=prediction
+            )
+        
+        return prediction
+    except Exception as e:
+        logger.error(f"Error in PricePredictor prediction: {e}")
+        raise HTTPException(status_code=500, detail=f"Prediction failed: {str(e)}")
+
+
+@router.post("/analyze/risk")
+async def analyze_risk(
+    portfolio_id: int = Query(..., description="Portfolio ID to analyze"),
+    db: AsyncSession = Depends(get_db)
+):
+    """Get RiskAnalyzer analysis for a portfolio."""
+    try:
+        # Get portfolio data
+        portfolio = await defi_service.get_portfolio(db, portfolio_id)
+        if not portfolio:
+            raise HTTPException(status_code=404, detail="Portfolio not found")
+        
+        assets = await defi_service.get_portfolio_assets(db, portfolio_id)
+        
+        portfolio_data = {
+            "id": portfolio.id,
+            "name": portfolio.name,
+            "total_value": portfolio.total_value,
+            "assets": [
+                {
+                    "symbol": asset.symbol,
+                    "amount": asset.amount,
+                    "value": asset.value,
+                    "allocation": asset.allocation
+                }
+                for asset in assets
+            ]
+        }
+        
+        # Get risk analysis
+        analysis = await ml_model_service.call_risk_analyzer(portfolio_data)
+        
+        return {
+            "portfolio_id": portfolio_id,
+            "analysis": analysis,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in risk analysis: {e}")
+        raise HTTPException(status_code=500, detail=f"Risk analysis failed: {str(e)}")
+
+
+# ============== TwinFun Endpoints ==============
+
+@router.get("/twins")
+async def get_twins():
+    """Get available digital twins from TwinFun."""
+    try:
+        twins = await twin_service.get_available_twins()
+        return {
+            "twins": twins,
+            "count": len(twins),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error fetching twins: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to fetch twins: {str(e)}")
+
+
+@router.post("/twins/chat")
+async def chat_with_twin(
+    twin_id: str,
+    message: str,
+    model: Optional[str] = Query(None, description="TEE LLM model to use"),
+    temperature: Optional[float] = Query(None, ge=0.0, le=2.0, description="Sampling temperature"),
+    max_tokens: Optional[int] = Query(None, ge=1, le=4000, description="Maximum tokens in response")
+):
+    """Chat with a digital twin."""
+    try:
+        response = await twin_service.chat_with_twin(
+            twin_id=twin_id,
+            message=message,
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens
+        )
+        return response
+    except Exception as e:
+        logger.error(f"Error chatting with twin {twin_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
+
+
+@router.post("/twins/analyze-portfolio")
+async def analyze_portfolio_with_twin(
+    portfolio_id: int,
+    twin_id: str = Query("defi_analyst_001", description="Twin ID for analysis"),
+    user_id: Optional[str] = Query(None, description="User ID for portfolio access"),
+    db: AsyncSession = Depends(get_db)
+):
+    """Analyze portfolio using a DeFi analyst twin."""
+    try:
+        # Get portfolio data
+        portfolio = await defi_service.get_portfolio(db, portfolio_id, user_id)
+        if not portfolio:
+            raise HTTPException(status_code=404, detail="Portfolio not found")
+        
+        # Convert portfolio to dict for twin service
+        assets = portfolio.assets if hasattr(portfolio, 'assets') else []
+        portfolio_data = {
+            "id": portfolio_id,
+            "total_value": portfolio.total_value if hasattr(portfolio, 'total_value') else 0,
+            "assets": [
+                {
+                    "symbol": asset.symbol if hasattr(asset, 'symbol') else "UNKNOWN",
+                    "amount": asset.amount if hasattr(asset, 'amount') else 0,
+                    "value_usd": asset.value_usd if hasattr(asset, 'value_usd') else 0
+                }
+                for asset in assets
+            ]
+        }
+        
+        # Get analysis from twin
+        analysis = await twin_service.analyze_portfolio_with_twin(
+            portfolio_data=portfolio_data,
+            twin_id=twin_id
+        )
+        
+        return analysis
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error analyzing portfolio with twin: {e}")
+        raise HTTPException(status_code=500, detail=f"Portfolio analysis failed: {str(e)}")
+
+
 # ============== Utility Endpoints ==============
 
 @router.get("/health")
@@ -446,6 +657,7 @@ async def defi_health():
             "market_data",
             "analytics",
             "ai_predictions",
+            "ml_models_integration",
             "websocket_updates",
             "defi_assistant"
         ]

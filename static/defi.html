@@ -812,6 +812,64 @@
   </div>
 </div>
 
+<!-- Digital Twins Integration -->
+<div class="defi-card glass-panel hover-lift" style="margin-top: 40px;">
+  <div class="defi-card-header">
+    <div>
+      <div class="defi-card-title">👥 Digital Twins (TwinFun)</div>
+      <div class="defi-card-subtitle">Chat with AI-powered DeFi experts and analysts</div>
+    </div>
+    <div class="apy-badge" style="background: var(--gradient-3);">OpenGradient</div>
+  </div>
+  
+  <div style="margin-bottom: 20px;">
+    <div class="defi-card-title" style="font-size: 16px; margin-bottom: 12px;">🎯 Available Twins</div>
+    <div id="twins-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+      <!-- Twins will be loaded here -->
+      <div style="padding: 16px; background: var(--bg-secondary); border-radius: 12px; text-align: center;">
+        <div style="margin-bottom: 8px;">🌀</div>
+        <div style="font-weight: 600; margin-bottom: 4px;">Loading twins...</div>
+        <div style="font-size: 12px; color: var(--text-tertiary);">Connecting to TwinFun</div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-bottom: 20px;">
+    <div class="defi-card-title" style="font-size: 16px; margin-bottom: 12px;">💬 Chat with Twin</div>
+    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+      <select id="twin-select" style="flex: 1; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; color: var(--text);">
+        <option value="defi_analyst_001">DeFi Analyst Pro</option>
+        <option value="risk_manager_002">Risk Management Expert</option>
+        <option value="crypto_trader_003">Crypto Trading Assistant</option>
+        <option value="market_researcher_004">Market Research Analyst</option>
+      </select>
+      <button class="btn btn-modern" onclick="refreshTwins()" style="white-space: nowrap;">🔄 Refresh</button>
+    </div>
+    
+    <div style="margin-bottom: 12px;">
+      <textarea id="twin-message" placeholder="Ask a question about DeFi, portfolio analysis, market trends..." rows="3" style="width: 100%; padding: 14px; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 16px; font-family: var(--font-primary); resize: vertical;"></textarea>
+    </div>
+    
+    <div style="display: flex; gap: 12px;">
+      <button class="btn btn-modern" onclick="chatWithTwin()" style="flex: 1;">💬 Send Message</button>
+      <button class="btn btn-secondary" onclick="analyzeWithTwin()" style="flex: 1;">📊 Analyze Portfolio</button>
+    </div>
+  </div>
+  
+  <div id="twin-chat" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding: 16px; background: var(--bg-secondary); border-radius: 12px;">
+    <div class="assistant-message" style="margin-bottom: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;">
+      <strong>👥 Twin System:</strong> Select a twin and start chatting to get expert DeFi insights powered by OpenGradient's TwinFun.
+    </div>
+  </div>
+  
+  <div style="padding-top: 20px; border-top: 1px solid var(--border);">
+    <div class="defi-card-title" style="font-size: 14px; margin-bottom: 8px; color: var(--text-light);">💡 TwinFun Integration</div>
+    <div style="font-size: 12px; color: var(--text-tertiary); line-height: 1.5;">
+      This integration connects to OpenGradient's TwinFun platform, allowing you to interact with specialized AI digital twins for DeFi analysis. Twins are powered by verifiable inference and TEE LLMs.
+    </div>
+  </div>
+</div>
+
 <!-- Footer -->
  <footer class="footer">
   <div class="footer-logo">OpenGradient DeFi AI Assistant</div>
@@ -1265,6 +1323,190 @@
     if (confidenceEl) confidenceEl.textContent = analytics.ai_confidence || '87%';
   }
   
+  // ============== TwinFun Integration ==============
+  
+  async function loadTwins() {
+    try {
+      const response = await fetch('/api/defi/twins');
+      if (!response.ok) throw new Error('Failed to fetch twins');
+      
+      const data = await response.json();
+      const twinsListEl = document.getElementById('twins-list');
+      const twinSelectEl = document.getElementById('twin-select');
+      
+      if (!twinsListEl || !twinSelectEl) return;
+      
+      // Clear existing options except first
+      while (twinSelectEl.options.length > 1) {
+        twinSelectEl.remove(1);
+      }
+      
+      // Update twins list display
+      twinsListEl.innerHTML = '';
+      
+      data.twins.forEach(twin => {
+        // Create twin card
+        const twinCard = document.createElement('div');
+        twinCard.style.cssText = 'padding: 16px; background: var(--bg-secondary); border-radius: 12px;';
+        twinCard.innerHTML = `
+          <div style="margin-bottom: 8px; font-size: 24px;">🌀</div>
+          <div style="font-weight: 600; margin-bottom: 4px;">${twin.name}</div>
+          <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px;">${twin.description}</div>
+          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            ${twin.tags.map(tag => `<span style="font-size: 10px; padding: 2px 6px; background: var(--bg-tertiary); border-radius: 4px;">${tag}</span>`).join('')}
+          </div>
+        `;
+        twinsListEl.appendChild(twinCard);
+        
+        // Add to select dropdown
+        const option = document.createElement('option');
+        option.value = twin.id;
+        option.textContent = twin.name;
+        twinSelectEl.appendChild(option);
+      });
+      
+      showToast('✅', `Loaded ${data.count} digital twins`);
+      
+    } catch (error) {
+      console.error('Failed to load twins:', error);
+      showToast('⚠️', 'Using demo twins data');
+    }
+  }
+  
+  async function refreshTwins() {
+    showToast('🔄', 'Refreshing twins...');
+    await loadTwins();
+  }
+  
+  async function chatWithTwin() {
+    const twinId = document.getElementById('twin-select').value;
+    const message = document.getElementById('twin-message').value.trim();
+    const chatEl = document.getElementById('twin-chat');
+    
+    if (!message) {
+      showToast('⚠️', 'Please enter a message');
+      return;
+    }
+    
+    // Add user message to chat
+    const userMsg = document.createElement('div');
+    userMsg.className = 'assistant-message';
+    userMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: rgba(0, 243, 255, 0.1); border-radius: 8px;';
+    userMsg.innerHTML = `<strong>👤 You:</strong> ${message}`;
+    chatEl.appendChild(userMsg);
+    
+    // Clear input
+    document.getElementById('twin-message').value = '';
+    
+    showToast('🔄', 'Sending to twin...');
+    
+    try {
+      const response = await fetch(`/api/defi/twins/chat?twin_id=${encodeURIComponent(twinId)}&message=${encodeURIComponent(message)}`, {
+        method: 'POST'
+      });
+      
+      if (!response.ok) throw new Error('Chat failed');
+      
+      const data = await response.json();
+      
+      // Add twin response to chat
+      const twinMsg = document.createElement('div');
+      twinMsg.className = 'assistant-message';
+      twinMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;';
+      twinMsg.innerHTML = `<strong>🤖 Twin (${twinId}):</strong> ${data.response}`;
+      chatEl.appendChild(twinMsg);
+      
+      // Scroll to bottom
+      chatEl.scrollTop = chatEl.scrollHeight;
+      
+      showToast('✅', 'Twin responded');
+      
+    } catch (error) {
+      console.error('Chat error:', error);
+      
+      // Add error message
+      const errorMsg = document.createElement('div');
+      errorMsg.className = 'assistant-message';
+      errorMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: rgba(255, 0, 60, 0.1); border-radius: 8px;';
+      errorMsg.innerHTML = `<strong>⚠️ System:</strong> ${error.message}. Using demo response.`;
+      chatEl.appendChild(errorMsg);
+      
+      // Add mock response
+      const mockMsg = document.createElement('div');
+      mockMsg.className = 'assistant-message';
+      mockMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: var(--bg-tertiary); border-radius: 8px;';
+      mockMsg.innerHTML = `<strong>🤖 Twin (${twinId}):</strong> This is a demo response. Enable TwinFun API for real AI responses.`;
+      chatEl.appendChild(mockMsg);
+      
+      showToast('⚠️', 'Using demo response');
+    }
+  }
+  
+  async function analyzeWithTwin() {
+    const twinId = document.getElementById('twin-select').value;
+    const chatEl = document.getElementById('twin-chat');
+    
+    showToast('🔄', 'Analyzing portfolio with twin...');
+    
+    try {
+      // Get current portfolio ID (simplified - use first portfolio)
+      const response = await fetch('/api/defi/portfolio/user/demo?create_if_not_exists=true');
+      if (!response.ok) throw new Error('No portfolio found');
+      
+      const portfolio = await response.json();
+      const portfolioId = portfolio.id;
+      
+      // Call twin analysis API
+      const analysisResponse = await fetch(`/api/defi/twins/analyze-portfolio?portfolio_id=${portfolioId}&twin_id=${twinId}`, {
+        method: 'POST'
+      });
+      
+      if (!analysisResponse.ok) throw new Error('Analysis failed');
+      
+      const analysis = await analysisResponse.json();
+      
+      // Add analysis to chat
+      const analysisMsg = document.createElement('div');
+      analysisMsg.className = 'assistant-message';
+      analysisMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: rgba(157, 78, 221, 0.1); border-radius: 8px;';
+      analysisMsg.innerHTML = `
+        <strong>📊 Portfolio Analysis (${twinId}):</strong><br><br>
+        ${analysis.analysis.replace(/\n/g, '<br>')}<br><br>
+        <small style="color: var(--text-tertiary);">Portfolio ID: ${analysis.portfolio_id} | Assets: ${analysis.metadata?.assets_analyzed || 'N/A'}</small>
+      `;
+      chatEl.appendChild(analysisMsg);
+      
+      // Scroll to bottom
+      chatEl.scrollTop = chatEl.scrollHeight;
+      
+      showToast('✅', 'Portfolio analyzed');
+      
+    } catch (error) {
+      console.error('Analysis error:', error);
+      showToast('⚠️', 'Analysis failed - using demo');
+      
+      // Add demo analysis
+      const demoMsg = document.createElement('div');
+      demoMsg.className = 'assistant-message';
+      demoMsg.style.cssText = 'margin-bottom: 12px; padding: 12px; background: rgba(157, 78, 221, 0.1); border-radius: 8px;';
+      demoMsg.innerHTML = `
+        <strong>📊 Portfolio Analysis (${twinId}):</strong><br><br>
+        Based on your portfolio of $25,430 with 4 assets:<br><br>
+        1. <strong>Risk Assessment:</strong> Moderate risk profile with 60% exposure to volatile assets.<br>
+        2. <strong>Diversification:</strong> Good across large caps, needs more stablecoin allocation.<br>
+        3. <strong>Recommendations:</strong> Increase ETH staking, add 15% USDC for stability.<br>
+        4. <strong>Market Outlook:</strong> Bullish on DeFi tokens, neutral on BTC short-term.<br><br>
+        <small style="color: var(--text-tertiary);">Enable real TwinFun API for personalized analysis</small>
+      `;
+      chatEl.appendChild(demoMsg);
+    }
+  }
+  
+  // Load twins on startup
+  async function initTwins() {
+    await loadTwins();
+  }
+  
   // ============== Initialization ==============
   
   async function initDeFiApp() {
@@ -1278,7 +1520,10 @@
     
     // Initialize charts and load AI predictions
     initCharts();
-    await loadPredictions();
+    await Promise.all([
+      loadPredictions(),
+      initTwins()
+    ]);
     
     showToast('✅', 'DeFi data loaded!');
     

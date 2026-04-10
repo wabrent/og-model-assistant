@@ -11,8 +11,9 @@ class Settings(BaseSettings):
     # OpenGradient
     private_key: Optional[str] = None
     
-    # MemSync
+    # MemSync / TwinFun
     memsync_api_key: Optional[str] = None
+    twins_api_key: Optional[str] = None
     
     # OpenGradient Model Management
     og_email: Optional[str] = None
