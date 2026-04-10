@@ -1931,12 +1931,8 @@
       <div class="feature-title">AI Chat</div>
       <div class="feature-desc">Conversational interface powered by OpenGradient LLM</div>
     </div>
-    <div class="feature-card glass-panel hover-lift" style="--i:2" onclick="toggleVoice()">
-      <div class="feature-icon g3">🎤</div>
-      <div class="feature-title">Voice Input</div>
-      <div class="feature-desc">Speak to search with speech-to-text support</div>
-    </div>
-    <div class="feature-card glass-panel hover-lift" style="--i:3" onclick="sendQuick('Show vision AI models')">
+
+    <div class="feature-card glass-panel hover-lift" style="--i:2" onclick="sendQuick('Show vision AI models')">
       <div class="feature-icon g4">🖼️</div>
       <div class="feature-title">Vision AI</div>
       <div class="feature-desc">Upload images for AI analysis and model matching</div>
@@ -2108,88 +2104,7 @@
   </div>
 </section>
 
-<!-- Price Prediction Dashboard -->
-<section class="prediction-section" id="predictions">
-  <div class="prediction-header">
-    <h2 style="font-size:28px;font-weight:700;margin-bottom:8px">📈 Live Price Predictions</h2>
-    <p style="color:var(--text-light);font-size:15px">ML-powered forecasts from OpenGradient workflows</p>
-  </div>
-  
-  <div class="prediction-grid">
-    <div class="prediction-card">
-      <div class="prediction-title">
-        <span style="font-size:24px">💠</span>
-        <div>
-          <h3>ETH/USDT Volatility</h3>
-          <p style="font-size:12px;color:var(--text-tertiary)">1-hour forecast</p>
-        </div>
-      </div>
-      <canvas id="eth-chart" height="200"></canvas>
-      <div class="prediction-stats">
-        <div class="stat"><span class="stat-value" id="eth-value">—</span><span class="stat-label">Prediction</span></div>
-        <div class="stat"><span class="stat-value" id="eth-confidence">—</span><span class="stat-label">Confidence</span></div>
-        <a class="stat-link" href="https://explorer.opengradient.ai/address/0xD5629A5b95dde11e4B5772B5Ad8a13B933e33845" target="_blank">🔗 Explorer</a>
-      </div>
-    </div>
-    
-    <div class="prediction-card">
-      <div class="prediction-title">
-        <span style="font-size:24px">🔷</span>
-        <div>
-          <h3>SUI/USDT Return</h3>
-          <p style="font-size:12px;color:var(--text-tertiary)">30-minute forecast</p>
-        </div>
-      </div>
-      <canvas id="sui30-chart" height="200"></canvas>
-      <div class="prediction-stats">
-        <div class="stat"><span class="stat-value" id="sui30-value">—</span><span class="stat-label">Prediction</span></div>
-        <div class="stat"><span class="stat-value" id="sui30-confidence">—</span><span class="stat-label">Confidence</span></div>
-        <a class="stat-link" href="https://explorer.opengradient.ai/address/0xD85BA71f5701dc4C5BDf9780189Db49C6F3708D2" target="_blank">🔗 Explorer</a>
-      </div>
-    </div>
-    
-    <div class="prediction-card">
-      <div class="prediction-title">
-        <span style="font-size:24px">📊</span>
-        <div>
-          <h3>SUI/USDT Return</h3>
-          <p style="font-size:12px;color:var(--text-tertiary)">6-hour forecast</p>
-        </div>
-      </div>
-      <canvas id="sui6h-chart" height="200"></canvas>
-      <div class="prediction-stats">
-        <div class="stat"><span class="stat-value" id="sui6h-value">—</span><span class="stat-label">Prediction</span></div>
-        <div class="stat"><span class="stat-value" id="sui6h-confidence">—</span><span class="stat-label">Confidence</span></div>
-        <a class="stat-link" href="https://explorer.opengradient.ai/address/0x3C2E4DbD653Bd30F1333d456480c1b7aB122e946" target="_blank">🔗 Explorer</a>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- AI Agent Debate -->
-<section class="debate-section" id="debate">
-  <div class="debate-header">
-    <h2 style="font-size:28px;font-weight:700;margin-bottom:8px">🥊 AI Agent Debate</h2>
-    <p style="color:var(--text-light);font-size:15px">Watch two AI agents debate on hot topics</p>
-  </div>
-  
-  <div class="debate-controls">
-    <select id="debate-topic" class="debate-select">
-      <option value="crypto">💰 Crypto: Future or Bubble?</option>
-      <option value="ai_future">🤖 AI: Savior or Threat?</option>
-      <option value="defi">🏦 DeFi: Freedom or Risk?</option>
-      <option value="nft">🎨 NFTs: Revolution or Hype?</option>
-    </select>
-    <button class="debate-btn" onclick="startDebate()">⚡ Start Debate</button>
-  </div>
-  
-  <div class="debate-arena" id="debate-arena">
-    <div class="debate-placeholder">
-      <span style="font-size:48px">🥊</span>
-      <p>Select a topic and start the debate</p>
-    </div>
-  </div>
-</section>
 
 <!-- Footer -->
 <footer class="footer">
@@ -2202,60 +2117,9 @@
   </a>
 </footer>
 
-<!-- History Panel -->
-<div class="history-panel" id="history-panel">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-    <h3 style="font-size:18px;font-weight:600">Chat History</h3>
-    <button onclick="toggleHistory()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-light)">×</button>
-  </div>
-  <button onclick="newChat()" style="width:100%;padding:14px;background:var(--text);color:var(--bg);border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:16px">+ New Chat</button>
-  <div id="history-list"></div>
-</div>
 
-<!-- Dashboard Panel -->
-<div class="dashboard-panel" id="dashboard-panel">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-    <h3 style="font-size:18px;font-weight:600">📊 Dashboard</h3>
-    <button onclick="toggleDashboard()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-light)">×</button>
-  </div>
 
-  <div class="dashboard-header">
-    <div class="dashboard-level">
-      <div class="level-badge" id="dash-level">1</div>
-      <div class="level-info">
-        <h3 id="dash-level-title">Beginner</h3>
-        <p id="dash-xp">0 / 100 XP</p>
-        <div class="progress-bar">
-          <div class="progress-fill" id="dash-progress" style="width: 0%"></div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-value" id="stat-queries">0</div>
-      <div class="stat-label">Queries</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="stat-chats">0</div>
-      <div class="stat-label">Messages</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="stat-views">0</div>
-      <div class="stat-label">Views</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value" id="stat-streak">0</div>
-      <div class="stat-label">Streak 🔥</div>
-    </div>
-  </div>
-
-  <div class="achievements-section">
-    <h4>🏆 Achievements <span id="achievements-count" style="font-size:12px;color:var(--text-light)">(0/0)</span></h4>
-    <div class="achievements-grid" id="achievements-grid"></div>
-  </div>
-</div>
 
 <!-- Ecosystem Panel -->
 <div class="ecosystem-panel" id="ecosystem-panel">
@@ -2291,63 +2155,15 @@
   let isLoading = false;
   let currentMessages = [];
   let queryCount = 0;
-  let isRecording = false;
-  let recognition = null;
+
   let favorites = JSON.parse(localStorage.getItem('og_favorites') || '[]');
-  let tokenBalance = 10.0;
+
   let faucetInterval = null;
-  let walletAddress = null;
 
-  // ==================== WALLET FUNCTIONS ====================
-  async function connectWallet() {
-    const btn = document.getElementById('wallet-btn');
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        walletAddress = accounts[0];
-        const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-        btn.textContent = '🔗 ' + shortAddr;
-        btn.style.background = 'var(--gradient-4)';
-        showToast('Wallet connected: ' + shortAddr);
-        
-        // Store in localStorage
-        localStorage.setItem('og_wallet', walletAddress);
-      } catch (e) {
-        showToast('Failed to connect wallet');
-      }
-    } else {
-      showToast('Please install MetaMask!');
-    }
-  }
 
-  // Check for existing wallet connection
-  async function checkWallet() {
-    const savedWallet = localStorage.getItem('og_wallet');
-    if (savedWallet && window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.includes(savedWallet)) {
-          walletAddress = savedWallet;
-          const shortAddr = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-          const btn = document.getElementById('wallet-btn');
-          btn.textContent = '🔗 ' + shortAddr;
-          btn.style.background = 'var(--gradient-4)';
-        }
-      } catch (e) {}
-    }
-  }
 
-  // ==================== TOKEN FUNCTIONS ====================
-  async function loadTokenBalance() {
-    try {
-      const r = await fetch(`/api/tokens/balance?user_id=${sessionId}`);
-      const data = await r.json();
-      tokenBalance = data.balance;
-      document.getElementById('token-balance').textContent = tokenBalance.toFixed(1);
-    } catch (e) {
-      console.error('Failed to load token balance:', e);
-    }
-  }
+
+
 
   async function autoClaimFaucet() {
     try {
@@ -2358,10 +2174,9 @@
         // Auto-claim tokens
         const claimR = await fetch(`/api/tokens/faucet/claim?user_id=${sessionId}`, { method: 'POST' });
         const claimData = await claimR.json();
-        if (claimData.success) {
-          showToast('💎', `Received ${claimData.tokens_claimed} free tokens!`);
-          loadTokenBalance();
-        }
+         if (claimData.success) {
+           showToast('💎', `Received ${claimData.tokens_claimed} free tokens!`);
+         }
       }
     } catch (e) {
       console.error('Auto-claim failed:', e);
@@ -2519,42 +2334,7 @@
     setTimeout(() => { t.style.animation = 'slideIn 0.4s ease reverse'; setTimeout(() => t.remove(), 300); }, 3500);
   }
 
-  // ==================== VOICE ====================
-  function initSpeechRecognition() {
-    if ('webkitSpeechRecognition' in window) {
-      recognition = new webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = true;
-      recognition.onresult = e => {
-        const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
-        document.getElementById('input').value = transcript;
-      };
-      recognition.onend = () => {
-        isRecording = false;
-        document.getElementById('voice-btn').classList.remove('active');
-      };
-      recognition.onerror = () => {
-        isRecording = false;
-        showToast('❌', 'Voice recognition error');
-      };
-    }
-  }
 
-  function toggleVoice() {
-    if (!recognition) initSpeechRecognition();
-    if (!recognition) { showToast('❌', 'Voice not supported'); return; }
-    
-    if (isRecording) {
-      recognition.stop();
-      isRecording = false;
-      document.getElementById('voice-btn').classList.remove('active');
-    } else {
-      recognition.start();
-      isRecording = true;
-      document.getElementById('voice-btn').classList.add('active');
-      showToast('🎤', 'Listening...');
-    }
-  }
 
   // ==================== HISTORY ====================
   function getSessions() {
@@ -2941,7 +2721,6 @@
   window.addEventListener('DOMContentLoaded', () => {
     showToast('👋', 'Welcome to OpenGradient Model Hub!');
     loadStats();
-    loadTokenBalance();
     loadTopModels(); // Load trending models
     startAutoFaucet(); // Start automatic faucet
     checkAchievements(); // Check for new achievements
@@ -2964,132 +2743,6 @@
     }
   }
 
-  // ==================== PRICE PREDICTIONS ====================
-  async function loadPredictions() {
-    try {
-      // ETH Volatility
-      const ethRes = await fetch('/api/ml/predict/eth/volatility');
-      const ethData = await ethRes.json();
-      if (!ethData.error) {
-        document.getElementById('eth-value').textContent = 'Active';
-        document.getElementById('eth-confidence').textContent = 'TEE';
-        drawChart('eth-chart', [2.1, 2.3, 2.0, 2.5, 2.2, 2.4, 2.6, 2.3], '#007aff');
-      }
-      
-      // SUI 30min
-      const sui30Res = await fetch('/api/ml/predict/sui/30min');
-      const sui30Data = await sui30Res.json();
-      if (!sui30Data.error) {
-        document.getElementById('sui30-value').textContent = 'Active';
-        document.getElementById('sui30-confidence').textContent = 'TEE';
-        drawChart('sui30-chart', [1.2, 1.3, 1.1, 1.4, 1.2, 1.5, 1.3, 1.4], '#30d158');
-      }
-      
-      // SUI 6h
-      const sui6hRes = await fetch('/api/ml/predict/sui/6h');
-      const sui6hData = await sui6hRes.json();
-      if (!sui6hData.error) {
-        document.getElementById('sui6h-value').textContent = 'Active';
-        document.getElementById('sui6h-confidence').textContent = 'TEE';
-        drawChart('sui6h-chart', [3.1, 3.3, 3.0, 3.5, 3.2, 3.4, 3.6, 3.3], '#ff9500');
-      }
-    } catch (e) {
-      console.log('Predictions not available yet');
-    }
-  }
-
-  function drawChart(canvasId, data, color) {
-    const canvas = document.getElementById(canvasId);
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.offsetWidth;
-    const h = canvas.height = 200;
-    const max = Math.max(...data);
-    const min = Math.min(...data);
-    const range = max - min || 1;
-    const step = w / (data.length - 1);
-    
-    ctx.clearRect(0, 0, w, h);
-    
-    // Gradient fill
-    const gradient = ctx.createLinearGradient(0, 0, 0, h);
-    gradient.addColorStop(0, color + '40');
-    gradient.addColorStop(1, color + '00');
-    
-    ctx.beginPath();
-    ctx.moveTo(0, h);
-    data.forEach((val, i) => {
-      const x = i * step;
-      const y = h - ((val - min) / range) * (h - 40) - 20;
-      if (i === 0) ctx.lineTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.lineTo(w, h);
-    ctx.closePath();
-    ctx.fillStyle = gradient;
-    ctx.fill();
-    
-    // Line
-    ctx.beginPath();
-    data.forEach((val, i) => {
-      const x = i * step;
-      const y = h - ((val - min) / range) * (h - 40) - 20;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 3;
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-    
-    // Dots
-    data.forEach((val, i) => {
-      const x = i * step;
-      const y = h - ((val - min) / range) * (h - 40) - 20;
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fillStyle = color;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-    });
-  }
-
-  // ==================== AI DEBATE ====================
-  async function startDebate() {
-    const topic = document.getElementById('debate-topic').value;
-    const arena = document.getElementById('debate-arena');
-    arena.innerHTML = '<div class="debate-placeholder"><p>⚡ Debate starting...</p></div>';
-    
-    try {
-      const res = await fetch('/api/debate/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic, rounds: 3 })
-      });
-      const data = await res.json();
-      
-      arena.innerHTML = '';
-      data.transcript.forEach((msg, i) => {
-        setTimeout(() => {
-          const isBull = msg.speaker.includes('Bull') || msg.speaker.includes('Optimus') || msg.speaker.includes('Maximalist') || msg.speaker.includes('Visionary');
-          const div = document.createElement('div');
-          div.className = `debate-message ${isBull ? 'bull' : 'bear'}`;
-          div.innerHTML = `<div class="debate-speaker">${msg.speaker} (Round ${msg.round})</div><div class="debate-text">${msg.argument}</div>`;
-          arena.appendChild(div);
-          arena.scrollTop = arena.scrollHeight;
-        }, i * 800);
-      });
-    } catch (e) {
-      arena.innerHTML = '<div class="debate-placeholder"><p>❌ Debate failed</p></div>';
-    }
-  }
-
-  // Load predictions on page load
-  setTimeout(loadPredictions, 2000);
-</script>
 </script>
 </body>
 </html>
