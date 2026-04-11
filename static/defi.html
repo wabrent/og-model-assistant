@@ -1540,11 +1540,20 @@
   
 
   
-  // Start the app when DOM is loaded
+  // Start the app when window is fully loaded (prevents scroll jumps)
+  function startDeFiApp() {
+    // Ensure we're at the top of the page
+    if (window.scrollY === 0) {
+      window.scrollTo(0, 0);
+    }
+    // Small delay to ensure rendering is complete
+    setTimeout(initDeFiApp, 50);
+  }
+  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDeFiApp);
+    window.addEventListener('load', startDeFiApp);
   } else {
-    initDeFiApp();
+    startDeFiApp();
   }
 </script>
 
