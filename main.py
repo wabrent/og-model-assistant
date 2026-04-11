@@ -17,6 +17,7 @@ from core.config import settings
 from core.database import init_db, close_db
 from core.cache import cache
 from core.logging_config import setup_logging
+from core.seed import seed_all
 
 from api.models_router import router as models_router
 from api.chat_router import router as chat_router
@@ -60,6 +61,16 @@ async def lifespan(app: FastAPI):
         logger.info("✅ Initial model sync completed!")
     except Exception as e:
         logger.error(f"⚠️ Initial sync failed: {e}. Use /api/sync/trigger to sync manually.")
+
+    # Seed market data for DeFi demo
+    try:
+        from core.database import async_session_maker
+        logger.info("🌱 Seeding market data...")
+        async with async_session_maker() as db:
+            await seed_all(db)
+        logger.info("✅ Market data seeded!")
+    except Exception as e:
+        logger.error(f"⚠️ Market data seeding failed: {e}. DeFi features may not work.")
 
     logger.info(f"Server starting on http://{settings.api_host}:{settings.api_port}")
 
